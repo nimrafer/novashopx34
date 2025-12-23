@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import ChatGPTPage from "./pages/services/ChatGPTPage";
 import GeminiPage from "./pages/services/GeminiPage";
 import GrokPage from "./pages/services/GrokPage";
+import ClaudePage from "./pages/services/ClaudePage";
 import PerplexityPage from "./pages/services/PerplexityPage";
 import SpotifyPage from "./pages/services/SpotifyPage";
 import CursorPage from "./pages/services/CursorPage";
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/services/chatgpt" element={<ChatGPTPage />} />
           <Route path="/services/gemini" element={<GeminiPage />} />
           <Route path="/services/grok" element={<GrokPage />} />
+          <Route path="/services/claude" element={<ClaudePage />} />
           <Route path="/services/perplexity" element={<PerplexityPage />} />
           <Route path="/services/spotify" element={<SpotifyPage />} />
           <Route path="/services/cursor" element={<CursorPage />} />
