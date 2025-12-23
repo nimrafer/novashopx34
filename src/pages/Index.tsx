@@ -1,26 +1,35 @@
-import Header from "../components/header/Header";
-import Footer from "../components/footer/Footer";
-import LargeHero from "../components/content/LargeHero";
-import FiftyFiftySection from "../components/content/FiftyFiftySection";
-import OneThirdTwoThirdsSection from "../components/content/OneThirdTwoThirdsSection";
-import ProductCarousel from "../components/content/ProductCarousel";
-import EditorialSection from "../components/content/EditorialSection";
+import { Helmet } from "react-helmet";
+import ShopHeader from "@/components/shop/ShopHeader";
+import HeroSection from "@/components/shop/HeroSection";
+import ServicesSection from "@/components/shop/ServicesSection";
+import ShopFooter from "@/components/shop/ShopFooter";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      
-      <main className="pt-6">
-        <FiftyFiftySection />
-        <ProductCarousel />
-        <LargeHero />
-        <OneThirdTwoThirdsSection />
-        <EditorialSection />
-      </main>
-      
-      <Footer />
-    </div>
+    <>
+      <Helmet>
+        <title>Nova AI Shop | خرید اشتراک ChatGPT، Gemini، Spotify و سرویس‌های پرمیوم</title>
+        <meta
+          name="description"
+          content="خرید اشتراک ChatGPT Pro، Gemini Pro، Spotify Premium، Cursor Pro و ده‌ها سرویس دیگر با قیمت مناسب، تضمین کیفیت و پشتیبانی ۲۴ ساعته."
+        />
+        <meta
+          name="keywords"
+          content="خرید ChatGPT, اشتراک Gemini, Spotify Premium, Cursor Pro, VPN, شماره مجازی, تلگرام پرمیوم"
+        />
+      </Helmet>
+
+      <div className="min-h-screen bg-background">
+        <ShopHeader />
+        
+        <main>
+          <HeroSection />
+          <ServicesSection />
+        </main>
+        
+        <ShopFooter />
+      </div>
+    </>
   );
 };
 
