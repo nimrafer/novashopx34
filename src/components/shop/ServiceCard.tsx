@@ -1,4 +1,5 @@
-import { LucideIcon, MessageCircle } from "lucide-react";
+import { Link } from "react-router-dom";
+import { LucideIcon, MessageCircle, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -11,6 +12,7 @@ interface Plan {
 }
 
 interface ServiceCardProps {
+  id: string;
   icon: LucideIcon;
   title: string;
   description: string;
@@ -27,6 +29,7 @@ const formatPrice = (price: number) => {
 };
 
 const ServiceCard = ({
+  id,
   icon: Icon,
   title,
   description,
@@ -38,6 +41,19 @@ const ServiceCard = ({
   const handleOrder = (planName: string) => {
     const message = encodeURIComponent(`سلام! میخوام ${title} - ${planName} رو سفارش بدم.`);
     window.open(`https://t.me/${SUPPORT_USERNAME}?text=${message}`, "_blank");
+  };
+
+  const serviceRoutes: Record<string, string> = {
+    chatgpt: "/services/chatgpt",
+    gemini: "/services/gemini",
+    grok: "/services/grok",
+    perplexity: "/services/perplexity",
+    spotify: "/services/spotify",
+    cursor: "/services/cursor",
+    telegram: "/services/telegram-premium",
+    vpn: "/services/vpn",
+    cards: "/services/cards",
+    vnum: "/services/virtual-number",
   };
 
   return (
@@ -65,8 +81,8 @@ const ServiceCard = ({
 
       {/* Features List */}
       {features && features.length > 0 && (
-        <ul className="space-y-2 mb-6">
-          {features.map((feature, idx) => (
+        <ul className="space-y-2 mb-4">
+          {features.slice(0, 3).map((feature, idx) => (
             <li key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
               <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
               {feature}
@@ -74,6 +90,16 @@ const ServiceCard = ({
           ))}
         </ul>
       )}
+
+      {/* View More Link */}
+      <Link
+        to={serviceRoutes[id] || "/"}
+        className="inline-flex items-center gap-1 text-sm mb-6 transition-colors hover:opacity-80"
+        style={{ color }}
+      >
+        مشاهده جزئیات کامل
+        <ArrowLeft className="w-4 h-4" />
+      </Link>
 
       {/* Plans Grid */}
       <div className="grid gap-4">
