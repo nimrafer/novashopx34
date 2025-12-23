@@ -28,8 +28,8 @@ const ShopHeader = () => {
             <a href="#gemini" className="text-muted-foreground hover:text-foreground transition-colors">
               Gemini
             </a>
-            <a href="#vpn" className="text-muted-foreground hover:text-foreground transition-colors">
-              VPN
+            <a href="#spotify" className="text-muted-foreground hover:text-foreground transition-colors">
+              Spotify
             </a>
           </nav>
           
