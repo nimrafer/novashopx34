@@ -1,22 +1,23 @@
-import { 
-  Bot, 
-  Sparkles, 
-  Music, 
-  Code, 
-  Search, 
-  Star, 
-  Server, 
-  CreditCard, 
-  Phone,
-  MessageCircle
-} from "lucide-react";
 import ServiceCard from "./ServiceCard";
+
+// Logo paths
+const logos = {
+  chatgpt: "/logos/chatgpt.png",
+  gemini: "/logos/gemini.png",
+  grok: "/logos/grok.png",
+  perplexity: "/logos/perplexity.png",
+  spotify: "/logos/spotify.png",
+  cursor: "/logos/cursor.png",
+  telegram: "/logos/telegram.png",
+  cards: "/logos/visa.png",
+  vnum: "/logos/chatgpt.png", // Will use phone emoji instead
+};
 
 const ServicesSection = () => {
   const services = [
     {
       id: "chatgpt",
-      icon: Bot,
+      logo: logos.chatgpt,
       title: "ChatGPT Pro",
       description: "اشتراک حرفه‌ای هوش مصنوعی OpenAI",
       color: "#10B981",
@@ -37,7 +38,7 @@ const ServicesSection = () => {
     },
     {
       id: "gemini",
-      icon: Sparkles,
+      logo: logos.gemini,
       title: "Gemini Pro",
       description: "اشتراک هوش مصنوعی گوگل",
       color: "#3B82F6",
@@ -57,7 +58,7 @@ const ServicesSection = () => {
     },
     {
       id: "grok",
-      icon: MessageCircle,
+      logo: logos.grok,
       title: "Super Grok",
       description: "هوش مصنوعی بدون سانسور xAI",
       color: "#FFFFFF",
@@ -74,7 +75,7 @@ const ServicesSection = () => {
     },
     {
       id: "perplexity",
-      icon: Search,
+      logo: logos.perplexity,
       title: "Perplexity Pro",
       description: "موتور جستجوی هوشمند با منابع",
       color: "#06B6D4",
@@ -91,7 +92,7 @@ const ServicesSection = () => {
     },
     {
       id: "spotify",
-      icon: Music,
+      logo: logos.spotify,
       title: "Spotify Premium",
       description: "موسیقی بدون تبلیغ با کیفیت بالا",
       color: "#1DB954",
@@ -108,7 +109,7 @@ const ServicesSection = () => {
     },
     {
       id: "cursor",
-      icon: Code,
+      logo: logos.cursor,
       title: "Cursor Pro",
       description: "ادیتور کدنویسی هوشمند",
       color: "#8B5CF6",
@@ -126,7 +127,7 @@ const ServicesSection = () => {
     },
     {
       id: "telegram",
-      icon: Star,
+      logo: logos.telegram,
       title: "تلگرام پرمیوم",
       description: "ارتقای حساب کاربری تلگرام",
       color: "#0088CC",
@@ -143,24 +144,8 @@ const ServicesSection = () => {
       ],
     },
     {
-      id: "vpn",
-      icon: Server,
-      title: "سرور و VPN",
-      description: "فیلترشکن آی‌پی ثابت و سرور اختصاصی",
-      color: "#F97316",
-      features: [
-        "سرورهای باکیفیت در بهترین دیتاسنترها",
-        "مناسب ترید، بانکی و برنامه‌نویسی",
-        "نصب انواع سیستم‌عامل‌ها",
-        "پشتیبانی حرفه‌ای",
-      ],
-      plans: [
-        { name: "مشاوره و سفارش", duration: "قیمت بر اساس نیاز", price: 0, features: ["برای دریافت قیمت پیام دهید"] },
-      ],
-    },
-    {
       id: "cards",
-      icon: CreditCard,
+      emoji: "💳",
       title: "ویزا و مستر کارت",
       description: "کارت اعتباری مجازی بین‌المللی",
       color: "#EAB308",
@@ -178,7 +163,7 @@ const ServicesSection = () => {
     },
     {
       id: "vnum",
-      icon: Phone,
+      emoji: "📱",
       title: "شماره مجازی",
       description: "شماره خارجی دائمی",
       color: "#A855F7",

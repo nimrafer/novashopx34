@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { LucideIcon, MessageCircle, ArrowLeft } from "lucide-react";
+import { MessageCircle, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -13,7 +13,8 @@ interface Plan {
 
 interface ServiceCardProps {
   id: string;
-  icon: LucideIcon;
+  logo?: string;
+  emoji?: string;
   title: string;
   description: string;
   color: string;
@@ -25,12 +26,14 @@ interface ServiceCardProps {
 const SUPPORT_USERNAME = "Nova_AI_Support";
 
 const formatPrice = (price: number) => {
+  if (price === 0) return "تماس بگیرید";
   return new Intl.NumberFormat("fa-IR").format(price / 1000) + " هزار تومان";
 };
 
 const ServiceCard = ({
   id,
-  icon: Icon,
+  logo,
+  emoji,
   title,
   description,
   color,
@@ -51,7 +54,6 @@ const ServiceCard = ({
     spotify: "/services/spotify",
     cursor: "/services/cursor",
     telegram: "/services/telegram-premium",
-    vpn: "/services/vpn",
     cards: "/services/cards",
     vnum: "/services/virtual-number",
   };
@@ -62,10 +64,14 @@ const ServiceCard = ({
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-center gap-4">
           <div
-            className="w-14 h-14 rounded-2xl flex items-center justify-center"
+            className="w-14 h-14 rounded-2xl flex items-center justify-center overflow-hidden"
             style={{ backgroundColor: `${color}20` }}
           >
-            <Icon className="w-7 h-7" style={{ color }} />
+            {logo ? (
+              <img src={logo} alt={title} className="w-9 h-9 object-contain" />
+            ) : emoji ? (
+              <span className="text-3xl">{emoji}</span>
+            ) : null}
           </div>
           <div>
             <h3 className="text-xl font-bold">{title}</h3>
@@ -103,7 +109,7 @@ const ServiceCard = ({
 
       {/* Plans Grid */}
       <div className="grid gap-4">
-        {plans.map((plan, idx) => (
+        {plans.slice(0, 2).map((plan, idx) => (
           <div
             key={idx}
             className={`relative rounded-2xl p-4 border transition-all ${
@@ -129,16 +135,6 @@ const ServiceCard = ({
                 </div>
               </div>
             </div>
-            
-            {plan.features && (
-              <div className="mt-3 pt-3 border-t border-border/50">
-                <ul className="space-y-1">
-                  {plan.features.map((f, i) => (
-                    <li key={i} className="text-xs text-muted-foreground">• {f}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
             
             <Button
               className="w-full mt-4"

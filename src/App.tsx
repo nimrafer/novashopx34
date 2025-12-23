@@ -13,7 +13,6 @@ import PerplexityPage from "./pages/services/PerplexityPage";
 import SpotifyPage from "./pages/services/SpotifyPage";
 import CursorPage from "./pages/services/CursorPage";
 import TelegramPremiumPage from "./pages/services/TelegramPremiumPage";
-import VPNPage from "./pages/services/VPNPage";
 import CardsPage from "./pages/services/CardsPage";
 import VirtualNumberPage from "./pages/services/VirtualNumberPage";
 
@@ -35,7 +34,6 @@ const App = () => (
           <Route path="/services/spotify" element={<SpotifyPage />} />
           <Route path="/services/cursor" element={<CursorPage />} />
           <Route path="/services/telegram-premium" element={<TelegramPremiumPage />} />
-          <Route path="/services/vpn" element={<VPNPage />} />
           <Route path="/services/cards" element={<CardsPage />} />
           <Route path="/services/virtual-number" element={<VirtualNumberPage />} />
           <Route path="*" element={<NotFound />} />
