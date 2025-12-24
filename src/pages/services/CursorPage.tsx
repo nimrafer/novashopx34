@@ -1,4 +1,4 @@
-import { Code, Clock, RefreshCw, Zap } from "lucide-react";
+import { Code, Clock, RefreshCw, Zap, Headphones, Terminal, Cpu, GitBranch } from "lucide-react";
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
 
@@ -6,50 +6,41 @@ const CursorPage = () => {
   const features = [
     "تکمیل خودکار کد با مدل‌های قدرتمند AI",
     "دسترسی به Claude 3.5 Sonnet، GPT-4 و Gemini",
-    "درک کامل کانتکست پروژه",
+    "درک کامل کانتکست کل پروژه",
+    "Tab Completion پیشرفته برای کدنویسی سریع‌تر",
     "پیشنهاد رفع باگ و بهینه‌سازی کد",
     "Refactoring هوشمند با یک کلیک",
     "چت با AI درباره کد و پروژه",
     "پشتیبانی از تمام زبان‌های برنامه‌نویسی",
     "سازگار با VS Code Extensions",
-    "Tab Completion پیشرفته",
-    "مناسب فریلنسرها و تیم‌ها",
-    "سرعت کدنویسی ۲ برابر بیشتر",
+    "Composer برای تغییرات چند فایلی",
     "فعال‌سازی روی اکانت شخصی",
+    "تضمین جایگزینی و پشتیبانی ۲۴ ساعته",
   ];
 
   const plans = [
     {
-      name: "پلن ۷ روزه",
-      duration: "آفر ویژه - ۷ روز",
-      price: 350000,
-      features: [
-        "تمام امکانات Pro",
-        "مناسب تست و پروژه کوتاه",
-        "فعال‌سازی سریع",
-        "۵۰۰ درخواست سریع",
-      ],
-    },
-    {
-      name: "پلن یک‌ماهه",
+      name: "پلن Pro ماهانه",
       duration: "۱ ماهه - ۲۰ دلار",
-      price: 1250000,
+      price: 3997000,
       popular: true,
       features: [
         "دسترسی کامل به همه امکانات",
-        "فعال‌سازی روی اکانت شخصی",
         "۵۰۰ درخواست سریع در ماه",
         "درخواست‌های کند نامحدود",
+        "فعال‌سازی روی اکانت شخصی",
+        "دسترسی به Claude، GPT-4، Gemini",
       ],
     },
     {
       name: "پلن Business",
       duration: "۱ ماهه - تیمی",
-      price: 2500000,
+      price: 6000000,
       features: [
         "مناسب تیم‌ها و شرکت‌ها",
-        "مدیریت مرکزی",
+        "مدیریت مرکزی کاربران",
         "پشتیبانی اولویت‌دار",
+        "امنیت سازمانی",
       ],
     },
   ];
@@ -57,89 +48,251 @@ const CursorPage = () => {
   const comparison = [
     { feature: "تکمیل خودکار کد", free: "محدود", premium: "نامحدود" },
     { feature: "مدل‌های پیشرفته (Claude, GPT-4)", free: false, premium: true },
-    { feature: "درک کانتکست پروژه", free: "محدود", premium: "کامل" },
+    { feature: "درک کانتکست کل پروژه", free: "محدود", premium: "کامل" },
     { feature: "چت با AI", free: "محدود", premium: "نامحدود" },
     { feature: "Refactoring هوشمند", free: false, premium: true },
-    { feature: "Tab Completion", free: "پایه", premium: "پیشرفته" },
+    { feature: "Tab Completion پیشرفته", free: "پایه", premium: "پیشرفته" },
+    { feature: "Composer چند فایلی", free: false, premium: true },
     { feature: "سرعت پاسخ", free: "عادی", premium: "سریع" },
   ];
 
   const faqs = [
     {
-      question: "Cursor چه تفاوتی با GitHub Copilot دارد؟",
+      question: "Cursor چیست و چه تفاوتی با GitHub Copilot دارد؟",
       answer:
-        "Cursor یک ادیتور کامل است که از ابتدا برای AI طراحی شده، در حالی که Copilot یک افزونه است. Cursor درک بهتری از کل پروژه دارد و می‌تواند با چند فایل همزمان کار کند. همچنین به مدل‌های متنوع‌تری دسترسی دارد.",
-    },
-    {
-      question: "پلن ۷ روزه برای چه کسانی مناسب است؟",
-      answer:
-        "برای کسانی که می‌خواهند Cursor را تست کنند یا یک پروژه کوتاه‌مدت دارند. قیمت بسیار مناسبی دارد و تمام امکانات Pro را شامل می‌شود.",
-    },
-    {
-      question: "آیا Extensions های VS Code کار می‌کنند؟",
-      answer:
-        "بله، Cursor بر پایه VS Code ساخته شده و اکثر افزونه‌های محبوب کار می‌کنند. می‌توانید تم‌ها، زبان‌ها و ابزارهای مورد علاقه‌تان را نصب کنید.",
+        "Cursor یک ادیتور کامل است که از ابتدا برای AI طراحی شده، در حالی که Copilot یک افزونه است. Cursor درک بهتری از کل پروژه دارد، می‌تواند با چند فایل همزمان کار کند و به مدل‌های متنوع‌تری (Claude, GPT-4, Gemini) دسترسی دارد.",
     },
     {
       question: "تفاوت درخواست سریع و کند چیست؟",
       answer:
-        "درخواست‌های سریع از مدل‌های قوی‌تر مثل Claude 3.5 Sonnet و GPT-4 استفاده می‌کنند و اولویت پاسخ‌گویی دارند. درخواست‌های کند از مدل‌های سبک‌تر استفاده می‌کنند اما همچنان قدرتمند هستند.",
+        "درخواست‌های سریع از مدل‌های قوی‌تر مثل Claude 3.5 Sonnet و GPT-4 استفاده می‌کنند و اولویت پاسخ‌گویی دارند. درخواست‌های کند از مدل‌های سبک‌تر استفاده می‌کنند اما همچنان قدرتمند هستند و نامحدود هستند.",
+    },
+    {
+      question: "آیا Extensions های VS Code کار می‌کنند؟",
+      answer:
+        "بله، Cursor بر پایه VS Code ساخته شده و اکثر افزونه‌های محبوب کار می‌کنند. می‌توانید تم‌ها، زبان‌ها، فرمترها و ابزارهای مورد علاقه‌تان را نصب کنید.",
+    },
+    {
+      question: "Composer چیست؟",
+      answer:
+        "Composer یک قابلیت قدرتمند Cursor است که اجازه می‌دهد تغییرات را در چند فایل همزمان اعمال کنید. مثلاً می‌توانید بگویید «یک API endpoint برای کاربران بساز» و Cursor تمام فایل‌های لازم را ایجاد یا ویرایش می‌کند.",
+    },
+    {
+      question: "چرا Cursor بهتر از کدنویسی سنتی است؟",
+      answer:
+        "با Cursor سرعت کدنویسی ۲ برابر یا بیشتر می‌شود. AI کد را تکمیل می‌کند، باگ‌ها را پیدا می‌کند، refactor می‌کند و حتی تست می‌نویسد. شما فقط ایده را توضیح می‌دهید و Cursor پیاده‌سازی می‌کند.",
     },
   ];
 
-  // Extra content
+  // Extra content sections
   const extraContent = (
-    <section className="py-12">
-      <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-bold mb-8">🚀 چرا Cursor؟</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="glass rounded-2xl p-6 text-center">
-            <div className="w-14 h-14 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-4">
-              <Code className="w-7 h-7 text-purple-500" />
+    <>
+      {/* Stats Section */}
+      <section className="py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="glass rounded-2xl p-8 text-center">
+              <div className="text-4xl font-bold text-purple-500 mb-2">۲x</div>
+              <div className="text-lg font-semibold mb-1">سرعت کدنویسی</div>
+              <p className="text-muted-foreground text-sm">با Tab Completion هوشمند</p>
             </div>
-            <h3 className="font-bold mb-2">کدنویسی ۲ برابر سریع‌تر</h3>
-            <p className="text-muted-foreground text-sm">
-              با Tab Completion هوشمند، سرعت کدنویسی‌تان دو برابر می‌شود.
-            </p>
+            <div className="glass rounded-2xl p-8 text-center">
+              <div className="text-4xl font-bold text-purple-500 mb-2">۵۰۰</div>
+              <div className="text-lg font-semibold mb-1">درخواست سریع</div>
+              <p className="text-muted-foreground text-sm">Claude و GPT-4 در ماه</p>
+            </div>
+            <div className="glass rounded-2xl p-8 text-center">
+              <div className="text-4xl font-bold text-purple-500 mb-2">∞</div>
+              <div className="text-lg font-semibold mb-1">درخواست کند</div>
+              <p className="text-muted-foreground text-sm">نامحدود و همیشه در دسترس</p>
+            </div>
           </div>
-          <div className="glass rounded-2xl p-6 text-center">
-            <div className="w-14 h-14 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-4">
-              <RefreshCw className="w-7 h-7 text-purple-500" />
-            </div>
-            <h3 className="font-bold mb-2">درک کل پروژه</h3>
-            <p className="text-muted-foreground text-sm">
-              AI کل پروژه رو می‌فهمه و پیشنهادات مرتبط میده.
+        </div>
+      </section>
+
+      {/* What is Cursor Section */}
+      <section className="py-12">
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl font-bold mb-6">🤖 Cursor چیست؟</h2>
+          <div className="glass rounded-3xl p-8 max-w-4xl">
+            <p className="text-muted-foreground leading-relaxed mb-4">
+              Cursor یک ادیتور کدنویسی نسل جدید است که از ابتدا برای کار با هوش مصنوعی طراحی شده. بر پایه VS Code ساخته شده اما با قابلیت‌های AI بسیار قوی‌تر.
             </p>
-          </div>
-          <div className="glass rounded-2xl p-6 text-center">
-            <div className="w-14 h-14 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-4">
-              <Zap className="w-7 h-7 text-purple-500" />
-            </div>
-            <h3 className="font-bold mb-2">مدل‌های متنوع</h3>
-            <p className="text-muted-foreground text-sm">
-              دسترسی به Claude، GPT-4 و Gemini در یک جا.
+            <p className="text-muted-foreground leading-relaxed mb-4">
+              برخلاف GitHub Copilot که فقط یک افزونه است، Cursor کل پروژه شما را درک می‌کند و می‌تواند تغییرات هماهنگ در چند فایل همزمان انجام دهد.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              با دسترسی به Claude 3.5 Sonnet، GPT-4 و Gemini، بهترین مدل‌های AI دنیا را برای کدنویسی در اختیار دارید.
             </p>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Key Features Section */}
+      <section className="py-12">
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl font-bold mb-8">🌟 قابلیت‌های کلیدی Cursor</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="glass rounded-2xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                  <Terminal className="w-6 h-6 text-purple-500" />
+                </div>
+                <h3 className="font-bold text-lg">Tab Completion</h3>
+              </div>
+              <p className="text-muted-foreground text-sm">
+                با فشار Tab، AI کد را تکمیل می‌کند. نه فقط یک خط، بلکه بلوک‌های کامل کد با درک کانتکست.
+              </p>
+            </div>
+            <div className="glass rounded-2xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                  <Cpu className="w-6 h-6 text-purple-500" />
+                </div>
+                <h3 className="font-bold text-lg">مدل‌های متنوع</h3>
+              </div>
+              <p className="text-muted-foreground text-sm">
+                دسترسی به Claude 3.5 Sonnet (بهترین در کدنویسی)، GPT-4 و Gemini. هر مدل را برای کار مناسب استفاده کنید.
+              </p>
+            </div>
+            <div className="glass rounded-2xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                  <GitBranch className="w-6 h-6 text-purple-500" />
+                </div>
+                <h3 className="font-bold text-lg">Composer</h3>
+              </div>
+              <p className="text-muted-foreground text-sm">
+                تغییرات چند فایلی با یک دستور. بگویید چه می‌خواهید و Cursor تمام فایل‌ها را ایجاد یا ویرایش می‌کند.
+              </p>
+            </div>
+            <div className="glass rounded-2xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                  <Code className="w-6 h-6 text-purple-500" />
+                </div>
+                <h3 className="font-bold text-lg">درک کل پروژه</h3>
+              </div>
+              <p className="text-muted-foreground text-sm">
+                AI کل کدبیس را می‌فهمد. از توابع، کلاس‌ها و وابستگی‌ها آگاه است و پیشنهادات مرتبط می‌دهد.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison with Copilot */}
+      <section className="py-12">
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl font-bold mb-8">🔄 Cursor در مقابل GitHub Copilot</h2>
+          <div className="glass rounded-3xl p-8 max-w-4xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="font-bold text-lg mb-4 text-purple-500">Cursor Pro ✓</h3>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li>✅ ادیتور کامل با AI یکپارچه</li>
+                  <li>✅ درک کل پروژه</li>
+                  <li>✅ تغییرات چند فایلی (Composer)</li>
+                  <li>✅ دسترسی به Claude, GPT-4, Gemini</li>
+                  <li>✅ چت با AI درباره کد</li>
+                  <li>✅ Refactoring هوشمند</li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg mb-4 text-muted-foreground">GitHub Copilot</h3>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li>⚪ فقط افزونه برای ادیتور</li>
+                  <li>⚪ درک محدود (فایل فعلی)</li>
+                  <li>❌ تغییرات تک فایلی</li>
+                  <li>⚪ فقط مدل‌های OpenAI</li>
+                  <li>⚪ چت محدود</li>
+                  <li>❌ Refactoring محدود</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Us Section */}
+      <section className="py-12">
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl font-bold mb-8">🏆 چرا ما بهترین انتخاب هستیم؟</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="glass rounded-2xl p-6 text-center">
+              <div className="w-16 h-16 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-4">
+                <Headphones className="w-8 h-8 text-purple-500" />
+              </div>
+              <h3 className="font-bold text-lg mb-2">پشتیبانی ۲۴ ساعته</h3>
+              <p className="text-muted-foreground text-sm">
+                تیم پشتیبانی متخصص و همیشه در دسترس
+              </p>
+            </div>
+            <div className="glass rounded-2xl p-6 text-center">
+              <div className="w-16 h-16 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-4">
+                <RefreshCw className="w-8 h-8 text-purple-500" />
+              </div>
+              <h3 className="font-bold text-lg mb-2">تضمین جایگزینی</h3>
+              <p className="text-muted-foreground text-sm">
+                در صورت هر مشکلی، اکانت جدید دریافت می‌کنید
+              </p>
+            </div>
+            <div className="glass rounded-2xl p-6 text-center">
+              <div className="w-16 h-16 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-4">
+                <Zap className="w-8 h-8 text-purple-500" />
+              </div>
+              <h3 className="font-bold text-lg mb-2">تحویل فوری</h3>
+              <p className="text-muted-foreground text-sm">
+                بلافاصله پس از پرداخت، اکانت فعال می‌شود
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How to Buy Section */}
+      <section className="py-12">
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl font-bold mb-8">📋 نحوه خرید در ۳ مرحله</h2>
+          <div className="glass rounded-3xl p-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="text-center">
+                <div className="w-14 h-14 rounded-full bg-purple-500 text-background font-bold text-2xl flex items-center justify-center mx-auto mb-4">۱</div>
+                <h3 className="font-bold text-lg mb-2">انتخاب پلن</h3>
+                <p className="text-muted-foreground text-sm">پلن Pro یا Business را انتخاب کنید</p>
+              </div>
+              <div className="text-center">
+                <div className="w-14 h-14 rounded-full bg-purple-500 text-background font-bold text-2xl flex items-center justify-center mx-auto mb-4">۲</div>
+                <h3 className="font-bold text-lg mb-2">پیام به پشتیبانی</h3>
+                <p className="text-muted-foreground text-sm">با کلیک روی ثبت سفارش به تلگرام متصل شوید</p>
+              </div>
+              <div className="text-center">
+                <div className="w-14 h-14 rounded-full bg-purple-500 text-background font-bold text-2xl flex items-center justify-center mx-auto mb-4">۳</div>
+                <h3 className="font-bold text-lg mb-2">دسترسی فوری</h3>
+                <p className="text-muted-foreground text-sm">پس از پرداخت، اکانت همان لحظه فعال می‌شود</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 
   return (
     <>
       <Helmet>
-        <title>خرید اشتراک Cursor Pro | ادیتور کدنویسی AI</title>
+        <title>خرید اشتراک Cursor Pro | ادیتور کدنویسی AI - سریع‌تر از Copilot</title>
         <meta
           name="description"
-          content="خرید اشتراک Cursor Pro - ادیتور کدنویسی هوشمند با AI. تکمیل خودکار کد، رفع باگ هوشمند، دسترسی به Claude و GPT-4. مناسب برنامه‌نویسان حرفه‌ای."
+          content="خرید اشتراک Cursor Pro - ادیتور کدنویسی هوشمند با AI. دسترسی به Claude 3.5 Sonnet و GPT-4. سرعت کدنویسی ۲ برابر. بهتر از GitHub Copilot."
         />
-        <meta name="keywords" content="خرید Cursor, Cursor Pro, ادیتور کد AI, کدنویسی هوشمند, GitHub Copilot" />
+        <meta name="keywords" content="خرید Cursor, Cursor Pro, ادیتور کد AI, کدنویسی هوشمند, GitHub Copilot, Claude, GPT-4" />
       </Helmet>
       <ServicePageLayout
         icon={Code}
         title="Cursor Pro"
         subtitle="ادیتور کدنویسی هوشمند"
-        description="کرسر یک ادیتور کدنویسی هوشمند است که با کمک هوش مصنوعی، سرعت کدنویسی و رفع باگ شما را چند برابر می‌کند. با دسترسی به Claude 3.5 Sonnet، GPT-4 و Gemini، بهترین مدل‌های AI را برای کدنویسی در اختیار دارید."
+        description="Cursor یک ادیتور کدنویسی نسل جدید است که از ابتدا برای کار با هوش مصنوعی طراحی شده. با دسترسی به Claude 3.5 Sonnet، GPT-4 و Gemini، سرعت کدنویسی‌تان ۲ برابر می‌شود. درک کامل کل پروژه، تغییرات چند فایلی با Composer و Tab Completion پیشرفته."
         color="#8B5CF6"
         features={features}
         plans={plans}
