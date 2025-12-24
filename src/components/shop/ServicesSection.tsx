@@ -17,10 +17,11 @@ const ServicesSection = () => {
     {
       id: "chatgpt",
       logo: logos.chatgpt,
-      title: "ChatGPT Plus / Pro",
+      title: "خرید اکانت ChatGPT Plus",
       description: "قدرتمندترین AI برای تولید محتوا و کدنویسی",
       color: "#10B981",
       badge: "پرفروش",
+      discount: 34,
       features: [
         "دسترسی به GPT-4o و GPT-5",
         "ساخت تصویر با DALL-E 3",
@@ -36,11 +37,44 @@ const ServicesSection = () => {
       ],
     },
     {
+      id: "chatgpt-shared",
+      logo: logos.chatgpt,
+      title: "اکانت اشتراکی ChatGPT Plus",
+      description: "اقتصادی و مقرون به صرفه",
+      color: "#3B82F6",
+      discount: 14,
+      features: [
+        "دسترسی به GPT-4o",
+        "مشترک با ۲ نفر دیگر",
+        "قیمت مناسب",
+      ],
+      plans: [
+        { name: "اشتراکی ماهانه", duration: "۱ ماهه", price: 497000, popular: true },
+      ],
+    },
+    {
+      id: "chatgpt-pro",
+      logo: logos.chatgpt,
+      title: "اکانت اشتراکی ChatGPT Pro",
+      description: "دسترسی به O3 Pro و امکانات پیشرفته",
+      color: "#8B5CF6",
+      discount: 17,
+      features: [
+        "دسترسی به O3 Pro",
+        "بدون محدودیت",
+        "پشتیبانی ویژه",
+      ],
+      plans: [
+        { name: "Pro ماهانه", duration: "۱ ماهه", price: 3197000, popular: true },
+      ],
+    },
+    {
       id: "gemini",
       logo: logos.gemini,
-      title: "Gemini Pro",
-      description: "AI گوگل با ۲ ترابایت فضا و Deep Research",
-      color: "#3B82F6",
+      title: "خرید و فعال‌سازی اشتراک Gemini Pro",
+      description: "AI گوگل با ۲ ترابایت فضا",
+      color: "#A855F7",
+      discount: 17,
       features: [
         "یکپارچه با Gmail, Drive, Docs",
         "۲ ترابایت فضای Google One",
@@ -51,33 +85,32 @@ const ServicesSection = () => {
         { name: "پلن یک‌ماهه", duration: "۱ ماهه", price: 649000 },
         { name: "پلن سه‌ماهه", duration: "۳ ماهه", price: 1250000, popular: true },
         { name: "پلن شش‌ماهه", duration: "۶ ماهه", price: 1630000 },
-        { name: "یکساله Gmail شخصی", duration: "۱ ساله", price: 2790000 },
+        { name: "یکساله Gmail شخصی", duration: "۱ ساله", price: 2497000 },
       ],
     },
     {
-      id: "claude",
-      logo: logos.claude,
-      title: "Claude Pro",
-      description: "بهترین AI برای متون طولانی و کدنویسی",
-      color: "#D97706",
-      badge: "جدید",
+      id: "gemini-ultra",
+      logo: logos.gemini,
+      title: "اکانت Gemini Ultra (۲۵۰ دلار)",
+      description: "پلن حرفه‌ای با امکانات کامل",
+      color: "#10B981",
+      discount: 12,
       features: [
-        "پنجره کانتکست ۲۰۰ هزار توکنی",
-        "Claude 3.5 Sonnet + Opus",
-        "بهترین برای تحلیل کتاب‌ها",
-        "Artifacts برای خروجی بصری",
+        "تمام امکانات Gemini",
+        "۲۵۰ دلار اعتبار",
+        "دسترسی به مدل‌های پیشرفته",
       ],
       plans: [
-        { name: "Pro ماهانه", duration: "۱ ماهه - شخصی", price: 1250000, popular: true },
-        { name: "Pro اشتراکی", duration: "۱ ماهه - اقتصادی", price: 450000 },
+        { name: "Ultra ماهانه", duration: "۱ ماهه", price: 29500000, popular: true },
       ],
     },
     {
       id: "grok",
       logo: logos.grok,
-      title: "Super Grok",
+      title: "اکانت اشتراکی Grok",
       description: "هوش مصنوعی بدون سانسور xAI",
-      color: "#FFFFFF",
+      color: "#374151",
+      discount: 16,
       badge: "بدون سانسور",
       features: [
         "پاسخ به سوالات حساس بدون فیلتر",
@@ -86,49 +119,34 @@ const ServicesSection = () => {
         "حالت استدلال پیشرفته",
       ],
       plans: [
-        { name: "پلن ماهانه", duration: "۱ ماهه", price: 1850000, popular: true },
+        { name: "پلن ماهانه", duration: "۱ ماهه", price: 2597000, popular: true },
       ],
     },
     {
-      id: "perplexity",
-      logo: logos.perplexity,
-      title: "Perplexity Pro",
-      description: "موتور جستجوی هوشمند با منابع",
-      color: "#06B6D4",
+      id: "claude",
+      logo: logos.claude,
+      title: "اکانت Claude",
+      description: "بهترین AI برای متون طولانی",
+      color: "#F97316",
+      discount: 15,
       features: [
-        "پاسخ‌های دقیق با ذکر منبع و لینک",
-        "دسترسی به GPT-4، Claude 3 و Gemini Pro",
-        "۳۰۰+ پرسش Pro در روز",
-        "آپلود نامحدود فایل",
+        "پنجره کانتکست ۲۰۰ هزار توکنی",
+        "Claude 3.5 Sonnet + Opus",
+        "بهترین برای تحلیل کتاب‌ها",
+        "Artifacts برای خروجی بصری",
       ],
       plans: [
-        { name: "پلن یک‌ماهه", duration: "۱ ماهه", price: 649000, popular: true },
-        { name: "پلن یکساله", duration: "۱ ساله", price: 1670000 },
-      ],
-    },
-    {
-      id: "spotify",
-      logo: logos.spotify,
-      title: "Spotify Premium",
-      description: "موسیقی بدون تبلیغ با کیفیت بالا",
-      color: "#1DB954",
-      features: [
-        "بدون تبلیغات آزاردهنده",
-        "دانلود آهنگ برای حالت آفلاین",
-        "کیفیت صدای عالی",
-        "فعال‌سازی روی اکانت شخصی",
-      ],
-      plans: [
-        { name: "پلن یک‌ماهه", duration: "۱ ماهه", price: 350000, popular: true },
-        { name: "پلن ۴ ماهه", duration: "۴ ماهه - اقتصادی", price: 1350000 },
+        { name: "Pro ماهانه", duration: "۱ ماهه - شخصی", price: 2797000, popular: true },
+        { name: "Pro اشتراکی", duration: "۱ ماهه - اقتصادی", price: 450000 },
       ],
     },
     {
       id: "cursor",
       logo: logos.cursor,
-      title: "Cursor Pro",
+      title: "اکانت Cursor",
       description: "ادیتور کدنویسی هوشمند",
-      color: "#8B5CF6",
+      color: "#3B82F6",
+      discount: 13,
       badge: "مخصوص برنامه‌نویسان",
       features: [
         "تکمیل خودکار کد با AI",
@@ -141,85 +159,25 @@ const ServicesSection = () => {
         { name: "پلن یک‌ماهه", duration: "۱ ماهه", price: 3490000, popular: true },
       ],
     },
-    {
-      id: "telegram",
-      logo: logos.telegram,
-      title: "تلگرام پرمیوم",
-      description: "ارتقای حساب کاربری تلگرام",
-      color: "#0088CC",
-      features: [
-        "بدون تبلیغات در کانال‌ها",
-        "آپلود فایل تا ۴ گیگابایت",
-        "استیکرها و ایموجی‌های پرمیوم",
-        "فعال‌سازی به صورت گیفت (بدون نیاز به لاگین)",
-      ],
-      plans: [
-        { name: "پلن ۳ ماهه", duration: "۳ ماهه", price: 1730000 },
-        { name: "پلن ۶ ماهه", duration: "۶ ماهه", price: 2230000, popular: true },
-        { name: "پلن یکساله", duration: "۱ ساله - بهترین قیمت", price: 3900000 },
-      ],
-    },
-    {
-      id: "cards",
-      emoji: "💳",
-      title: "ویزا و مستر کارت",
-      description: "کارت اعتباری مجازی بین‌المللی",
-      color: "#EAB308",
-      badge: "جدید",
-      features: [
-        "صادر شده از بانک‌های اروپایی و سوییس",
-        "قابلیت شارژ مجدد نامحدود",
-        "مناسب تمام خریدهای بین‌المللی",
-        "رفع تحریم به معنای واقعی",
-      ],
-      plans: [
-        { name: "مستر کارت", duration: "بین‌المللی", price: 650000 },
-        { name: "ویزا کارت", duration: "بین‌المللی", price: 750000, popular: true },
-      ],
-    },
-    {
-      id: "vnum",
-      emoji: "📱",
-      title: "شماره مجازی",
-      description: "شماره خارجی دائمی",
-      color: "#A855F7",
-      features: [
-        "مناسب ثبت‌نام در سرویس‌های بین‌المللی",
-        "شماره‌های دائمی و Private",
-        "کشورهای UK، US، AU، CA",
-        "حساب‌های آماده تلگرام و واتساپ",
-      ],
-      plans: [
-        { name: "شماره کانادا", duration: "دائمی", price: 650000 },
-        { name: "شماره آمریکا", duration: "دائمی", price: 750000 },
-        { name: "شماره انگلیس", duration: "دائمی", price: 950000, popular: true },
-        { name: "شماره استرالیا", duration: "دائمی", price: 1450000 },
-      ],
-    },
   ];
 
   return (
     <section id="services" className="py-20 relative">
       {/* Background Effect */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-      
+
       <div className="container mx-auto px-4">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <span className="text-gradient">سرویس‌های ما</span>
+        <div className="text-center mb-12">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">
+            پرفروش‌ترین محصولات ما
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            تمام سرویس‌های زیر با تضمین کیفیت و پشتیبانی ۲۴ ساعته ارائه می‌شوند
-          </p>
         </div>
-        
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+        {/* Services Grid - 4 columns on large screens */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {services.map((service) => (
-            <div key={service.id} id={service.id}>
-              <ServiceCard {...service} />
-            </div>
+            <ServiceCard key={service.id} {...service} />
           ))}
         </div>
       </div>
