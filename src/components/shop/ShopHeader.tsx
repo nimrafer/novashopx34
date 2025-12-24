@@ -1,7 +1,8 @@
-import { MessageCircle, Sparkles, User, LogOut } from "lucide-react";
+import { MessageCircle, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import novaLogo from "@/assets/nova-logo.png";
 
 const SUPPORT_USERNAME = "Nova_AI_Support";
 const CHANNEL_USERNAME = "nova_ai_shop";
@@ -15,9 +16,7 @@ const ShopHeader = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-primary-foreground" />
-            </div>
+            <img src={novaLogo} alt="Nova AI Shop" className="w-10 h-10 rounded-xl object-cover" />
             <span className="text-xl font-bold">Nova AI Shop</span>
           </Link>
           
