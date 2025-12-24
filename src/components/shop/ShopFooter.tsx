@@ -1,5 +1,7 @@
-import { Sparkles, MessageCircle, Send } from "lucide-react";
+import { MessageCircle, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import novaLogo from "@/assets/nova-logo.png";
 
 const SUPPORT_USERNAME = "Nova_AI_Support";
 const CHANNEL_USERNAME = "nova_ai_shop";
@@ -47,12 +49,10 @@ const ShopFooter = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-primary-foreground" />
-            </div>
+          <Link to="/" className="flex items-center gap-2">
+            <img src={novaLogo} alt="Nova AI Shop" className="w-10 h-10 rounded-xl object-cover" />
             <span className="text-xl font-bold">Nova AI Shop</span>
-          </div>
+          </Link>
           
           {/* Links */}
           <div className="flex items-center gap-6 text-sm text-muted-foreground">

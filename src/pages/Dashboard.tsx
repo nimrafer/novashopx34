@@ -14,6 +14,7 @@ import {
   ArrowLeft,
   ShoppingBag
 } from 'lucide-react';
+import novaLogo from '@/assets/nova-logo.png';
 
 interface Order {
   id: string;
@@ -117,9 +118,9 @@ const Dashboard = () => {
           
           <Link to="/">
             <img 
-              src="/LINEA-1.svg" 
-              alt="LINEA" 
-              className="h-6 w-auto invert"
+              src={novaLogo} 
+              alt="Nova AI Shop" 
+              className="w-8 h-8 rounded-lg object-cover"
             />
           </Link>
 

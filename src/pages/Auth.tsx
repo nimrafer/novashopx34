@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import novaLogo from '@/assets/nova-logo.png';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -145,9 +146,9 @@ const Auth = () => {
           <div className="text-center mb-8">
             <Link to="/">
               <img 
-                src="/LINEA-1.svg" 
-                alt="LINEA" 
-                className="h-8 w-auto mx-auto mb-4 invert"
+                src={novaLogo} 
+                alt="Nova AI Shop" 
+                className="w-16 h-16 mx-auto mb-4 rounded-xl object-cover"
               />
             </Link>
             <h1 className="text-2xl font-bold text-foreground mb-2">
