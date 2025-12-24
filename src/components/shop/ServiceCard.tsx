@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
-import { MessageCircle, ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 interface Plan {
   name: string;
@@ -21,13 +20,25 @@ interface ServiceCardProps {
   plans: Plan[];
   features?: string[];
   badge?: string;
+  discount?: number;
 }
-
-const SUPPORT_USERNAME = "Nova_AI_Support";
 
 const formatPrice = (price: number) => {
   if (price === 0) return "تماس بگیرید";
-  return new Intl.NumberFormat("fa-IR").format(price / 1000) + " هزار تومان";
+  return new Intl.NumberFormat("fa-IR").format(price / 1000);
+};
+
+const serviceRoutes: Record<string, string> = {
+  chatgpt: "/services/chatgpt",
+  gemini: "/services/gemini",
+  grok: "/services/grok",
+  claude: "/services/claude",
+  perplexity: "/services/perplexity",
+  spotify: "/services/spotify",
+  cursor: "/services/cursor",
+  telegram: "/services/telegram-premium",
+  cards: "/services/cards",
+  vnum: "/services/virtual-number",
 };
 
 const ServiceCard = ({
@@ -38,114 +49,91 @@ const ServiceCard = ({
   description,
   color,
   plans,
-  features,
   badge,
+  discount,
 }: ServiceCardProps) => {
-  const handleOrder = (planName: string) => {
-    const message = encodeURIComponent(`سلام! میخوام ${title} - ${planName} رو سفارش بدم.`);
-    window.open(`https://t.me/${SUPPORT_USERNAME}?text=${message}`, "_blank");
-  };
-
-  const serviceRoutes: Record<string, string> = {
-    chatgpt: "/services/chatgpt",
-    gemini: "/services/gemini",
-    grok: "/services/grok",
-    perplexity: "/services/perplexity",
-    spotify: "/services/spotify",
-    cursor: "/services/cursor",
-    telegram: "/services/telegram-premium",
-    cards: "/services/cards",
-    vnum: "/services/virtual-number",
-  };
+  // Get the lowest price from plans
+  const lowestPrice = Math.min(...plans.map((p) => p.price));
+  const originalPrice = discount ? Math.round(lowestPrice / (1 - discount / 100)) : null;
 
   return (
-    <div className="glass rounded-3xl p-6 md:p-8 glass-hover">
-      {/* Header */}
-      <div className="flex items-start justify-between mb-6">
-        <div className="flex items-center gap-4">
-          <div
-            className="w-14 h-14 rounded-2xl flex items-center justify-center overflow-hidden"
-            style={{ backgroundColor: `${color}20` }}
-          >
-            {logo ? (
-              <img src={logo} alt={title} className="w-9 h-9 object-contain" />
-            ) : emoji ? (
-              <span className="text-3xl">{emoji}</span>
-            ) : null}
-          </div>
-          <div>
-            <h3 className="text-xl font-bold">{title}</h3>
-            <p className="text-sm text-muted-foreground">{description}</p>
-          </div>
-        </div>
-        {badge && (
-          <Badge className="bg-gradient-primary text-primary-foreground">
-            {badge}
+    <div className="group relative rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl">
+      {/* Discount Badge */}
+      {discount && (
+        <div className="absolute top-3 right-3 z-20">
+          <Badge className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+            تخفیف {discount}٪
           </Badge>
-        )}
-      </div>
-
-      {/* Features List */}
-      {features && features.length > 0 && (
-        <ul className="space-y-2 mb-4">
-          {features.slice(0, 3).map((feature, idx) => (
-            <li key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
-              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
-              {feature}
-            </li>
-          ))}
-        </ul>
+        </div>
       )}
 
-      {/* View More Link */}
-      <Link
-        to={serviceRoutes[id] || "/"}
-        className="inline-flex items-center gap-1 text-sm mb-6 transition-colors hover:opacity-80"
-        style={{ color }}
-      >
-        مشاهده جزئیات کامل
-        <ArrowLeft className="w-4 h-4" />
-      </Link>
+      {/* Badge (Popular, New, etc.) */}
+      {badge && !discount && (
+        <div className="absolute top-3 right-3 z-20">
+          <Badge className="bg-gradient-primary text-white text-xs font-bold px-2 py-1 rounded-full">
+            {badge}
+          </Badge>
+        </div>
+      )}
 
-      {/* Plans Grid */}
-      <div className="grid gap-4">
-        {plans.slice(0, 2).map((plan, idx) => (
-          <div
-            key={idx}
-            className={`relative rounded-2xl p-4 border transition-all ${
-              plan.popular
-                ? "border-primary bg-primary/5"
-                : "border-border/50 bg-secondary/30 hover:border-primary/30"
-            }`}
-          >
-            {plan.popular && (
-              <div className="absolute -top-2.5 right-4">
-                <Badge className="bg-gradient-primary text-xs">پرفروش</Badge>
-              </div>
+      {/* Top Section - Logo Area */}
+      <div
+        className="relative h-48 flex items-center justify-center overflow-hidden"
+        style={{
+          background: `linear-gradient(135deg, ${color}30 0%, ${color}60 50%, ${color}40 100%)`,
+        }}
+      >
+        {/* Glow Effect */}
+        <div
+          className="absolute inset-0 opacity-50"
+          style={{
+            background: `radial-gradient(circle at center, ${color}40 0%, transparent 70%)`,
+          }}
+        />
+
+        {/* Logo */}
+        <div className="relative z-10 w-24 h-24 rounded-2xl bg-background/20 backdrop-blur-sm flex items-center justify-center shadow-xl border border-white/10">
+          {logo ? (
+            <img src={logo} alt={title} className="w-16 h-16 object-contain" />
+          ) : emoji ? (
+            <span className="text-5xl">{emoji}</span>
+          ) : null}
+        </div>
+      </div>
+
+      {/* Bottom Section - Info Area */}
+      <div className="bg-card/80 backdrop-blur-sm p-4 border-t border-border/30">
+        {/* Title & Description */}
+        <h3 className="font-bold text-foreground mb-1 line-clamp-1">{title}</h3>
+        <p className="text-sm text-muted-foreground mb-3 line-clamp-1">{description}</p>
+
+        {/* Price Section */}
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col items-start">
+            {originalPrice && (
+              <span className="text-xs text-muted-foreground line-through">
+                {formatPrice(originalPrice)} هزار تومان
+              </span>
             )}
-            
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="font-semibold">{plan.name}</h4>
-                <p className="text-sm text-muted-foreground">{plan.duration}</p>
-              </div>
-              <div className="text-left">
-                <div className="font-bold text-lg" style={{ color }}>
-                  {formatPrice(plan.price)}
-                </div>
-              </div>
+            <div className="flex items-baseline gap-1">
+              <span className="text-lg font-bold" style={{ color }}>
+                {formatPrice(lowestPrice)}
+              </span>
+              <span className="text-xs text-muted-foreground">هزار تومان</span>
             </div>
-            
-            <Button
-              className="w-full mt-4"
-              style={{ backgroundColor: color }}
-              onClick={() => handleOrder(plan.name)}
-            >
-              <MessageCircle className="w-4 h-4 ml-2" />
-              ثبت سفارش
-            </Button>
+            <span className="text-xs text-muted-foreground">قیمت از</span>
           </div>
-        ))}
+
+          <Link to={serviceRoutes[id] || "/"}>
+            <Button
+              size="sm"
+              variant="outline"
+              className="rounded-full border-border/50 bg-background/50 hover:bg-background transition-all"
+            >
+              مشاهده
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );
