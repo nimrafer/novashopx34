@@ -83,10 +83,10 @@ const ServicesSection = () => {
         "Deep Research + NotebookLM",
       ],
       plans: [
-        { name: "پلن یک‌ماهه", duration: "۱ ماهه", price: getPrice("gem_month") },
-        { name: "پلن سه‌ماهه", duration: "۳ ماهه", price: getPrice("gem_3month"), popular: true },
-        { name: "پلن شش‌ماهه", duration: "۶ ماهه", price: getPrice("gem_6month") },
-        { name: "یکساله Gmail شخصی", duration: "۱ ساله", price: getPrice("gem_year_personal") },
+        { name: "اختصاصی یک‌ماهه", duration: "۱ ماهه", price: getPrice("gem_exclusive_1month") },
+        { name: "اختصاصی سه‌ماهه", duration: "۳ ماهه", price: getPrice("gem_exclusive_3month"), popular: true },
+        { name: "اختصاصی شش‌ماهه", duration: "۶ ماهه", price: getPrice("gem_exclusive_6month") },
+        { name: "اختصاصی نه‌ماهه", duration: "۹ ماهه", price: getPrice("gem_exclusive_9month") },
       ],
     },
     {
