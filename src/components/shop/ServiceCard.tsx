@@ -57,7 +57,11 @@ const ServiceCard = ({
   const originalPrice = discount ? Math.round(lowestPrice / (1 - discount / 100)) : null;
 
   return (
-    <div className="group relative rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl">
+    <Link 
+      to={serviceRoutes[id] || "/"} 
+      className="group relative rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl block cursor-pointer"
+      title={`اطلاعات بیشتر و خرید ${title}`}
+    >
       {/* Discount Badge */}
       {discount && (
         <div className="absolute top-3 right-3 z-20">
@@ -124,19 +128,16 @@ const ServiceCard = ({
             <span className="text-xs text-muted-foreground">قیمت از</span>
           </div>
 
-          <Link to={serviceRoutes[id] || "/"}>
-            <Button
-              size="sm"
-              variant="outline"
-              className="rounded-full border-border/50 bg-background/50 hover:bg-background transition-all"
-              title={`اطلاعات بیشتر و خرید ${title}`}
-            >
-              جزئیات و خرید
-            </Button>
-          </Link>
+          <Button
+            size="sm"
+            variant="outline"
+            className="rounded-full border-border/50 bg-background/50 hover:bg-background transition-all"
+          >
+            مشاهده
+          </Button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
