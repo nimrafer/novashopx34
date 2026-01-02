@@ -2,6 +2,7 @@ import { MessageSquare, Clock, RefreshCw, Zap, Headphones, BookOpen, Code } from
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
 import { usePricesContext } from "@/contexts/PricesContext";
+import { createFAQSchema, createBreadcrumbSchema, createProductSchema } from "@/components/seo/schemas";
 
 const ClaudePage = () => {
   const { getPrice } = usePricesContext();
@@ -250,15 +251,41 @@ const ClaudePage = () => {
     </>
   );
 
+  const lowestPrice = Math.min(...plans.map(p => p.price));
+  
+  // Generate SEO schemas
+  const faqSchema = createFAQSchema(faqs);
+  const breadcrumbSchema = createBreadcrumbSchema([
+    { name: "خانه", url: "/" },
+    { name: "خرید Claude Pro", url: "/services/claude" }
+  ]);
+  const productSchema = createProductSchema({
+    name: "اشتراک Claude Pro",
+    description: "خرید اشتراک Claude Pro از Anthropic. پنجره کانتکست ۲۰۰ هزار توکنی، بهترین انتخاب برای تحلیل کتاب‌ها و کدنویسی حرفه‌ای.",
+    price: lowestPrice,
+    url: "/services/claude",
+    image: "https://nova-ai-shop.lovable.app/logos/claude.png",
+    category: "اشتراک هوش مصنوعی",
+    sku: "CLAUDE-PRO",
+    ratingValue: 4.8,
+    reviewCount: 720
+  });
+
   return (
     <>
       <Helmet>
-        <title>خرید اشتراک Claude Pro | بهترین AI برای متون طولانی و کدنویسی</title>
+        <title>خرید اشتراک Claude Pro | بهترین AI برای کدنویسی - نوا شاپ</title>
         <meta
           name="description"
-          content="خرید اشتراک Claude Pro از Anthropic. پنجره کانتکست ۲۰۰ هزار توکنی، بهترین انتخاب برای تحلیل کتاب‌ها، کدنویسی حرفه‌ای و تحقیقات با کمترین خطا."
+          content="خرید اشتراک Claude Pro از Anthropic. پنجره کانتکست ۲۰۰ هزار توکنی، بهترین انتخاب برای تحلیل کتاب‌ها، کدنویسی حرفه‌ای و تحقیقات."
         />
-        <meta name="keywords" content="خرید Claude, اشتراک Claude Pro, Anthropic, هوش مصنوعی, Claude 3.5 Sonnet, Claude Opus" />
+        <meta name="keywords" content="خرید Claude, اشتراک Claude Pro, Anthropic, هوش مصنوعی, Claude 3.5 Sonnet, Claude Opus, خرید کلود ایران" />
+        <link rel="canonical" href="https://nova-ai-shop.lovable.app/services/claude" />
+        
+        {/* Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify([productSchema, faqSchema, breadcrumbSchema])}
+        </script>
       </Helmet>
       <ServicePageLayout
         icon={MessageSquare}

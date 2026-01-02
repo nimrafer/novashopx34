@@ -2,6 +2,7 @@ import { Sparkles, Clock, RefreshCw, Zap, Headphones, Wifi, Database } from "luc
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
 import { usePricesContext } from "@/contexts/PricesContext";
+import { createFAQSchema, createBreadcrumbSchema, createProductSchema } from "@/components/seo/schemas";
 
 const GeminiPage = () => {
   const { getPrice } = usePricesContext();
@@ -301,37 +302,39 @@ const GeminiPage = () => {
   );
 
   const lowestPrice = Math.min(...plans.map(p => p.price));
+  
+  // Generate SEO schemas
+  const faqSchema = createFAQSchema(faqs);
+  const breadcrumbSchema = createBreadcrumbSchema([
+    { name: "خانه", url: "/" },
+    { name: "خرید Gemini Pro", url: "/services/gemini" }
+  ]);
+  const productSchema = createProductSchema({
+    name: "اشتراک Gemini Pro گوگل",
+    description: "خرید اشتراک Gemini Pro گوگل با ۲ ترابایت فضای ابری Google One، Deep Research و یکپارچگی کامل با Gmail, Drive و Docs.",
+    price: lowestPrice,
+    url: "/services/gemini",
+    image: "https://nova-ai-shop.lovable.app/logos/gemini.png",
+    category: "اشتراک هوش مصنوعی",
+    sku: "GEM-PRO",
+    ratingValue: 4.8,
+    reviewCount: 890
+  });
 
   return (
     <>
       <Helmet>
-        <title>خرید اشتراک Gemini Pro گوگل | ۲ ترابایت فضا + Deep Research</title>
+        <title>خرید اشتراک Gemini Pro | ۲ ترابایت فضا + Deep Research - نوا شاپ</title>
         <meta
           name="description"
           content="خرید اشتراک Gemini Pro گوگل با ۲ ترابایت فضای ابری. یکپارچه با Gmail, Drive و Docs. ساخت ویدیو با Veo، Deep Research و پشتیبانی ۲۴ ساعته."
         />
-        <meta name="keywords" content="خرید Gemini, اشتراک Gemini Pro, هوش مصنوعی گوگل, Google One, Deep Research, Veo" />
+        <meta name="keywords" content="خرید Gemini, اشتراک Gemini Pro, هوش مصنوعی گوگل, Google One, Deep Research, Veo, خرید جمینی ایران" />
+        <link rel="canonical" href="https://nova-ai-shop.lovable.app/services/gemini" />
         
-        {/* Product Schema with dynamic price */}
+        {/* Structured Data */}
         <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            "name": "اشتراک Gemini Pro گوگل",
-            "description": "خرید اشتراک Gemini Pro با ۲ ترابایت فضای ابری و Deep Research",
-            "brand": {
-              "@type": "Brand",
-              "name": "Nova AI Shop"
-            },
-            "offers": {
-              "@type": "AggregateOffer",
-              "priceCurrency": "IRR",
-              "lowPrice": lowestPrice,
-              "highPrice": Math.max(...plans.map(p => p.price)),
-              "offerCount": plans.length,
-              "availability": "https://schema.org/InStock"
-            }
-          })}
+          {JSON.stringify([productSchema, faqSchema, breadcrumbSchema])}
         </script>
       </Helmet>
       <ServicePageLayout

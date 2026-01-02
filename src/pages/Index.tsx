@@ -1,24 +1,77 @@
 import { Link } from "react-router-dom";
 import SEOHead from "@/components/seo/SEOHead";
-import { organizationSchema, websiteSchema, localBusinessSchema } from "@/components/seo/schemas";
+import { 
+  organizationSchema, 
+  websiteSchema, 
+  localBusinessSchema, 
+  createItemListSchema,
+  createHowToSchema,
+  createFAQSchema
+} from "@/components/seo/schemas";
 import ShopHeader from "@/components/shop/ShopHeader";
 import HeroSection from "@/components/shop/HeroSection";
 import ServicesSection from "@/components/shop/ServicesSection";
 import ShopFooter from "@/components/shop/ShopFooter";
 
 const Index = () => {
+  // Product listing for SEO
+  const productList = createItemListSchema([
+    { name: "اکانت ChatGPT Plus", url: "/services/chatgpt", position: 1 },
+    { name: "اکانت Gemini Pro", url: "/services/gemini", position: 2 },
+    { name: "اکانت Grok", url: "/services/grok", position: 3 },
+    { name: "اکانت Claude Pro", url: "/services/claude", position: 4 },
+    { name: "اکانت Cursor Pro", url: "/services/cursor", position: 5 },
+    { name: "اکانت Perplexity Pro", url: "/services/perplexity", position: 6 },
+  ]);
+
+  // How to buy guide for SEO
+  const howToBuy = createHowToSchema({
+    name: "نحوه خرید اکانت هوش مصنوعی از نوا شاپ",
+    description: "راهنمای گام به گام خرید اشتراک ChatGPT، Gemini و سایر سرویس‌های AI",
+    steps: [
+      { name: "انتخاب سرویس", text: "از لیست محصولات، سرویس مورد نظر خود را انتخاب کنید" },
+      { name: "انتخاب پلن", text: "پلن مناسب با نیاز و بودجه خود را انتخاب کنید" },
+      { name: "تماس با پشتیبانی", text: "با کلیک روی دکمه ثبت سفارش، به تلگرام پشتیبانی متصل شوید" },
+      { name: "پرداخت و تحویل", text: "پس از پرداخت، اکانت در کمتر از ۱ ساعت تحویل داده می‌شود" },
+    ],
+    totalTime: "PT30M"
+  });
+
+  // Homepage FAQ for SEO
+  const homeFAQ = createFAQSchema([
+    {
+      question: "چگونه می‌توانم اکانت ChatGPT بخرم؟",
+      answer: "برای خرید اکانت ChatGPT، وارد صفحه ChatGPT شوید، پلن مورد نظر را انتخاب کنید و با پشتیبانی تلگرام ما در ارتباط باشید. تحویل فوری و با گارانتی تعویض."
+    },
+    {
+      question: "آیا اکانت‌های شما قانونی هستند؟",
+      answer: "بله، تمامی اکانت‌های ما ۱۰۰٪ قانونی و اصلی هستند و مستقیماً از سرویس‌دهنده اصلی تهیه می‌شوند."
+    },
+    {
+      question: "زمان تحویل اکانت چقدر است؟",
+      answer: "تحویل اکانت‌ها فوری است و معمولاً در کمتر از ۱ ساعت پس از پرداخت انجام می‌شود."
+    },
+    {
+      question: "آیا گارانتی تعویض دارید؟",
+      answer: "بله، در صورت بروز هرگونه مشکل، اکانت شما فوراً تعویض می‌شود. پشتیبانی ۲۴ ساعته در خدمت شماست."
+    }
+  ]);
+
   const jsonLdSchemas = [
     organizationSchema,
     websiteSchema,
     localBusinessSchema,
+    productList,
+    howToBuy,
+    homeFAQ,
   ];
 
   return (
     <>
       <SEOHead
-        title="خرید اکانت‌های پریمیوم هوش مصنوعی | تحویل فوری - Nova AI Shop"
-        description="ارائه اشتراک‌های قانونی و اختصاصی ChatGPT، Grok، Gemini و Cursor؛ بدون قطعی و با پشتیبانی دائمی در ایران. خرید ارزان اکانت‌های AI با فعال‌سازی سریع."
-        keywords="خرید ChatGPT, اشتراک Gemini, خرید Grok, Cursor Pro, اکانت هوش مصنوعی, خرید اکانت AI, خرید اکانت ChatGPT Plus, اشتراک هوش مصنوعی"
+        title="نوا شاپ | خرید اکانت ChatGPT، Gemini، Grok با تحویل فوری"
+        description="خرید اشتراک ChatGPT Plus، Gemini Pro، Grok، Claude و Cursor با تحویل فوری، گارانتی تعویض و پشتیبانی ۲۴ ساعته. اکانت ۱۰۰٪ اصلی با قیمت مناسب."
+        keywords="خرید ChatGPT, اشتراک ChatGPT Plus, خرید Gemini Pro, خرید Grok, خرید Claude, خرید Cursor, اکانت هوش مصنوعی, خرید اکانت AI ایران, نوا شاپ"
         canonicalUrl="/"
         ogType="website"
         jsonLd={jsonLdSchemas}
@@ -31,7 +84,7 @@ const Index = () => {
           <HeroSection />
           <ServicesSection />
           
-          {/* SEO Section */}
+          {/* SEO Content Section */}
           <section className="py-16 bg-muted/30">
             <div className="container mx-auto px-4">
               <div className="max-w-4xl mx-auto">
@@ -54,6 +107,31 @@ const Index = () => {
                   <p>
                     تمامی اشتراک‌ها <strong className="text-foreground">قانونی</strong>، <strong className="text-foreground">اختصاصی</strong> و با <strong className="text-foreground">تحویل آنی</strong> ارائه می‌شوند. اولویت ما <strong className="text-foreground">پایداری ۱۰۰٪</strong>، <strong className="text-foreground">پشتیبانی دائمی</strong> و <strong className="text-foreground">کیفیت تضمین‌شده</strong> است؛ تا هیچ مانعی میان شما و آینده وجود نداشته باشد.
                   </p>
+                </div>
+                
+                {/* Additional SEO Keywords Section */}
+                <div className="mt-8 pt-8 border-t border-border">
+                  <h3 className="text-xl font-semibold mb-4 text-center">
+                    چرا نوا شاپ؟
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-muted-foreground">
+                    <div className="flex items-start gap-2">
+                      <span className="text-primary">✓</span>
+                      <span><strong className="text-foreground">تحویل فوری:</strong> اکانت شما در کمتر از ۱ ساعت فعال می‌شود</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="text-primary">✓</span>
+                      <span><strong className="text-foreground">گارانتی تعویض:</strong> در صورت مشکل، فوراً اکانت جدید دریافت کنید</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="text-primary">✓</span>
+                      <span><strong className="text-foreground">پشتیبانی ۲۴/۷:</strong> تیم پشتیبانی واقعی همیشه در دسترس شماست</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="text-primary">✓</span>
+                      <span><strong className="text-foreground">اکانت ۱۰۰٪ اصلی:</strong> تمام اشتراک‌ها قانونی و مستقیم از سرویس‌دهنده</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

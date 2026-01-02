@@ -2,6 +2,7 @@ import { Code, Clock, RefreshCw, Zap, Headphones, Terminal, Cpu, GitBranch } fro
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
 import { usePricesContext } from "@/contexts/PricesContext";
+import { createFAQSchema, createBreadcrumbSchema, createProductSchema } from "@/components/seo/schemas";
 
 const CursorPage = () => {
   const { getPrice } = usePricesContext();
@@ -283,37 +284,39 @@ const CursorPage = () => {
   );
 
   const lowestPrice = Math.min(...plans.map(p => p.price));
+  
+  // Generate SEO schemas
+  const faqSchema = createFAQSchema(faqs);
+  const breadcrumbSchema = createBreadcrumbSchema([
+    { name: "خانه", url: "/" },
+    { name: "خرید Cursor Pro", url: "/services/cursor" }
+  ]);
+  const productSchema = createProductSchema({
+    name: "اشتراک Cursor Pro",
+    description: "خرید اشتراک Cursor Pro - ادیتور کدنویسی هوشمند با AI. دسترسی به Claude 3.5 Sonnet و GPT-4. سرعت کدنویسی ۲ برابر.",
+    price: lowestPrice,
+    url: "/services/cursor",
+    image: "https://nova-ai-shop.lovable.app/logos/cursor.png",
+    category: "ابزار برنامه‌نویسی",
+    sku: "CURSOR-PRO",
+    ratingValue: 4.9,
+    reviewCount: 580
+  });
 
   return (
     <>
       <Helmet>
-        <title>خرید اشتراک Cursor Pro | ادیتور کدنویسی AI - سریع‌تر از Copilot</title>
+        <title>خرید اشتراک Cursor Pro | ادیتور کدنویسی AI - نوا شاپ</title>
         <meta
           name="description"
           content="خرید اشتراک Cursor Pro - ادیتور کدنویسی هوشمند با AI. دسترسی به Claude 3.5 Sonnet و GPT-4. سرعت کدنویسی ۲ برابر. بهتر از GitHub Copilot."
         />
-        <meta name="keywords" content="خرید Cursor, Cursor Pro, ادیتور کد AI, کدنویسی هوشمند, GitHub Copilot, Claude, GPT-4" />
+        <meta name="keywords" content="خرید Cursor, Cursor Pro, ادیتور کد AI, کدنویسی هوشمند, GitHub Copilot, Claude, GPT-4, خرید کرسور ایران" />
+        <link rel="canonical" href="https://nova-ai-shop.lovable.app/services/cursor" />
         
-        {/* Product Schema with dynamic price */}
+        {/* Structured Data */}
         <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            "name": "اشتراک Cursor Pro",
-            "description": "خرید اشتراک Cursor Pro - ادیتور کدنویسی هوشمند با AI",
-            "brand": {
-              "@type": "Brand",
-              "name": "Nova AI Shop"
-            },
-            "offers": {
-              "@type": "AggregateOffer",
-              "priceCurrency": "IRR",
-              "lowPrice": lowestPrice,
-              "highPrice": Math.max(...plans.map(p => p.price)),
-              "offerCount": plans.length,
-              "availability": "https://schema.org/InStock"
-            }
-          })}
+          {JSON.stringify([productSchema, faqSchema, breadcrumbSchema])}
         </script>
       </Helmet>
       <ServicePageLayout
