@@ -118,8 +118,9 @@ export const getPriceName = (prices: PricesData, key: string): string => {
  * Custom hook to fetch and manage prices
  */
 export const usePrices = () => {
-  const [prices, setPrices] = useState<PricesData>(FALLBACK_PRICES);
-  const [loading, setLoading] = useState(true);
+  // Initialize with cache if available, otherwise fallback
+  const [prices, setPrices] = useState<PricesData>(pricesCache || FALLBACK_PRICES);
+  const [loading, setLoading] = useState(!pricesCache);
   const [error, setError] = useState<string | null>(null);
 
   const fetchPrices = useCallback(async () => {
