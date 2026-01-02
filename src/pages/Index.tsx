@@ -51,7 +51,7 @@ const Index = () => {
                   </p>
 
                   <p>
-                    تمامی اشتراک‌ها <strong className="text-foreground">قانونی</strong>، <strong className="text-foreground">اختصاصی</strong> و با <strong className="text-foreground">تحویل آنی</strong> ارائه می‌شوند. اولویت ما <strong className="text-foreground">پایداری ۱۰۰٪</strong>، <strong className="text-foreground">پشتیبانی دائمی</strong> و ارائه <strong className="text-foreground">پایین‌ترین قیمت</strong> است؛ تا هیچ مانعی میان شما و آینده وجود نداشته باشد.
+                    تمامی اشتراک‌ها <strong className="text-foreground">قانونی</strong>، <strong className="text-foreground">اختصاصی</strong> و با <strong className="text-foreground">تحویل آنی</strong> ارائه می‌شوند. اولویت ما <strong className="text-foreground">پایداری ۱۰۰٪</strong>، <strong className="text-foreground">پشتیبانی دائمی</strong> و <strong className="text-foreground">کیفیت تضمین‌شده</strong> است؛ تا هیچ مانعی میان شما و آینده وجود نداشته باشد.
                   </p>
                 </div>
               </div>
