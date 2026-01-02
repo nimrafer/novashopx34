@@ -24,7 +24,6 @@ const ServicesSection = () => {
       description: "قدرتمندترین AI برای تولید محتوا و کدنویسی",
       color: "#10B981",
       badge: "پرفروش",
-      discount: 34,
       features: [
         "دسترسی به GPT-4o و GPT-5",
         "ساخت تصویر با DALL-E 3",
@@ -59,7 +58,6 @@ const ServicesSection = () => {
       title: "اکانت اشتراکی ChatGPT Plus",
       description: "اقتصادی و مقرون به صرفه",
       color: "#3B82F6",
-      discount: 14,
       features: ["دسترسی به GPT-4o", "مشترک با ۲ نفر دیگر", "قیمت مناسب"],
       plans: [{ name: "اشتراکی ماهانه", duration: "۱ ماهه", price: getPrice("cgpt_pro_shared"), popular: true }],
     },
@@ -69,7 +67,6 @@ const ServicesSection = () => {
       title: "اکانت اختصاصی ChatGPT Pro",
       description: "دسترسی به جدیدترین ورژن ChatGPT Pro",
       color: "#8B5CF6",
-      discount: 17,
       features: ["دسترسی به جدیدترین مدل‌ها", "بدون محدودیت", "پشتیبانی ویژه"],
       plans: [{ name: "Pro ماهانه", duration: "۱ ماهه", price: getPrice("cgpt_pro_monthly"), popular: true }],
     },
@@ -79,7 +76,6 @@ const ServicesSection = () => {
       title: "اکانت اختصاصی Gemini Pro",
       description: "۲ ترابایت فضای ابری Google One",
       color: "#A855F7",
-      discount: 17,
       features: [
         "یکپارچه با Gmail, Drive, Docs",
         "۲ ترابایت فضای Google One",
@@ -99,7 +95,6 @@ const ServicesSection = () => {
       title: "اکانت اختصاصی Gemini Ultra",
       description: "قدرتمندترین مدل گوگل برای پروژه‌های حرفه‌ای",
       color: "#10B981",
-      discount: 12,
       features: ["تمام امکانات Gemini", "پردازش پیشرفته چندرسانه‌ای", "دسترسی به مدل‌های نسل جدید"],
       plans: [{ name: "Ultra ماهانه", duration: "۱ ماهه", price: getPrice("gemini_ultra"), popular: true }],
     },
@@ -109,7 +104,6 @@ const ServicesSection = () => {
       title: "اکانت اختصاصی Grok",
       description: "هوش مصنوعی آزاد و بدون محدودیت از xAI",
       color: "#374151",
-      discount: 16,
       badge: "بدون سانسور",
       features: [
         "پاسخ به سوالات حساس بدون فیلتر",
@@ -125,7 +119,6 @@ const ServicesSection = () => {
       title: "اکانت Claude",
       description: "بهترین AI برای متون طولانی",
       color: "#F97316",
-      discount: 15,
       features: [
         "پنجره کانتکست ۲۰۰ هزار توکنی",
         "Claude 3.5 Sonnet + Opus",
@@ -143,7 +136,6 @@ const ServicesSection = () => {
       title: "اکانت Cursor",
       description: "ادیتور کدنویسی هوشمند",
       color: "#3B82F6",
-      discount: 13,
       badge: "مخصوص برنامه‌نویسان",
       features: [
         "تکمیل خودکار کد با AI",
