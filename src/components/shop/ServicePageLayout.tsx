@@ -330,7 +330,7 @@ const ServicePageLayout = ({
                   متخصصان و برنامه‌نویسان نیز می‌توانند با <strong className="text-foreground">خرید اکانت Cursor Pro</strong>، کدنویسی خود را به سطح جدیدی ببرند یا با <strong className="text-foreground">خرید Gemini Advanced</strong> از اکوسیستم قدرتمند گوگل و <strong className="text-foreground">فضای ابری ۲ ترابایتی</strong> بهره‌مند شوند. برای سرگرمی و موسیقی هم <strong className="text-foreground">اشتراک Spotify Premium</strong> و <strong className="text-foreground">تلگرام پریمیوم</strong> داریم!
                 </p>
                 <p>
-                  تمامی اشتراک‌های ما به صورت <strong className="text-foreground">کاملاً قانونی</strong>، <strong className="text-foreground">اختصاصی</strong> و با <strong className="text-foreground">تحویل آنی</strong> ارائه می‌شوند. اولویت ما در نوا شاپ، <strong className="text-foreground">تضمین پایداری ۱۰۰٪</strong>، <strong className="text-foreground">پشتیبانی ۲۴ ساعته</strong> و ارائه <strong className="text-foreground">پایین‌ترین قیمت بازار</strong> است تا هیچ مانعی میان شما و آینده وجود نداشته باشد.
+                  تمامی اشتراک‌های ما به صورت <strong className="text-foreground">کاملاً قانونی</strong>، <strong className="text-foreground">اختصاصی</strong> و با <strong className="text-foreground">تحویل آنی</strong> ارائه می‌شوند. اولویت ما در نوا شاپ، <strong className="text-foreground">تضمین پایداری ۱۰۰٪</strong>، <strong className="text-foreground">پشتیبانی ۲۴ ساعته</strong> و <strong className="text-foreground">کیفیت تضمین‌شده</strong> است تا هیچ مانعی میان شما و آینده وجود نداشته باشد.
                 </p>
               </div>
             </div>
