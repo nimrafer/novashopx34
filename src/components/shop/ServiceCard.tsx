@@ -59,7 +59,7 @@ const ServiceCard = ({
   return (
     <Link 
       to={serviceRoutes[id] || "/"} 
-      className="group relative rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl block cursor-pointer"
+      className="group relative rounded-2xl overflow-hidden transition-all duration-500 ease-out hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/10 block cursor-pointer"
       title={`اطلاعات بیشتر و خرید ${title}`}
     >
       {/* Discount Badge */}
@@ -82,25 +82,25 @@ const ServiceCard = ({
 
       {/* Top Section - Logo Area */}
       <div
-        className="relative h-48 flex items-center justify-center overflow-hidden"
+        className="relative h-48 flex items-center justify-center overflow-hidden transition-all duration-500 ease-out group-hover:brightness-110"
         style={{
           background: `linear-gradient(135deg, ${color}30 0%, ${color}60 50%, ${color}40 100%)`,
         }}
       >
         {/* Glow Effect */}
         <div
-          className="absolute inset-0 opacity-50"
+          className="absolute inset-0 opacity-50 transition-opacity duration-500 group-hover:opacity-70"
           style={{
             background: `radial-gradient(circle at center, ${color}40 0%, transparent 70%)`,
           }}
         />
 
         {/* Logo */}
-        <div className="relative z-10 w-24 h-24 rounded-2xl bg-background/20 backdrop-blur-sm flex items-center justify-center shadow-xl border border-white/10">
+        <div className="relative z-10 w-24 h-24 rounded-2xl bg-background/20 backdrop-blur-sm flex items-center justify-center shadow-xl border border-white/10 transition-all duration-500 ease-out group-hover:scale-110 group-hover:shadow-2xl group-hover:bg-background/30">
           {logo ? (
-            <img src={logo} alt={title} className="w-16 h-16 object-contain" />
+            <img src={logo} alt={title} className="w-16 h-16 object-contain transition-transform duration-500 ease-out group-hover:scale-105" />
           ) : emoji ? (
-            <span className="text-5xl">{emoji}</span>
+            <span className="text-5xl transition-transform duration-500 ease-out group-hover:scale-110">{emoji}</span>
           ) : null}
         </div>
       </div>
