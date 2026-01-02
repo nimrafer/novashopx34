@@ -22,18 +22,54 @@ const ShopHeader = () => {
           
           {/* Navigation */}
           <nav className="hidden md:flex items-center gap-6">
-            <Link to="/#services" className="text-muted-foreground hover:text-foreground transition-colors">
+            <button 
+              onClick={() => {
+                if (window.location.pathname !== '/') {
+                  window.location.href = '/#services';
+                } else {
+                  document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
               سرویس‌ها
-            </Link>
-            <Link to="/#services" className="text-muted-foreground hover:text-foreground transition-colors">
+            </button>
+            <button 
+              onClick={() => {
+                if (window.location.pathname !== '/') {
+                  window.location.href = '/#services';
+                } else {
+                  document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
               ChatGPT
-            </Link>
-            <Link to="/#services" className="text-muted-foreground hover:text-foreground transition-colors">
+            </button>
+            <button 
+              onClick={() => {
+                if (window.location.pathname !== '/') {
+                  window.location.href = '/#services';
+                } else {
+                  document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
               Gemini
-            </Link>
-            <Link to="/#services" className="text-muted-foreground hover:text-foreground transition-colors">
+            </button>
+            <button 
+              onClick={() => {
+                if (window.location.pathname !== '/') {
+                  window.location.href = '/#services';
+                } else {
+                  document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
               Spotify
-            </Link>
+            </button>
           </nav>
           
           {/* Actions */}
