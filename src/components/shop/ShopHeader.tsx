@@ -22,18 +22,18 @@ const ShopHeader = () => {
           
           {/* Navigation */}
           <nav className="hidden md:flex items-center gap-6">
-            <a href="#services" className="text-muted-foreground hover:text-foreground transition-colors">
+            <Link to="/#services" className="text-muted-foreground hover:text-foreground transition-colors">
               سرویس‌ها
-            </a>
-            <a href="#chatgpt" className="text-muted-foreground hover:text-foreground transition-colors">
+            </Link>
+            <Link to="/#services" className="text-muted-foreground hover:text-foreground transition-colors">
               ChatGPT
-            </a>
-            <a href="#gemini" className="text-muted-foreground hover:text-foreground transition-colors">
+            </Link>
+            <Link to="/#services" className="text-muted-foreground hover:text-foreground transition-colors">
               Gemini
-            </a>
-            <a href="#spotify" className="text-muted-foreground hover:text-foreground transition-colors">
+            </Link>
+            <Link to="/#services" className="text-muted-foreground hover:text-foreground transition-colors">
               Spotify
-            </a>
+            </Link>
           </nav>
           
           {/* Actions */}
