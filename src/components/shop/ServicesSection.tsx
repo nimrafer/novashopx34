@@ -176,17 +176,8 @@ const ServicesSection = () => {
 
         {/* Services Grid - 4 columns on large screens */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {services.map((service, index) => (
-            <div 
-              key={service.id} 
-              className="animate-fade-in opacity-0"
-              style={{ 
-                animationDelay: `${index * 100}ms`,
-                animationFillMode: 'forwards'
-              }}
-            >
-              <ServiceCard {...service} />
-            </div>
+          {services.map((service) => (
+            <ServiceCard key={service.id} {...service} />
           ))}
         </div>
       </div>
