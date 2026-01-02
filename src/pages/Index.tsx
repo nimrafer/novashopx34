@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import SEOHead from "@/components/seo/SEOHead";
 import { organizationSchema, websiteSchema, localBusinessSchema } from "@/components/seo/schemas";
 import ShopHeader from "@/components/shop/ShopHeader";
@@ -43,11 +44,11 @@ const Index = () => {
                   </p>
 
                   <p>
-                    برخلاف مجموعه‌های تک‌محصولی، ما یک فروشگاه <strong className="text-foreground">چندمحصولی</strong> هستیم و <strong className="text-foreground">موجودی دائمی و کامل</strong> از سرویس‌های محبوب را یکجا ارائه می‌دهیم: از <strong className="text-foreground">خرید اکانت ChatGPT Plus</strong> برای دسترسی به مدل‌های پیشرفته OpenAI، تا <strong className="text-foreground">خرید اشتراک Grok AI</strong> برای تجربه هوش مصنوعی X. علاوه بر این، <strong className="text-foreground">Claude Pro</strong> و <strong className="text-foreground">Perplexity Pro</strong> برای کارهای تحقیقاتی، و همچنین <strong className="text-foreground">تلگرام پریمیوم</strong> و <strong className="text-foreground">Spotify Premium</strong> برای استفاده روزمره همیشه در دسترس هستند.
+                    برخلاف مجموعه‌های تک‌محصولی، ما یک فروشگاه <strong className="text-foreground">چندمحصولی</strong> هستیم و <strong className="text-foreground">موجودی دائمی و کامل</strong> از سرویس‌های محبوب را یکجا ارائه می‌دهیم: از <Link to="/services/chatgpt" className="text-primary hover:underline font-semibold">خرید اکانت ChatGPT Plus</Link> برای دسترسی به مدل‌های پیشرفته OpenAI، تا <Link to="/services/grok" className="text-primary hover:underline font-semibold">خرید اشتراک Grok AI</Link> برای تجربه هوش مصنوعی X. علاوه بر این، <Link to="/services/claude" className="text-primary hover:underline font-semibold">Claude Pro</Link> و <Link to="/services/perplexity" className="text-primary hover:underline font-semibold">Perplexity Pro</Link> برای کارهای تحقیقاتی، و همچنین <Link to="/services/telegram-premium" className="text-primary hover:underline font-semibold">تلگرام پریمیوم</Link> و <Link to="/services/spotify" className="text-primary hover:underline font-semibold">Spotify Premium</Link> برای استفاده روزمره همیشه در دسترس هستند.
                   </p>
 
                   <p>
-                    برای برنامه‌نویسان و تیم‌های فنی نیز امکان <strong className="text-foreground">خرید اکانت Cursor Pro</strong> فراهم است تا سرعت کدنویسی و کیفیت خروجی چند برابر شود. اگر اکوسیستم گوگل را ترجیح می‌دهید، با <strong className="text-foreground">خرید Gemini Advanced</strong> می‌توانید از قابلیت‌های قدرتمند گوگل و <strong className="text-foreground">فضای ابری ۲ ترابایتی</strong> بهره‌مند شوید.
+                    برای برنامه‌نویسان و تیم‌های فنی نیز امکان <Link to="/services/cursor" className="text-primary hover:underline font-semibold">خرید اکانت Cursor Pro</Link> فراهم است تا سرعت کدنویسی و کیفیت خروجی چند برابر شود. اگر اکوسیستم گوگل را ترجیح می‌دهید، با <Link to="/services/gemini" className="text-primary hover:underline font-semibold">خرید Gemini Advanced</Link> می‌توانید از قابلیت‌های قدرتمند گوگل و <strong className="text-foreground">فضای ابری ۲ ترابایتی</strong> بهره‌مند شوید.
                   </p>
 
                   <p>
