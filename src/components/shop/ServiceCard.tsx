@@ -129,8 +129,9 @@ const ServiceCard = ({
               size="sm"
               variant="outline"
               className="rounded-full border-border/50 bg-background/50 hover:bg-background transition-all"
+              title={`اطلاعات بیشتر و خرید ${title}`}
             >
-              مشاهده
+              جزئیات و خرید
             </Button>
           </Link>
         </div>
