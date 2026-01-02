@@ -317,11 +317,22 @@ const ServicePageLayout = ({
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-2xl font-bold mb-6 text-center">
-                راهنمای انتخاب و خرید اکانت‌های هوش مصنوعی
+                🏆 فروشگاه جامع اکانت‌های هوش مصنوعی | نوا شاپ
               </h2>
-              <p className="text-muted-foreground leading-8 text-justify">
-                امروزه استفاده از ابزارهای <strong className="text-foreground">هوش مصنوعی</strong> به یک ضرورت تبدیل شده است. ما در این مجموعه، بستر <strong className="text-foreground">خرید اکانت هوش مصنوعی</strong> را به صورت کاملاً قانونی فراهم کرده‌ایم. اگر به دنبال <strong className="text-foreground">خرید اکانت ChatGPT Plus</strong> برای دسترسی به آخرین مدل‌های OpenAI هستید یا قصد <strong className="text-foreground">خرید اشتراک Grok</strong> (هوش مصنوعی X) را دارید، تمامی این سرویس‌ها با <strong className="text-foreground">تحویل فوری</strong> و ضمانت پایداری ارائه می‌شوند. همچنین برای برنامه‌نویسان حرفه‌ای، امکان <strong className="text-foreground">خرید اکانت Cursor Pro</strong> فراهم شده است. اولویت ما ارائه <strong className="text-foreground">پایین‌ترین قیمت</strong> در کنار <strong className="text-foreground">پشتیبانی دائمی</strong> است تا کاربران ایرانی بدون محدودیت از پتانسیل هوش مصنوعی بهره‌مند شوند.
-              </p>
+              <div className="space-y-6 text-muted-foreground leading-8 text-justify">
+                <p>
+                  در عصری که <strong className="text-foreground">هوش مصنوعی</strong> مرزهای توانمندی انسان را جابه‌جا کرده، دسترسی بدون محدودیت به برترین ابزارها دیگر یک انتخاب نیست، بلکه <strong className="text-foreground">یک ضرورت</strong> است. <strong className="text-foreground">نوا شاپ</strong> به عنوان <strong className="text-foreground">بزرگترین فروشگاه اکانت هوش مصنوعی</strong> در ایران، با هدف حذف تحریم‌ها و موانع پرداخت ارزی، بستری امن و مطمئن برای <strong className="text-foreground">خرید اکانت AI</strong> فراهم کرده است.
+                </p>
+                <p>
+                  برخلاف مجموعه‌های تک‌محصولی، ما در نوا شاپ <strong className="text-foreground">پکیج کاملی از قدرت</strong> را به شما ارائه می‌دهیم: از <strong className="text-foreground">خرید اکانت ChatGPT Plus</strong> با دسترسی کامل به مدل‌های <strong className="text-foreground">o1، o3 و GPT-4o</strong> برای عموم کاربران، تا <strong className="text-foreground">خرید اشتراک Grok AI</strong> برای طرفداران ایلان ماسک و توییتر. همچنین <strong className="text-foreground">اشتراک Claude Pro</strong> برای تحلیل‌های پیچیده و <strong className="text-foreground">Perplexity Pro</strong> برای جستجوی هوشمند در دسترس شماست.
+                </p>
+                <p>
+                  متخصصان و برنامه‌نویسان نیز می‌توانند با <strong className="text-foreground">خرید اکانت Cursor Pro</strong>، کدنویسی خود را به سطح جدیدی ببرند یا با <strong className="text-foreground">خرید Gemini Advanced</strong> از اکوسیستم قدرتمند گوگل و <strong className="text-foreground">فضای ابری ۲ ترابایتی</strong> بهره‌مند شوند. برای سرگرمی و موسیقی هم <strong className="text-foreground">اشتراک Spotify Premium</strong> و <strong className="text-foreground">تلگرام پریمیوم</strong> داریم!
+                </p>
+                <p>
+                  تمامی اشتراک‌های ما به صورت <strong className="text-foreground">کاملاً قانونی</strong>، <strong className="text-foreground">اختصاصی</strong> و با <strong className="text-foreground">تحویل آنی</strong> ارائه می‌شوند. اولویت ما در نوا شاپ، <strong className="text-foreground">تضمین پایداری ۱۰۰٪</strong>، <strong className="text-foreground">پشتیبانی ۲۴ ساعته</strong> و ارائه <strong className="text-foreground">پایین‌ترین قیمت بازار</strong> است تا هیچ مانعی میان شما و آینده وجود نداشته باشد.
+                </p>
+              </div>
             </div>
           </div>
         </section>
