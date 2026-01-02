@@ -8,14 +8,14 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Nova AI Shop | خرید اشتراک ChatGPT، Gemini، Spotify و سرویس‌های پرمیوم</title>
+        <title>خرید اکانت‌های پریمیوم هوش مصنوعی | تحویل فوری</title>
         <meta
           name="description"
-          content="خرید اشتراک ChatGPT Pro، Gemini Pro، Spotify Premium، Cursor Pro و ده‌ها سرویس دیگر با قیمت مناسب، تضمین کیفیت و پشتیبانی ۲۴ ساعته."
+          content="ارائه اشتراک‌های قانونی و اختصاصی ChatGPT، Grok، Gemini و Cursor؛ بدون قطعی و با پشتیبانی دائمی در ایران. خرید ارزان اکانت‌های AI با فعال‌سازی سریع."
         />
         <meta
           name="keywords"
-          content="خرید ChatGPT, اشتراک Gemini, Spotify Premium, Cursor Pro, VPN, شماره مجازی, تلگرام پرمیوم"
+          content="خرید ChatGPT, اشتراک Gemini, خرید Grok, Cursor Pro, اکانت هوش مصنوعی, خرید اکانت AI"
         />
       </Helmet>
 

@@ -20,16 +20,16 @@ const HeroSection = () => {
           </div>
           
           {/* Main Heading */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 animate-slide-up animation-delay-100">
-            <span className="text-gradient">اشتراک‌های پرمیوم</span>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-slide-up animation-delay-100 leading-tight">
+            <span className="text-gradient">خرید اکانت‌های پریمیوم هوش مصنوعی</span>
             <br />
-            <span className="text-foreground">با قیمت مناسب</span>
+            <span className="text-foreground">با تحویل فوری</span>
           </h1>
           
-          {/* Description */}
-          <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto animate-slide-up animation-delay-200">
-            ChatGPT Pro، Gemini، Spotify، Cursor و ده‌ها سرویس دیگر با تضمین کیفیت و پشتیبانی ۲۴ ساعته
-          </p>
+          {/* Subtitle */}
+          <h2 className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto animate-slide-up animation-delay-200 font-normal">
+            ارائه اشتراک‌های قانونی و اختصاصی ChatGPT، Grok، Gemini و Cursor؛ با پشتیبانی دائمی در ایران.
+          </h2>
           
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-slide-up animation-delay-300">
@@ -38,7 +38,7 @@ const HeroSection = () => {
               className="bg-gradient-primary hover:opacity-90 transition-opacity text-lg px-8 py-6"
               onClick={() => document.getElementById("services")?.scrollIntoView({ behavior: "smooth" })}
             >
-              مشاهده سرویس‌ها
+              مشاهده قیمت و خرید اکانت‌ها
             </Button>
             <Button
               size="lg"
