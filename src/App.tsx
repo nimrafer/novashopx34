@@ -19,6 +19,8 @@ import CursorPage from "./pages/services/CursorPage";
 import TelegramPremiumPage from "./pages/services/TelegramPremiumPage";
 import CardsPage from "./pages/services/CardsPage";
 import VirtualNumberPage from "./pages/services/VirtualNumberPage";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +46,8 @@ const App = () => (
             <Route path="/services/telegram-premium" element={<TelegramPremiumPage />} />
             <Route path="/services/cards" element={<CardsPage />} />
             <Route path="/services/virtual-number" element={<VirtualNumberPage />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

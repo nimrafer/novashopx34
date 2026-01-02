@@ -58,18 +58,12 @@ const ShopHeader = () => {
             >
               Gemini
             </button>
-            <button 
-              onClick={() => {
-                if (window.location.pathname !== '/') {
-                  window.location.href = '/#services';
-                } else {
-                  document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
-                }
-              }}
+            <Link 
+              to="/blog"
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
-              Spotify
-            </button>
+              بلاگ
+            </Link>
           </nav>
           
           {/* Actions */}
