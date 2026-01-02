@@ -25,7 +25,7 @@ interface ServiceCardProps {
 
 const formatPrice = (price: number) => {
   if (price === 0) return "تماس بگیرید";
-  return new Intl.NumberFormat("fa-IR").format(price / 1000);
+  return new Intl.NumberFormat("fa-IR").format(price);
 };
 
 const serviceRoutes: Record<string, string> = {
@@ -116,14 +116,14 @@ const ServiceCard = ({
           <div className="flex flex-col items-start">
             {originalPrice && (
               <span className="text-xs text-muted-foreground line-through">
-                {formatPrice(originalPrice)} هزار تومان
+                {formatPrice(originalPrice)} تومان
               </span>
             )}
             <div className="flex items-baseline gap-1">
               <span className="text-lg font-bold" style={{ color }}>
                 {formatPrice(lowestPrice)}
               </span>
-              <span className="text-xs text-muted-foreground">هزار تومان</span>
+              <span className="text-xs text-muted-foreground">تومان</span>
             </div>
             <span className="text-xs text-muted-foreground">قیمت از</span>
           </div>
