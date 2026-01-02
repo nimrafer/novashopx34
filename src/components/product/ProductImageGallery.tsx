@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import ImageZoom from "./ImageZoom";
+import { LazyImage } from "@/components/ui/lazy-image";
 import pantheonImage from "@/assets/pantheon.jpg";
 import eclipseImage from "@/assets/eclipse.jpg";
 import haloImage from "@/assets/halo.jpg";
@@ -73,10 +74,10 @@ const ProductImageGallery = () => {
               className="w-full aspect-square overflow-hidden cursor-pointer group"
               onClick={() => handleImageClick(index)}
             >
-              <img
+              <LazyImage
                 src={image}
                 alt={`Product view ${index + 1}`}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                className="w-full h-full transition-transform duration-300 group-hover:scale-105"
               />
             </div>
           ))}
@@ -93,10 +94,10 @@ const ProductImageGallery = () => {
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
-            <img
+            <LazyImage
               src={productImages[currentImageIndex]}
               alt={`Product view ${currentImageIndex + 1}`}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 select-none"
+              className="w-full h-full transition-transform duration-300 group-hover:scale-105 select-none"
             />
           </div>
           

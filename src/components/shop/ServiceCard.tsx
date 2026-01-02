@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { LazyImage } from "@/components/ui/lazy-image";
 
 interface Plan {
   name: string;
@@ -98,7 +99,11 @@ const ServiceCard = ({
         {/* Logo */}
         <div className="relative z-10 w-24 h-24 rounded-2xl bg-background/20 backdrop-blur-sm flex items-center justify-center shadow-xl border border-white/10 transition-all duration-500 ease-out group-hover:scale-110 group-hover:shadow-2xl group-hover:bg-background/30">
           {logo ? (
-            <img src={logo} alt={title} className="w-16 h-16 object-contain transition-transform duration-500 ease-out group-hover:scale-105" />
+            <LazyImage 
+              src={logo} 
+              alt={title} 
+              className="w-16 h-16" 
+            />
           ) : emoji ? (
             <span className="text-5xl transition-transform duration-500 ease-out group-hover:scale-110">{emoji}</span>
           ) : null}
