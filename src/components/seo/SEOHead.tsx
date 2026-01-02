@@ -16,6 +16,11 @@ interface SEOHeadProps {
     section?: string;
     tags?: string[];
   };
+  product?: {
+    price?: string;
+    currency?: string;
+    availability?: string;
+  };
 }
 
 const SEOHead = ({
@@ -28,6 +33,7 @@ const SEOHead = ({
   jsonLd,
   noindex = false,
   article,
+  product,
 }: SEOHeadProps) => {
   const siteUrl = "https://nova-ai-shop.lovable.app";
   const fullCanonicalUrl = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
@@ -53,8 +59,18 @@ const SEOHead = ({
       <meta property="og:image" content={ogImage} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content={optimizedTitle} />
       <meta property="og:locale" content="fa_IR" />
       <meta property="og:site_name" content="نوا شاپ - Nova AI Shop" />
+      
+      {/* Product specific OG tags */}
+      {product && (
+        <>
+          <meta property="product:price:amount" content={product.price} />
+          <meta property="product:price:currency" content={product.currency || "IRR"} />
+          <meta property="product:availability" content={product.availability || "in stock"} />
+        </>
+      )}
       
       {/* Article specific OG tags */}
       {article && (
@@ -72,25 +88,54 @@ const SEOHead = ({
       <meta name="twitter:title" content={optimizedTitle} />
       <meta name="twitter:description" content={optimizedDescription} />
       <meta name="twitter:image" content={ogImage} />
+      <meta name="twitter:image:alt" content={optimizedTitle} />
       <meta name="twitter:site" content="@NovaAIShop" />
+      <meta name="twitter:creator" content="@NovaAIShop" />
       
       {/* Additional SEO */}
       <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
-      <meta name="googlebot" content={noindex ? "noindex, nofollow" : "index, follow"} />
+      <meta name="googlebot" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large"} />
+      <meta name="bingbot" content={noindex ? "noindex, nofollow" : "index, follow"} />
       <meta name="language" content="Persian" />
       <meta name="revisit-after" content="3 days" />
       <meta name="author" content="Nova AI Shop" />
+      <meta name="publisher" content="Nova AI Shop" />
+      <meta name="copyright" content="Nova AI Shop" />
+      <meta name="rating" content="general" />
+      <meta name="distribution" content="global" />
+      
+      {/* Geo Tags */}
       <meta name="geo.region" content="IR" />
       <meta name="geo.placename" content="Iran" />
+      <meta name="geo.position" content="35.6892;51.3890" />
+      <meta name="ICBM" content="35.6892, 51.3890" />
       <meta name="content-language" content="fa" />
       
       {/* Mobile optimization */}
       <meta name="format-detection" content="telephone=no" />
       <meta name="theme-color" content="#8B5CF6" />
+      <meta name="mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      <meta name="apple-mobile-web-app-title" content="نوا شاپ" />
+      <meta name="application-name" content="نوا شاپ" />
+      <meta name="msapplication-TileColor" content="#8B5CF6" />
+      <meta name="msapplication-config" content="/browserconfig.xml" />
+      
+      {/* Security & Performance */}
+      <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+      <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+      <meta name="referrer" content="origin-when-cross-origin" />
       
       {/* Preconnect for performance */}
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+      <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+      
+      {/* Alternate languages (for future) */}
+      <link rel="alternate" hrefLang="fa" href={fullCanonicalUrl} />
+      <link rel="alternate" hrefLang="x-default" href={fullCanonicalUrl} />
       
       {/* JSON-LD Structured Data */}
       {jsonLd && (
