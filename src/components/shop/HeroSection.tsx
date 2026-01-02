@@ -1,4 +1,4 @@
-import { Sparkles, Bot, Zap, Shield } from "lucide-react";
+import { Sparkles, Bot, Zap, Shield, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const SUPPORT_USERNAME = "Nova_AI_Support";
@@ -51,34 +51,44 @@ const HeroSection = () => {
           </div>
           
           {/* Features */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-slide-up animation-delay-400">
-            <div className="glass rounded-2xl p-6 glass-hover">
-              <div className="w-12 h-12 rounded-xl bg-chatgpt/20 flex items-center justify-center mx-auto mb-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-slide-up animation-delay-400">
+            <div className="glass rounded-2xl p-5 glass-hover">
+              <div className="w-12 h-12 rounded-xl bg-chatgpt/20 flex items-center justify-center mx-auto mb-3">
                 <Bot className="w-6 h-6 text-chatgpt" />
               </div>
-              <h3 className="font-semibold mb-2">اشتراک شخصی</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="font-semibold mb-1">اشتراک شخصی</h3>
+              <p className="text-xs text-muted-foreground">
                 فعال‌سازی روی اکانت شخصی شما
               </p>
             </div>
             
-            <div className="glass rounded-2xl p-6 glass-hover">
-              <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mx-auto mb-4">
+            <div className="glass rounded-2xl p-5 glass-hover">
+              <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mx-auto mb-3">
                 <Zap className="w-6 h-6 text-primary" />
               </div>
-              <h3 className="font-semibold mb-2">تحویل سریع</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="font-semibold mb-1">تحویل سریع</h3>
+              <p className="text-xs text-muted-foreground">
                 فعال‌سازی در کمتر از ۱ ساعت
               </p>
             </div>
             
-            <div className="glass rounded-2xl p-6 glass-hover">
-              <div className="w-12 h-12 rounded-xl bg-telegram/20 flex items-center justify-center mx-auto mb-4">
+            <div className="glass rounded-2xl p-5 glass-hover">
+              <div className="w-12 h-12 rounded-xl bg-telegram/20 flex items-center justify-center mx-auto mb-3">
                 <Shield className="w-6 h-6 text-telegram" />
               </div>
-              <h3 className="font-semibold mb-2">پشتیبانی ۲۴/۷</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="font-semibold mb-1">پشتیبانی دائمی</h3>
+              <p className="text-xs text-muted-foreground">
                 پشتیبانی تلگرامی همیشه در دسترس
+              </p>
+            </div>
+            
+            <div className="glass rounded-2xl p-5 glass-hover">
+              <div className="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center mx-auto mb-3">
+                <RefreshCw className="w-6 h-6 text-green-500" />
+              </div>
+              <h3 className="font-semibold mb-1">تضمین کیفیت</h3>
+              <p className="text-xs text-muted-foreground">
+                تعویض فوری اکانت شما در صورت بروز هرگونه مشکل
               </p>
             </div>
           </div>
