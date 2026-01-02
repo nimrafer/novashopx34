@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./hooks/useAuth";
+import { PricesProvider } from "./contexts/PricesContext";
 import ScrollToTop from "./components/ScrollToTop";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -27,31 +28,33 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <ScrollToTop />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/services/chatgpt" element={<ChatGPTPage />} />
-            <Route path="/services/gemini" element={<GeminiPage />} />
-            <Route path="/services/grok" element={<GrokPage />} />
-            <Route path="/services/claude" element={<ClaudePage />} />
-            <Route path="/services/perplexity" element={<PerplexityPage />} />
-            <Route path="/services/spotify" element={<SpotifyPage />} />
-            <Route path="/services/cursor" element={<CursorPage />} />
-            <Route path="/services/telegram-premium" element={<TelegramPremiumPage />} />
-            <Route path="/services/cards" element={<CardsPage />} />
-            <Route path="/services/virtual-number" element={<VirtualNumberPage />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <PricesProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <ScrollToTop />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/services/chatgpt" element={<ChatGPTPage />} />
+              <Route path="/services/gemini" element={<GeminiPage />} />
+              <Route path="/services/grok" element={<GrokPage />} />
+              <Route path="/services/claude" element={<ClaudePage />} />
+              <Route path="/services/perplexity" element={<PerplexityPage />} />
+              <Route path="/services/spotify" element={<SpotifyPage />} />
+              <Route path="/services/cursor" element={<CursorPage />} />
+              <Route path="/services/telegram-premium" element={<TelegramPremiumPage />} />
+              <Route path="/services/cards" element={<CardsPage />} />
+              <Route path="/services/virtual-number" element={<VirtualNumberPage />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </PricesProvider>
     </AuthProvider>
   </QueryClientProvider>
 );

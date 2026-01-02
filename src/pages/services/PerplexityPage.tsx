@@ -1,8 +1,11 @@
 import { Search } from "lucide-react";
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
+import { usePricesContext } from "@/contexts/PricesContext";
 
 const PerplexityPage = () => {
+  const { getPrice } = usePricesContext();
+
   const features = [
     "پاسخ‌های دقیق با ذکر منبع و لینک",
     "دسترسی به اطلاعات به‌روز از سراسر وب",
@@ -19,7 +22,8 @@ const PerplexityPage = () => {
     {
       name: "پلن یک‌ماهه",
       duration: "۱ ماهه",
-      price: 649000,
+      price: getPrice("perplexity_monthly"),
+      priceKey: "perplexity_monthly",
       popular: true,
       features: [
         "۳۰۰+ پرسش Pro در روز",
@@ -30,7 +34,8 @@ const PerplexityPage = () => {
     {
       name: "پلن یکساله",
       duration: "۱ ساله - صرفه‌جویی ۷۰٪",
-      price: 1670000,
+      price: getPrice("perplexity_yearly"),
+      priceKey: "perplexity_yearly",
       features: [
         "یک سال کامل",
         "صرفه‌جویی قابل توجه",
@@ -67,6 +72,8 @@ const PerplexityPage = () => {
     },
   ];
 
+  const lowestPrice = Math.min(...plans.map(p => p.price));
+
   return (
     <>
       <Helmet>
@@ -75,6 +82,28 @@ const PerplexityPage = () => {
           name="description"
           content="خرید اشتراک Perplexity Pro - موتور جستجوی هوشمند با منابع. پاسخ‌های دقیق با ذکر لینک، دسترسی به GPT-4 و Claude 3."
         />
+        
+        {/* Product Schema with dynamic price */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "اشتراک Perplexity Pro",
+            "description": "خرید اشتراک Perplexity Pro - موتور جستجوی هوشمند",
+            "brand": {
+              "@type": "Brand",
+              "name": "Nova AI Shop"
+            },
+            "offers": {
+              "@type": "AggregateOffer",
+              "priceCurrency": "IRR",
+              "lowPrice": lowestPrice,
+              "highPrice": Math.max(...plans.map(p => p.price)),
+              "offerCount": plans.length,
+              "availability": "https://schema.org/InStock"
+            }
+          })}
+        </script>
       </Helmet>
       <ServicePageLayout
         icon={Search}

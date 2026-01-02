@@ -1,0 +1,146 @@
+{
+  "cgpt_pro_30day": {
+    "name": "ChatGPT Pro 30 روزه",
+    "price": 497000
+  },
+  "cgpt_pro_37day": {
+    "name": "ChatGPT Pro 37 روزه",
+    "price": 547000
+  },
+  "cgpt_plus_team": {
+    "name": "ChatGPT Plus تیمی",
+    "price": 1249000
+  },
+  "cgpt_go_yearly": {
+    "name": "ChatGPT GO یکساله",
+    "price": 1849000
+  },
+  "cgpt_pro_shared": {
+    "name": "ChatGPT Pro اشتراکی",
+    "price": 297000
+  },
+  "gem_month": {
+    "name": "Gemini ماهانه",
+    "price": 649000
+  },
+  "gem_3month": {
+    "name": "Gemini سه‌ماهه",
+    "price": 1249000
+  },
+  "gem_6month": {
+    "name": "Gemini شش‌ماهه",
+    "price": 1749000
+  },
+  "gem_year_personal": {
+    "name": "Gemini یکساله (جیمیل شخصی)",
+    "price": 2497000
+  },
+  "gem_year_ready": {
+    "name": "Gemini یکساله (جیمیل آماده)",
+    "price": 2597000
+  },
+  "gem_student_month": {
+    "name": "تخفیف دانشجویی Gemini ماهانه",
+    "price": 130000
+  },
+  "gem_student_3month": {
+    "name": "تخفیف دانشجویی Gemini 3 ماهه",
+    "price": 300000
+  },
+  "gem_student_6month": {
+    "name": "تخفیف دانشجویی Gemini 6 ماهه",
+    "price": 300000
+  },
+  "gem_student_year": {
+    "name": "تخفیف دانشجویی Gemini یکساله",
+    "price": 350000
+  },
+  "spotify_monthly": {
+    "name": "Spotify ماهانه",
+    "price": 350000
+  },
+  "spotify_4month": {
+    "name": "Spotify 4 ماهه",
+    "price": 1150000
+  },
+  "cursor_monthly": {
+    "name": "Cursor ماهانه",
+    "price": 3490000
+  },
+  "cursor_weekly": {
+    "name": "Cursor هفتگی",
+    "price": 397000
+  },
+  "perplexity_monthly": {
+    "name": "Perplexity ماهانه",
+    "price": 629000
+  },
+  "perplexity_yearly": {
+    "name": "Perplexity یکساله",
+    "price": 1847000
+  },
+  "grok_monthly": {
+    "name": "Super Grok ماهانه",
+    "price": 1699000
+  },
+  "tgpremium_3month": {
+    "name": "Telegram Premium 3 ماهه",
+    "price": 1979000
+  },
+  "tgpremium_6month": {
+    "name": "Telegram Premium 6 ماهه",
+    "price": 2899000
+  },
+  "tgpremium_12month": {
+    "name": "Telegram Premium یکساله",
+    "price": 4579000
+  },
+  "visa_card": {
+    "name": "ویزا کارت",
+    "price": 750000
+  },
+  "master_card": {
+    "name": "مستر کارت",
+    "price": 750000
+  },
+  "vnum_uk": {
+    "name": "شماره انگلیس",
+    "price": 950000
+  },
+  "vnum_us": {
+    "name": "شماره آمریکا",
+    "price": 750000
+  },
+  "vnum_au": {
+    "name": "شماره استرالیا",
+    "price": 1450000
+  },
+  "vnum_ca": {
+    "name": "شماره کانادا",
+    "price": 650000
+  },
+  "vnum_tg_uk": {
+    "name": "تلگرام انگلیس",
+    "price": 350000
+  },
+  "vnum_tg_au": {
+    "name": "تلگرام استرالیا",
+    "price": 1250000
+  },
+  "vnum_tg_us": {
+    "name": "تلگرام آمریکا",
+    "price": 300000
+  },
+  "vnum_tg_ca": {
+    "name": "تلگرام کانادا",
+    "price": 300000
+  },
+  "vnum_wa_uk": {
+    "name": "واتساپ انگلیس",
+    "price": 350000
+  },
+  "vnum_wa_ca": {
+    "name": "واتساپ کانادا",
+    "price": 350000
+  }
+}

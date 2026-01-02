@@ -1,8 +1,11 @@
 import { CreditCard } from "lucide-react";
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
+import { usePricesContext } from "@/contexts/PricesContext";
 
 const CardsPage = () => {
+  const { getPrice } = usePricesContext();
+
   const features = [
     "صادر شده از بانک‌های اروپایی و سوییس",
     "قابلیت شارژ مجدد نامحدود",
@@ -19,7 +22,8 @@ const CardsPage = () => {
     {
       name: "مستر کارت",
       duration: "بین‌المللی - بانک سوییس",
-      price: 650000,
+      price: getPrice("master_card"),
+      priceKey: "master_card",
       features: [
         "قابلیت شارژ مجدد",
         "تمام سایت‌های بین‌المللی",
@@ -29,7 +33,8 @@ const CardsPage = () => {
     {
       name: "ویزا کارت",
       duration: "بین‌المللی - بانک سوییس",
-      price: 750000,
+      price: getPrice("visa_card"),
+      priceKey: "visa_card",
       popular: true,
       features: [
         "پذیرش گسترده‌تر",
@@ -62,6 +67,8 @@ const CardsPage = () => {
     },
   ];
 
+  const lowestPrice = Math.min(...plans.map(p => p.price));
+
   return (
     <>
       <Helmet>
@@ -70,6 +77,28 @@ const CardsPage = () => {
           name="description"
           content="خرید ویزا کارت و مستر کارت مجازی بین‌المللی. صادر شده از بانک سوییس، قابل شارژ، مناسب خریدهای بین‌المللی."
         />
+        
+        {/* Product Schema with dynamic price */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "ویزا کارت و مستر کارت مجازی",
+            "description": "کارت اعتباری مجازی بین‌المللی صادر شده از بانک سوییس",
+            "brand": {
+              "@type": "Brand",
+              "name": "Nova AI Shop"
+            },
+            "offers": {
+              "@type": "AggregateOffer",
+              "priceCurrency": "IRR",
+              "lowPrice": lowestPrice,
+              "highPrice": Math.max(...plans.map(p => p.price)),
+              "offerCount": plans.length,
+              "availability": "https://schema.org/InStock"
+            }
+          })}
+        </script>
       </Helmet>
       <ServicePageLayout
         icon={CreditCard}
