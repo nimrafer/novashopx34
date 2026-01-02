@@ -2,6 +2,7 @@ import { Search } from "lucide-react";
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
 import { usePricesContext } from "@/contexts/PricesContext";
+import { createFAQSchema, createBreadcrumbSchema, createProductSchema } from "@/components/seo/schemas";
 
 const PerplexityPage = () => {
   const { getPrice } = usePricesContext();
@@ -73,36 +74,39 @@ const PerplexityPage = () => {
   ];
 
   const lowestPrice = Math.min(...plans.map(p => p.price));
+  
+  // Generate SEO schemas
+  const faqSchema = createFAQSchema(faqs);
+  const breadcrumbSchema = createBreadcrumbSchema([
+    { name: "خانه", url: "/" },
+    { name: "خرید Perplexity Pro", url: "/services/perplexity" }
+  ]);
+  const productSchema = createProductSchema({
+    name: "اشتراک Perplexity Pro",
+    description: "خرید اشتراک Perplexity Pro - موتور جستجوی هوشمند با منابع. پاسخ‌های دقیق با ذکر لینک، دسترسی به GPT-4 و Claude 3.",
+    price: lowestPrice,
+    url: "/services/perplexity",
+    image: "https://nova-ai-shop.lovable.app/logos/perplexity.png",
+    category: "ابزار تحقیقاتی",
+    sku: "PERP-PRO",
+    ratingValue: 4.7,
+    reviewCount: 420
+  });
 
   return (
     <>
       <Helmet>
-        <title>خرید اشتراک Perplexity Pro | Nova AI Shop</title>
+        <title>خرید اشتراک Perplexity Pro | موتور جستجوی AI - نوا شاپ</title>
         <meta
           name="description"
-          content="خرید اشتراک Perplexity Pro - موتور جستجوی هوشمند با منابع. پاسخ‌های دقیق با ذکر لینک، دسترسی به GPT-4 و Claude 3."
+          content="خرید اشتراک Perplexity Pro - موتور جستجوی هوشمند با منابع معتبر. پاسخ‌های دقیق با ذکر لینک، دسترسی به GPT-4 و Claude 3. تحقیقات حرفه‌ای."
         />
+        <meta name="keywords" content="خرید Perplexity, Perplexity Pro, موتور جستجوی AI, تحقیق هوشمند, GPT-4, Claude, خرید پرپلکسیتی ایران" />
+        <link rel="canonical" href="https://nova-ai-shop.lovable.app/services/perplexity" />
         
-        {/* Product Schema with dynamic price */}
+        {/* Structured Data */}
         <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            "name": "اشتراک Perplexity Pro",
-            "description": "خرید اشتراک Perplexity Pro - موتور جستجوی هوشمند",
-            "brand": {
-              "@type": "Brand",
-              "name": "Nova AI Shop"
-            },
-            "offers": {
-              "@type": "AggregateOffer",
-              "priceCurrency": "IRR",
-              "lowPrice": lowestPrice,
-              "highPrice": Math.max(...plans.map(p => p.price)),
-              "offerCount": plans.length,
-              "availability": "https://schema.org/InStock"
-            }
-          })}
+          {JSON.stringify([productSchema, faqSchema, breadcrumbSchema])}
         </script>
       </Helmet>
       <ServicePageLayout

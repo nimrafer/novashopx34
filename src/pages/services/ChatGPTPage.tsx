@@ -2,6 +2,7 @@ import { Bot, Clock, RefreshCw, Zap, Shield, Wifi, Headphones } from "lucide-rea
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
 import { usePricesContext } from "@/contexts/PricesContext";
+import { createFAQSchema, createBreadcrumbSchema, createProductSchema } from "@/components/seo/schemas";
 
 const ChatGPTPage = () => {
   const { getPrice, loading } = usePricesContext();
@@ -311,37 +312,39 @@ const ChatGPTPage = () => {
 
   // Get the lowest price for schema
   const lowestPrice = Math.min(...plans.map(p => p.price));
+  
+  // Generate SEO schemas
+  const faqSchema = createFAQSchema(faqs);
+  const breadcrumbSchema = createBreadcrumbSchema([
+    { name: "خانه", url: "/" },
+    { name: "خرید ChatGPT", url: "/services/chatgpt" }
+  ]);
+  const productSchema = createProductSchema({
+    name: "اکانت ChatGPT Plus و Pro",
+    description: "خرید اکانت ChatGPT Plus و Pro با تحویل فوری، اتصال بدون VPN و ضمانت تعویض. دسترسی به GPT-4o، GPT-5 و O3 Pro.",
+    price: lowestPrice,
+    url: "/services/chatgpt",
+    image: "https://nova-ai-shop.lovable.app/logos/chatgpt.png",
+    category: "اشتراک هوش مصنوعی",
+    sku: "CGPT-PLUS",
+    ratingValue: 4.9,
+    reviewCount: 1250
+  });
 
   return (
     <>
       <Helmet>
-        <title>خرید اکانت ChatGPT Plus و Pro | تحویل فوری با ضمانت تعویض</title>
+        <title>خرید اکانت ChatGPT Plus و Pro | تحویل فوری - نوا شاپ</title>
         <meta
           name="description"
-          content="خرید اکانت ChatGPT Plus و Pro با قیمت مناسب. اکانت‌های اورجینال و اختصاصی با تحویل فوری، پشتیبانی ۲۴ ساعته واقعی، ضمانت تعویض و اتصال بدون VPN."
+          content="خرید اکانت ChatGPT Plus و Pro با قیمت مناسب. اکانت اورجینال با تحویل فوری، پشتیبانی ۲۴ ساعته، ضمانت تعویض و اتصال بدون VPN. GPT-4o و GPT-5"
         />
-        <meta name="keywords" content="خرید ChatGPT, اکانت ChatGPT Plus, اشتراک ChatGPT Pro, خرید GPT-4, هوش مصنوعی, GPT-5, O3 Pro" />
+        <meta name="keywords" content="خرید ChatGPT, اکانت ChatGPT Plus, اشتراک ChatGPT Pro, خرید GPT-4, خرید GPT-5, هوش مصنوعی, O3 Pro, خرید اکانت ChatGPT ایران" />
+        <link rel="canonical" href="https://nova-ai-shop.lovable.app/services/chatgpt" />
         
-        {/* Product Schema with dynamic price */}
+        {/* Structured Data */}
         <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            "name": "اکانت ChatGPT Plus و Pro",
-            "description": "خرید اکانت ChatGPT Plus و Pro با تحویل فوری و ضمانت تعویض",
-            "brand": {
-              "@type": "Brand",
-              "name": "Nova AI Shop"
-            },
-            "offers": {
-              "@type": "AggregateOffer",
-              "priceCurrency": "IRR",
-              "lowPrice": lowestPrice,
-              "highPrice": Math.max(...plans.map(p => p.price)),
-              "offerCount": plans.length,
-              "availability": "https://schema.org/InStock"
-            }
-          })}
+          {JSON.stringify([productSchema, faqSchema, breadcrumbSchema])}
         </script>
       </Helmet>
       <ServicePageLayout

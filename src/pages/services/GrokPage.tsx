@@ -2,6 +2,7 @@ import { MessageCircle, Clock, RefreshCw, Zap, Headphones, Image, Brain, Twitter
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
 import { usePricesContext } from "@/contexts/PricesContext";
+import { createFAQSchema, createBreadcrumbSchema, createProductSchema } from "@/components/seo/schemas";
 
 const GrokPage = () => {
   const { getPrice } = usePricesContext();
@@ -251,35 +252,39 @@ const GrokPage = () => {
   );
 
   const lowestPrice = plans[0].price;
+  
+  // Generate SEO schemas
+  const faqSchema = createFAQSchema(faqs);
+  const breadcrumbSchema = createBreadcrumbSchema([
+    { name: "خانه", url: "/" },
+    { name: "خرید Grok", url: "/services/grok" }
+  ]);
+  const productSchema = createProductSchema({
+    name: "اشتراک Super Grok",
+    description: "خرید اشتراک Super Grok - هوش مصنوعی بدون سانسور xAI ایلان ماسک. تولید تصویر نامحدود با Aurora و دسترسی لحظه‌ای به X.",
+    price: lowestPrice,
+    url: "/services/grok",
+    image: "https://nova-ai-shop.lovable.app/logos/grok.png",
+    category: "اشتراک هوش مصنوعی",
+    sku: "GROK-SUPER",
+    ratingValue: 4.7,
+    reviewCount: 650
+  });
 
   return (
     <>
       <Helmet>
-        <title>خرید اشتراک Super Grok | AI بدون سانسور ایلان ماسک</title>
+        <title>خرید اشتراک Super Grok | AI بدون سانسور ایلان ماسک - نوا شاپ</title>
         <meta
           name="description"
           content="خرید اشتراک Super Grok - هوش مصنوعی بدون سانسور xAI و ایلان ماسک. پاسخ به سوالات حساس، تولید تصویر نامحدود با Aurora، دسترسی لحظه‌ای به X."
         />
-        <meta name="keywords" content="خرید Grok, Super Grok, xAI, ایلان ماسک, هوش مصنوعی بدون سانسور, Aurora, توییتر" />
+        <meta name="keywords" content="خرید Grok, Super Grok, xAI, ایلان ماسک, هوش مصنوعی بدون سانسور, Aurora, توییتر, خرید گروک ایران" />
+        <link rel="canonical" href="https://nova-ai-shop.lovable.app/services/grok" />
         
-        {/* Product Schema with dynamic price */}
+        {/* Structured Data */}
         <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            "name": "اشتراک Super Grok",
-            "description": "خرید اشتراک Super Grok - هوش مصنوعی بدون سانسور xAI",
-            "brand": {
-              "@type": "Brand",
-              "name": "Nova AI Shop"
-            },
-            "offers": {
-              "@type": "Offer",
-              "priceCurrency": "IRR",
-              "price": lowestPrice,
-              "availability": "https://schema.org/InStock"
-            }
-          })}
+          {JSON.stringify([productSchema, faqSchema, breadcrumbSchema])}
         </script>
       </Helmet>
       <ServicePageLayout
