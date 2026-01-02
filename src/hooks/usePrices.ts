@@ -19,7 +19,7 @@ const FALLBACK_PRICES: PricesData = {
   cgpt_go_yearly: { name: "ChatGPT GO یکساله", price: 1849000 },
   cgpt_pro_shared: { name: "ChatGPT Pro اشتراکی", price: 297000 },
   cgpt_pro_200: { name: "ChatGPT Pro ۲۰۰ دلاری", price: 12500000 },
-  cgpt_pro_monthly: { name: "ChatGPT Pro ماهانه", price: 3197000 },
+  cgpt_pro_monthly: { name: "ChatGPT Pro ماهانه", price: 500000 },
   
   // Claude
   claude_pro: { name: "Claude Pro ماهانه", price: 2797000 },
