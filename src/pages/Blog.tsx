@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-import { Calendar, Clock, ArrowLeft, User, Tag } from "lucide-react";
+import { Calendar, Clock } from "lucide-react";
 import ShopHeader from "@/components/shop/ShopHeader";
 import ShopFooter from "@/components/shop/ShopFooter";
 import SEOHead from "@/components/seo/SEOHead";
 import { getBlogPostsArray, categories } from "@/data/blogPosts";
+import { LazyImage } from "@/components/ui/lazy-image";
 
 const blogPosts = getBlogPostsArray();
 
@@ -75,10 +76,10 @@ const Blog = () => {
                 >
                   {/* Image */}
                   <div className="aspect-video bg-gradient-to-br from-primary/20 to-purple-500/20 flex items-center justify-center p-8">
-                    <img
+                    <LazyImage
                       src={post.image}
                       alt={post.title}
-                      className="w-20 h-20 object-contain group-hover:scale-110 transition-transform duration-300"
+                      className="w-20 h-20 group-hover:scale-110 transition-transform duration-300"
                     />
                   </div>
                   
