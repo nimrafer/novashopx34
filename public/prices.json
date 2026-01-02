@@ -59,6 +59,22 @@
     "name": "Gemini یکساله (جیمیل آماده)",
     "price": 2597000
   },
+  "gem_exclusive_1month": {
+    "name": "اکانت اختصاصی Gemini Pro یک‌ماهه",
+    "price": 0
+  },
+  "gem_exclusive_3month": {
+    "name": "اکانت اختصاصی Gemini Pro سه‌ماهه",
+    "price": 0
+  },
+  "gem_exclusive_6month": {
+    "name": "اکانت اختصاصی Gemini Pro شش‌ماهه",
+    "price": 0
+  },
+  "gem_exclusive_9month": {
+    "name": "اکانت اختصاصی Gemini Pro نه‌ماهه",
+    "price": 0
+  },
   "gem_student_month": {
     "name": "تخفیف دانشجویی Gemini ماهانه",
     "price": 130000
