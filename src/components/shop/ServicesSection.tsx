@@ -49,7 +49,7 @@ const ServicesSection = () => {
           duration: "شخصی",
           price: getPrice("cgpt_pro_37day"),
         },
-        { name: "Pro ماهانه", duration: "۲۰۰ دلار - O3 Pro", price: 12500000 },
+        { name: "Pro ماهانه", duration: "۲۰۰ دلار - O3 Pro", price: getPrice("cgpt_pro_200") },
         { name: "تیمی Plus", duration: "تا ۷ نفر", price: getPrice("cgpt_plus_team") },
       ],
     },
@@ -71,7 +71,7 @@ const ServicesSection = () => {
       color: "#8B5CF6",
       discount: 17,
       features: ["دسترسی به جدیدترین مدل‌ها", "بدون محدودیت", "پشتیبانی ویژه"],
-      plans: [{ name: "Pro ماهانه", duration: "۱ ماهه", price: 3197000, popular: true }],
+      plans: [{ name: "Pro ماهانه", duration: "۱ ماهه", price: getPrice("cgpt_pro_monthly"), popular: true }],
     },
     {
       id: "gemini",
@@ -101,7 +101,7 @@ const ServicesSection = () => {
       color: "#10B981",
       discount: 12,
       features: ["تمام امکانات Gemini", "پردازش پیشرفته چندرسانه‌ای", "دسترسی به مدل‌های نسل جدید"],
-      plans: [{ name: "Ultra ماهانه", duration: "۱ ماهه", price: 29500000, popular: true }],
+      plans: [{ name: "Ultra ماهانه", duration: "۱ ماهه", price: getPrice("gemini_ultra"), popular: true }],
     },
     {
       id: "grok",
@@ -133,8 +133,8 @@ const ServicesSection = () => {
         "Artifacts برای خروجی بصری",
       ],
       plans: [
-        { name: "Pro ماهانه", duration: "۱ ماهه - شخصی", price: 2797000, popular: true },
-        { name: "Pro اشتراکی", duration: "۱ ماهه - اقتصادی", price: 450000 },
+        { name: "Pro ماهانه", duration: "۱ ماهه - شخصی", price: getPrice("claude_pro"), popular: true },
+        { name: "Pro اشتراکی", duration: "۱ ماهه - اقتصادی", price: getPrice("claude_pro_shared") },
       ],
     },
     {

@@ -18,8 +18,15 @@ const FALLBACK_PRICES: PricesData = {
   cgpt_plus_team: { name: "ChatGPT Plus تیمی", price: 1249000 },
   cgpt_go_yearly: { name: "ChatGPT GO یکساله", price: 1849000 },
   cgpt_pro_shared: { name: "ChatGPT Pro اشتراکی", price: 297000 },
+  cgpt_pro_200: { name: "ChatGPT Pro ۲۰۰ دلاری", price: 12500000 },
+  cgpt_pro_monthly: { name: "ChatGPT Pro ماهانه", price: 3197000 },
+  
+  // Claude
+  claude_pro: { name: "Claude Pro ماهانه", price: 2797000 },
+  claude_pro_shared: { name: "Claude Pro اشتراکی", price: 450000 },
   
   // Gemini
+  gemini_ultra: { name: "Gemini Ultra ماهانه", price: 29500000 },
   gem_month: { name: "Gemini ماهانه", price: 649000 },
   gem_3month: { name: "Gemini سه‌ماهه", price: 1249000 },
   gem_6month: { name: "Gemini شش‌ماهه", price: 1749000 },
