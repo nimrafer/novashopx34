@@ -1,8 +1,11 @@
 import { MessageSquare, Clock, RefreshCw, Zap, Headphones, BookOpen, Code } from "lucide-react";
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
+import { usePricesContext } from "@/contexts/PricesContext";
 
 const ClaudePage = () => {
+  const { getPrice } = usePricesContext();
+
   const features = [
     "دسترسی به Claude 3.5 Sonnet و Claude 3 Opus",
     "پنجره کانتکست ۲۰۰ هزار توکنی (معادل یک کتاب کامل)",
@@ -22,7 +25,8 @@ const ClaudePage = () => {
     {
       name: "اکانت Pro اختصاصی",
       duration: "۱ ماهه - ۲۰ دلار",
-      price: 3297000,
+      price: getPrice("claude_pro"),
+      priceKey: "claude_pro",
       popular: true,
       features: [
         "دسترسی به Claude 3.5 Sonnet",
@@ -35,15 +39,14 @@ const ClaudePage = () => {
     {
       name: "اکانت Pro اشتراکی",
       duration: "۱ ماهه - اقتصادی",
-      price: 997000,
+      price: getPrice("claude_pro_shared"),
+      priceKey: "claude_pro_shared",
       features: [
         "تمام امکانات Pro",
         "اشتراکی با ۱-۲ نفر دیگر",
         "مناسب استفاده آموزشی",
       ],
-      notIncluded: [
-        "تاریخچه چت خصوصی نیست",
-      ],
+      notIncluded: ["تاریخچه چت خصوصی نیست"],
     },
   ];
 
