@@ -89,12 +89,7 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
  * Otherwise show as "X تومان" with comma separators
  */
 export const formatPricePersian = (price: number): string => {
-  if (price % 1000 === 0) {
-    const thousands = price / 1000;
-    return `${thousands.toLocaleString('fa-IR')} هزار تومان`;
-  } else {
-    return `${price.toLocaleString('fa-IR')} تومان`;
-  }
+  return `${price.toLocaleString('fa-IR')} تومان`;
 };
 
 /**
