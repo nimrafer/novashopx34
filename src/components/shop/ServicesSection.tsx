@@ -75,7 +75,7 @@ const ServicesSection = () => {
       logo: logos.gemini,
       title: "اکانت اختصاصی Gemini Pro یک‌ماهه",
       description: "۲ ترابایت فضای ابری Google One",
-      color: "#A855F7",
+      color: "#60A5FA",
       features: [
         "یکپارچه با Gmail, Drive, Docs",
         "۲ ترابایت فضای Google One",
@@ -106,7 +106,7 @@ const ServicesSection = () => {
       logo: logos.gemini,
       title: "اکانت اختصاصی Gemini Pro شش‌ماهه",
       description: "۲ ترابایت فضای ابری Google One",
-      color: "#A855F7",
+      color: "#F472B6",
       features: [
         "یکپارچه با Gmail, Drive, Docs",
         "۲ ترابایت فضای Google One",
@@ -121,7 +121,7 @@ const ServicesSection = () => {
       logo: logos.gemini,
       title: "اکانت اختصاصی Gemini Pro نه‌ماهه",
       description: "۲ ترابایت فضای ابری Google One",
-      color: "#A855F7",
+      color: "#34D399",
       features: [
         "یکپارچه با Gmail, Drive, Docs",
         "۲ ترابایت فضای Google One",
