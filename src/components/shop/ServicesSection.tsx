@@ -56,7 +56,7 @@ const ServicesSection = () => {
       id: "chatgpt-pro",
       logo: logos.chatgpt,
       title: "اکانت اشتراکی ChatGPT Pro",
-      description: "دسترسی به جدیدترین مدل ChatGPT Pro و تمامی امکانات آن",
+      description: "دسترسی به O3 Pro و امکانات پیشرفته",
       color: "#8B5CF6",
       discount: 17,
       features: [
