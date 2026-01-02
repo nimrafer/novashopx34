@@ -1,14 +1,32 @@
+# Nova AI Shop - robots.txt
+# https://nova-ai-shop.lovable.app
+
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /checkout
+Disallow: /auth
+
+# Googlebot
 User-agent: Googlebot
 Allow: /
 
+# Bingbot
 User-agent: Bingbot
 Allow: /
 
+# Social Media Bots
 User-agent: Twitterbot
 Allow: /
 
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
+User-agent: LinkedInBot
 Allow: /
+
+# Sitemap
+Sitemap: https://nova-ai-shop.lovable.app/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
