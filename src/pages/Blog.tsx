@@ -3,96 +3,9 @@ import { Calendar, Clock, ArrowLeft, User, Tag } from "lucide-react";
 import ShopHeader from "@/components/shop/ShopHeader";
 import ShopFooter from "@/components/shop/ShopFooter";
 import SEOHead from "@/components/seo/SEOHead";
+import { getBlogPostsArray, categories } from "@/data/blogPosts";
 
-interface BlogPost {
-  id: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  image: string;
-  category: string;
-  author: string;
-  date: string;
-  readTime: string;
-  tags: string[];
-}
-
-const blogPosts: BlogPost[] = [
-  {
-    id: "chatgpt-guide",
-    title: "راهنمای کامل استفاده از ChatGPT برای مبتدیان",
-    excerpt: "در این مقاله با تمام قابلیت‌های ChatGPT آشنا می‌شوید و یاد می‌گیرید چگونه از این ابزار هوش مصنوعی به بهترین شکل استفاده کنید.",
-    content: "",
-    image: "/logos/chatgpt.png",
-    category: "آموزش",
-    author: "تیم نوا",
-    date: "۱۴۰۳/۱۰/۱۵",
-    readTime: "۸ دقیقه",
-    tags: ["ChatGPT", "هوش مصنوعی", "آموزش"]
-  },
-  {
-    id: "claude-vs-chatgpt",
-    title: "مقایسه Claude و ChatGPT: کدام یک بهتر است؟",
-    excerpt: "بررسی جامع تفاوت‌ها، مزایا و معایب دو چت‌بات محبوب هوش مصنوعی Claude و ChatGPT.",
-    content: "",
-    image: "/logos/claude.png",
-    category: "مقایسه",
-    author: "تیم نوا",
-    date: "۱۴۰۳/۱۰/۱۲",
-    readTime: "۱۰ دقیقه",
-    tags: ["Claude", "ChatGPT", "مقایسه"]
-  },
-  {
-    id: "cursor-coding",
-    title: "برنامه‌نویسی با Cursor: انقلابی در کدنویسی",
-    excerpt: "Cursor یک IDE هوشمند است که با استفاده از هوش مصنوعی، سرعت برنامه‌نویسی شما را چند برابر می‌کند.",
-    content: "",
-    image: "/logos/cursor.png",
-    category: "برنامه‌نویسی",
-    author: "تیم نوا",
-    date: "۱۴۰۳/۱۰/۱۰",
-    readTime: "۱۲ دقیقه",
-    tags: ["Cursor", "برنامه‌نویسی", "IDE"]
-  },
-  {
-    id: "gemini-features",
-    title: "قابلیت‌های جدید Gemini گوگل",
-    excerpt: "آشنایی با آخرین ویژگی‌های Gemini گوگل و نحوه استفاده از آن‌ها برای افزایش بهره‌وری.",
-    content: "",
-    image: "/logos/gemini.png",
-    category: "اخبار",
-    author: "تیم نوا",
-    date: "۱۴۰۳/۱۰/۰۸",
-    readTime: "۶ دقیقه",
-    tags: ["Gemini", "گوگل", "هوش مصنوعی"]
-  },
-  {
-    id: "ai-productivity",
-    title: "۱۰ روش افزایش بهره‌وری با هوش مصنوعی",
-    excerpt: "با استفاده از این ۱۰ روش ساده، می‌توانید بهره‌وری خود را با کمک ابزارهای هوش مصنوعی به شدت افزایش دهید.",
-    content: "",
-    image: "/logos/grok.png",
-    category: "بهره‌وری",
-    author: "تیم نوا",
-    date: "۱۴۰۳/۱۰/۰۵",
-    readTime: "۷ دقیقه",
-    tags: ["بهره‌وری", "هوش مصنوعی", "نکات"]
-  },
-  {
-    id: "perplexity-research",
-    title: "تحقیق حرفه‌ای با Perplexity AI",
-    excerpt: "Perplexity یک موتور جستجوی هوشمند است که می‌تواند تحقیقات شما را سریع‌تر و دقیق‌تر انجام دهد.",
-    content: "",
-    image: "/logos/perplexity.png",
-    category: "آموزش",
-    author: "تیم نوا",
-    date: "۱۴۰۳/۱۰/۰۱",
-    readTime: "۹ دقیقه",
-    tags: ["Perplexity", "تحقیق", "جستجو"]
-  }
-];
-
-const categories = ["همه", "آموزش", "مقایسه", "برنامه‌نویسی", "اخبار", "بهره‌وری"];
+const blogPosts = getBlogPostsArray();
 
 const Blog = () => {
   return (
