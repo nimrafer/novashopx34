@@ -17,7 +17,7 @@ const ServicesSection = () => {
     {
       id: "chatgpt",
       logo: logos.chatgpt,
-      title: "خرید اکانت ChatGPT Plus",
+      title: "اکانت اختصاصی ChatGPT Plus",
       description: "قدرتمندترین AI برای تولید محتوا و کدنویسی",
       color: "#10B981",
       badge: "پرفروش",
