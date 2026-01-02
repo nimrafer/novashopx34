@@ -14,7 +14,7 @@ const logos = {
 };
 
 const ServicesSection = () => {
-  const { getPrice, loading } = usePricesContext();
+  const { getPrice } = usePricesContext();
 
   const services = [
     {
@@ -32,9 +32,24 @@ const ServicesSection = () => {
         "تضمین تعویض + اتصال بدون VPN",
       ],
       plans: [
-        { name: "Plus اشتراکی", duration: "۱ ماهه - اقتصادی", price: getPrice("cgpt_pro_shared"), features: ["اشتراکی با ۲ نفر"] },
-        { name: "Plus ۳۰ روزه", duration: "۱ ماهه - شخصی", price: getPrice("cgpt_pro_30day"), popular: true },
-        { name: "Plus ۳۷ روزه", duration: "شخصی", price: getPrice("cgpt_pro_37day") },
+        {
+          name: "Plus اشتراکی",
+          duration: "۱ ماهه - اقتصادی",
+          price: getPrice("cgpt_pro_shared"),
+          features: ["اشتراکی با ۲ نفر"],
+        },
+        {
+          name: "Plus ۳۰ روزه",
+          duration: "۱ ماهه - شخصی",
+          price: getPrice("cgpt_pro_30day"),
+          popular: true,
+        },
+        {
+          name: "Plus ۳۷ روزه",
+          duration: "شخصی",
+          price: getPrice("cgpt_pro_37day"),
+        },
+        { name: "Pro ماهانه", duration: "۲۰۰ دلار - O3 Pro", price: 12500000 },
         { name: "تیمی Plus", duration: "تا ۷ نفر", price: getPrice("cgpt_plus_team") },
       ],
     },
@@ -45,14 +60,18 @@ const ServicesSection = () => {
       description: "اقتصادی و مقرون به صرفه",
       color: "#3B82F6",
       discount: 14,
-      features: [
-        "دسترسی به GPT-4o",
-        "مشترک با ۲ نفر دیگر",
-        "قیمت مناسب",
-      ],
-      plans: [
-        { name: "اشتراکی ماهانه", duration: "۱ ماهه", price: getPrice("cgpt_pro_shared"), popular: true },
-      ],
+      features: ["دسترسی به GPT-4o", "مشترک با ۲ نفر دیگر", "قیمت مناسب"],
+      plans: [{ name: "اشتراکی ماهانه", duration: "۱ ماهه", price: getPrice("cgpt_pro_shared"), popular: true }],
+    },
+    {
+      id: "chatgpt-pro",
+      logo: logos.chatgpt,
+      title: "اکانت اشتراکی ChatGPT Pro",
+      description: "دسترسی به O3 Pro و امکانات پیشرفته",
+      color: "#8B5CF6",
+      discount: 17,
+      features: ["دسترسی به O3 Pro", "بدون محدودیت", "پشتیبانی ویژه"],
+      plans: [{ name: "Pro ماهانه", duration: "۱ ماهه", price: 3197000, popular: true }],
     },
     {
       id: "gemini",
@@ -75,6 +94,16 @@ const ServicesSection = () => {
       ],
     },
     {
+      id: "gemini-ultra",
+      logo: logos.gemini,
+      title: "اکانت Gemini Ultra (۲۵۰ دلار)",
+      description: "پلن حرفه‌ای با امکانات کامل",
+      color: "#10B981",
+      discount: 12,
+      features: ["تمام امکانات Gemini", "۲۵۰ دلار اعتبار", "دسترسی به مدل‌های پیشرفته"],
+      plans: [{ name: "Ultra ماهانه", duration: "۱ ماهه", price: 29500000, popular: true }],
+    },
+    {
       id: "grok",
       logo: logos.grok,
       title: "اکانت اشتراکی Grok",
@@ -88,9 +117,7 @@ const ServicesSection = () => {
         "تولید تصویر با Aurora",
         "حالت استدلال پیشرفته",
       ],
-      plans: [
-        { name: "پلن ماهانه", duration: "۱ ماهه", price: getPrice("grok_monthly"), popular: true },
-      ],
+      plans: [{ name: "پلن ماهانه", duration: "۱ ماهه", price: getPrice("grok_monthly"), popular: true }],
     },
     {
       id: "claude",
@@ -106,7 +133,8 @@ const ServicesSection = () => {
         "Artifacts برای خروجی بصری",
       ],
       plans: [
-        { name: "Pro ماهانه", duration: "۱ ماهه - شخصی", price: getPrice("perplexity_monthly"), popular: true },
+        { name: "Pro ماهانه", duration: "۱ ماهه - شخصی", price: 2797000, popular: true },
+        { name: "Pro اشتراکی", duration: "۱ ماهه - اقتصادی", price: 450000 },
       ],
     },
     {
@@ -124,42 +152,13 @@ const ServicesSection = () => {
         "مناسب فریلنسرها و تیم‌ها",
       ],
       plans: [
-        { name: "پلن ۷ روزه", duration: "آفر ویژه", price: getPrice("cursor_weekly"), features: ["مناسب تست و پروژه کوتاه"] },
+        {
+          name: "پلن ۷ روزه",
+          duration: "آفر ویژه",
+          price: getPrice("cursor_weekly"),
+          features: ["مناسب تست و پروژه کوتاه"],
+        },
         { name: "پلن یک‌ماهه", duration: "۱ ماهه", price: getPrice("cursor_monthly"), popular: true },
-      ],
-    },
-    {
-      id: "perplexity",
-      logo: logos.perplexity,
-      title: "اکانت Perplexity Pro",
-      description: "موتور جستجوی هوشمند AI",
-      color: "#22D3EE",
-      discount: 12,
-      features: [
-        "جستجوی پیشرفته با AI",
-        "دسترسی به منابع آکادمیک",
-        "پاسخ‌های دقیق با منبع",
-      ],
-      plans: [
-        { name: "پلن ماهانه", duration: "۱ ماهه", price: getPrice("perplexity_monthly"), popular: true },
-        { name: "پلن یکساله", duration: "۱ ساله", price: getPrice("perplexity_yearly") },
-      ],
-    },
-    {
-      id: "spotify",
-      logo: logos.spotify,
-      title: "اشتراک Spotify Premium",
-      description: "موسیقی بدون تبلیغات",
-      color: "#1DB954",
-      discount: 10,
-      features: [
-        "پخش بدون تبلیغات",
-        "دانلود آفلاین",
-        "کیفیت صدای بالا",
-      ],
-      plans: [
-        { name: "پلن ماهانه", duration: "۱ ماهه", price: getPrice("spotify_monthly"), popular: true },
-        { name: "پلن ۴ ماهه", duration: "۴ ماهه", price: getPrice("spotify_4month") },
       ],
     },
   ];
