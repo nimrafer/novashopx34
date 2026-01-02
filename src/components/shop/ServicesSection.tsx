@@ -71,22 +71,64 @@ const ServicesSection = () => {
       plans: [{ name: "Pro ماهانه", duration: "۱ ماهه", price: getPrice("cgpt_pro_monthly"), popular: true }],
     },
     {
-      id: "gemini",
+      id: "gemini-1month",
       logo: logos.gemini,
-      title: "اکانت اختصاصی Gemini Pro",
+      title: "اکانت اختصاصی Gemini Pro یک‌ماهه",
       description: "۲ ترابایت فضای ابری Google One",
       color: "#A855F7",
       features: [
         "یکپارچه با Gmail, Drive, Docs",
         "۲ ترابایت فضای Google One",
         "ساخت ویدیو با Veo 3",
-        "Deep Research + NotebookLM",
       ],
       plans: [
-        { name: "اختصاصی یک‌ماهه", duration: "۱ ماهه", price: getPrice("gem_exclusive_1month") },
-        { name: "اختصاصی سه‌ماهه", duration: "۳ ماهه", price: getPrice("gem_exclusive_3month"), popular: true },
-        { name: "اختصاصی شش‌ماهه", duration: "۶ ماهه", price: getPrice("gem_exclusive_6month") },
-        { name: "اختصاصی نه‌ماهه", duration: "۹ ماهه", price: getPrice("gem_exclusive_9month") },
+        { name: "یک‌ماهه", duration: "۱ ماهه", price: getPrice("gem_exclusive_1month"), popular: true },
+      ],
+    },
+    {
+      id: "gemini-3month",
+      logo: logos.gemini,
+      title: "اکانت اختصاصی Gemini Pro سه‌ماهه",
+      description: "۲ ترابایت فضای ابری Google One",
+      color: "#A855F7",
+      badge: "پرفروش",
+      features: [
+        "یکپارچه با Gmail, Drive, Docs",
+        "۲ ترابایت فضای Google One",
+        "صرفه‌جویی قابل توجه",
+      ],
+      plans: [
+        { name: "سه‌ماهه", duration: "۳ ماهه", price: getPrice("gem_exclusive_3month"), popular: true },
+      ],
+    },
+    {
+      id: "gemini-6month",
+      logo: logos.gemini,
+      title: "اکانت اختصاصی Gemini Pro شش‌ماهه",
+      description: "۲ ترابایت فضای ابری Google One",
+      color: "#A855F7",
+      features: [
+        "یکپارچه با Gmail, Drive, Docs",
+        "۲ ترابایت فضای Google One",
+        "بهترین ارزش",
+      ],
+      plans: [
+        { name: "شش‌ماهه", duration: "۶ ماهه", price: getPrice("gem_exclusive_6month"), popular: true },
+      ],
+    },
+    {
+      id: "gemini-9month",
+      logo: logos.gemini,
+      title: "اکانت اختصاصی Gemini Pro نه‌ماهه",
+      description: "۲ ترابایت فضای ابری Google One",
+      color: "#A855F7",
+      features: [
+        "یکپارچه با Gmail, Drive, Docs",
+        "۲ ترابایت فضای Google One",
+        "بیشترین صرفه‌جویی",
+      ],
+      plans: [
+        { name: "نه‌ماهه", duration: "۹ ماهه", price: getPrice("gem_exclusive_9month"), popular: true },
       ],
     },
     {
