@@ -1,8 +1,11 @@
 import { Sparkles, Clock, RefreshCw, Zap, Headphones, Wifi, Database } from "lucide-react";
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
+import { usePricesContext } from "@/contexts/PricesContext";
 
 const GeminiPage = () => {
+  const { getPrice } = usePricesContext();
+
   const features = [
     "دسترسی به Gemini 2.5 Pro و Deep Research",
     "یکپارچه با اکوسیستم گوگل (Gmail, Docs, Drive, Photos)",
@@ -22,7 +25,8 @@ const GeminiPage = () => {
     {
       name: "پلن یک‌ماهه",
       duration: "۱ ماهه",
-      price: 2997000,
+      price: getPrice("gem_month"),
+      priceKey: "gem_month",
       features: [
         "تمام امکانات Gemini Pro",
         "فعال‌سازی روی Gmail شما",
@@ -32,7 +36,8 @@ const GeminiPage = () => {
     {
       name: "پلن سه‌ماهه",
       duration: "۳ ماهه",
-      price: 5500000,
+      price: getPrice("gem_3month"),
+      priceKey: "gem_3month",
       popular: true,
       features: [
         "صرفه‌جویی قابل توجه",
@@ -43,7 +48,8 @@ const GeminiPage = () => {
     {
       name: "پلن شش‌ماهه",
       duration: "۶ ماهه",
-      price: 9500000,
+      price: getPrice("gem_6month"),
+      priceKey: "gem_6month",
       features: [
         "بهترین ارزش برای پول",
         "تمام امکانات Pro",
@@ -51,13 +57,25 @@ const GeminiPage = () => {
       ],
     },
     {
-      name: "Gemini Ultra",
-      duration: "مدت محدود - ۲۵۰ دلار",
-      price: 30000000,
+      name: "پلن یکساله (جیمیل شخصی)",
+      duration: "۱ ساله - روی Gmail شما",
+      price: getPrice("gem_year_personal"),
+      priceKey: "gem_year_personal",
       features: [
-        "بالاترین سطح Gemini",
-        "قدرت پردازش نامحدود",
-        "مناسب شرکت‌ها و محققان",
+        "یک سال کامل",
+        "فعال‌سازی روی Gmail شخصی شما",
+        "بهترین انتخاب",
+      ],
+    },
+    {
+      name: "پلن یکساله (جیمیل آماده)",
+      duration: "۱ ساله - جیمیل آماده",
+      price: getPrice("gem_year_ready"),
+      priceKey: "gem_year_ready",
+      features: [
+        "یک سال کامل",
+        "جیمیل آماده با اشتراک فعال",
+        "تحویل سریع‌تر",
       ],
     },
   ];
@@ -96,9 +114,9 @@ const GeminiPage = () => {
         "بله، در پلن‌های یکساله می‌توانید اشتراک را روی Gmail شخصی خودتان فعال کنید و کاملاً اختصاصی است.",
     },
     {
-      question: "تفاوت Gemini Pro و Ultra چیست؟",
+      question: "تخفیف دانشجویی دارید؟",
       answer:
-        "Gemini Ultra نسخه پیشرفته‌تر با قدرت پردازش بسیار بالاتر است. قیمت آن ۲۵۰ دلار ماهانه است و مناسب شرکت‌ها، محققان و پروژه‌های سنگین است.",
+        "بله! برای دانشجویان تخفیف ویژه داریم. پلن‌های ماهانه، ۳ ماهه، ۶ ماهه و یکساله با قیمت‌های فوق‌العاده. با پشتیبانی تماس بگیرید.",
     },
   ];
 
@@ -123,6 +141,36 @@ const GeminiPage = () => {
               <div className="text-4xl font-bold text-blue-500 mb-2">۱۰۰٪</div>
               <div className="text-lg font-semibold mb-1">تضمین رضایت</div>
               <p className="text-muted-foreground text-sm">گارانتی تعویض و پشتیبانی کامل</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Student Discount Section */}
+      <section className="py-12">
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl font-bold mb-6">🎓 تخفیف دانشجویی</h2>
+          <div className="glass rounded-3xl p-8 max-w-4xl" style={{ background: "linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, transparent 50%)" }}>
+            <p className="text-muted-foreground mb-6">
+              با ارائه کارت دانشجویی معتبر، از تخفیف‌های ویژه بهره‌مند شوید:
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center p-4 bg-background/50 rounded-xl">
+                <div className="text-2xl font-bold text-blue-500">{new Intl.NumberFormat("fa-IR").format(getPrice("gem_student_month") / 1000)}</div>
+                <div className="text-sm text-muted-foreground">هزار تومان / ماهانه</div>
+              </div>
+              <div className="text-center p-4 bg-background/50 rounded-xl">
+                <div className="text-2xl font-bold text-blue-500">{new Intl.NumberFormat("fa-IR").format(getPrice("gem_student_3month") / 1000)}</div>
+                <div className="text-sm text-muted-foreground">هزار تومان / ۳ ماهه</div>
+              </div>
+              <div className="text-center p-4 bg-background/50 rounded-xl">
+                <div className="text-2xl font-bold text-blue-500">{new Intl.NumberFormat("fa-IR").format(getPrice("gem_student_6month") / 1000)}</div>
+                <div className="text-sm text-muted-foreground">هزار تومان / ۶ ماهه</div>
+              </div>
+              <div className="text-center p-4 bg-background/50 rounded-xl">
+                <div className="text-2xl font-bold text-blue-500">{new Intl.NumberFormat("fa-IR").format(getPrice("gem_student_year") / 1000)}</div>
+                <div className="text-sm text-muted-foreground">هزار تومان / یکساله</div>
+              </div>
             </div>
           </div>
         </div>
@@ -263,6 +311,8 @@ const GeminiPage = () => {
     </>
   );
 
+  const lowestPrice = Math.min(...plans.map(p => p.price));
+
   return (
     <>
       <Helmet>
@@ -272,6 +322,28 @@ const GeminiPage = () => {
           content="خرید اشتراک Gemini Pro گوگل با ۲ ترابایت فضای ابری. یکپارچه با Gmail, Drive و Docs. ساخت ویدیو با Veo، Deep Research و پشتیبانی ۲۴ ساعته."
         />
         <meta name="keywords" content="خرید Gemini, اشتراک Gemini Pro, هوش مصنوعی گوگل, Google One, Deep Research, Veo" />
+        
+        {/* Product Schema with dynamic price */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "اشتراک Gemini Pro گوگل",
+            "description": "خرید اشتراک Gemini Pro با ۲ ترابایت فضای ابری و Deep Research",
+            "brand": {
+              "@type": "Brand",
+              "name": "Nova AI Shop"
+            },
+            "offers": {
+              "@type": "AggregateOffer",
+              "priceCurrency": "IRR",
+              "lowPrice": lowestPrice,
+              "highPrice": Math.max(...plans.map(p => p.price)),
+              "offerCount": plans.length,
+              "availability": "https://schema.org/InStock"
+            }
+          })}
+        </script>
       </Helmet>
       <ServicePageLayout
         icon={Sparkles}

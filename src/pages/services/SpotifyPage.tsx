@@ -1,8 +1,11 @@
 import { Music } from "lucide-react";
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
+import { usePricesContext } from "@/contexts/PricesContext";
 
 const SpotifyPage = () => {
+  const { getPrice } = usePricesContext();
+
   const features = [
     "بدون تبلیغات آزاردهنده",
     "دانلود آهنگ و پلی‌لیست برای حالت آفلاین",
@@ -19,7 +22,8 @@ const SpotifyPage = () => {
     {
       name: "پلن یک‌ماهه",
       duration: "۱ ماهه",
-      price: 350000,
+      price: getPrice("spotify_monthly"),
+      priceKey: "spotify_monthly",
       popular: true,
       features: [
         "تمام امکانات Premium",
@@ -30,7 +34,8 @@ const SpotifyPage = () => {
     {
       name: "پلن ۴ ماهه",
       duration: "۴ ماهه - اقتصادی",
-      price: 1350000,
+      price: getPrice("spotify_4month"),
+      priceKey: "spotify_4month",
       features: [
         "صرفه‌جویی در هزینه",
         "۴ ماه بدون دغدغه",
@@ -66,6 +71,8 @@ const SpotifyPage = () => {
     },
   ];
 
+  const lowestPrice = Math.min(...plans.map(p => p.price));
+
   return (
     <>
       <Helmet>
@@ -74,6 +81,28 @@ const SpotifyPage = () => {
           name="description"
           content="خرید اشتراک Spotify Premium - موسیقی بدون تبلیغ با کیفیت بالا. دانلود آفلاین، فعال‌سازی روی اکانت شخصی."
         />
+        
+        {/* Product Schema with dynamic price */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "اشتراک Spotify Premium",
+            "description": "خرید اشتراک Spotify Premium با تحویل فوری",
+            "brand": {
+              "@type": "Brand",
+              "name": "Nova AI Shop"
+            },
+            "offers": {
+              "@type": "AggregateOffer",
+              "priceCurrency": "IRR",
+              "lowPrice": lowestPrice,
+              "highPrice": Math.max(...plans.map(p => p.price)),
+              "offerCount": plans.length,
+              "availability": "https://schema.org/InStock"
+            }
+          })}
+        </script>
       </Helmet>
       <ServicePageLayout
         icon={Music}

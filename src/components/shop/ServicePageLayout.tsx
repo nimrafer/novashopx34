@@ -41,9 +41,15 @@ interface ServicePageLayoutProps {
   extraContent?: ReactNode;
 }
 
+// Format price like bot.py's thousand_or_toman function
 const formatPrice = (price: number) => {
   if (price === 0) return "تماس بگیرید";
-  return new Intl.NumberFormat("fa-IR").format(price / 1000) + " هزار تومان";
+  if (price % 1000 === 0) {
+    const thousands = price / 1000;
+    return new Intl.NumberFormat("fa-IR").format(thousands) + " هزار تومان";
+  } else {
+    return new Intl.NumberFormat("fa-IR").format(price) + " تومان";
+  }
 };
 
 const ServicePageLayout = ({

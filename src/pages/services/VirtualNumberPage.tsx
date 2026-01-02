@@ -1,8 +1,11 @@
 import { Phone } from "lucide-react";
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
+import { usePricesContext } from "@/contexts/PricesContext";
 
 const VirtualNumberPage = () => {
+  const { getPrice } = usePricesContext();
+
   const features = [
     "ثبت‌نام در سرویس‌های بین‌المللی (Gmail, Facebook, Apple ID)",
     "شماره‌های دائمی و Private",
@@ -19,7 +22,8 @@ const VirtualNumberPage = () => {
     {
       name: "شماره کانادا",
       duration: "دائمی (+1)",
-      price: 650000,
+      price: getPrice("vnum_ca"),
+      priceKey: "vnum_ca",
       features: [
         "شماره دائمی",
         "دریافت SMS و تماس",
@@ -29,7 +33,8 @@ const VirtualNumberPage = () => {
     {
       name: "شماره آمریکا",
       duration: "دائمی (+1)",
-      price: 750000,
+      price: getPrice("vnum_us"),
+      priceKey: "vnum_us",
       features: [
         "شماره دائمی",
         "دریافت SMS و تماس",
@@ -39,7 +44,8 @@ const VirtualNumberPage = () => {
     {
       name: "شماره انگلیس",
       duration: "دائمی (+44)",
-      price: 950000,
+      price: getPrice("vnum_uk"),
+      priceKey: "vnum_uk",
       popular: true,
       features: [
         "شماره دائمی",
@@ -50,7 +56,8 @@ const VirtualNumberPage = () => {
     {
       name: "شماره استرالیا",
       duration: "دائمی (+61)",
-      price: 1450000,
+      price: getPrice("vnum_au"),
+      priceKey: "vnum_au",
       features: [
         "شماره دائمی",
         "مناسب منطقه آسیا-پاسیفیک",
@@ -90,23 +97,25 @@ const VirtualNumberPage = () => {
           <div className="glass rounded-2xl p-6">
             <h3 className="text-lg font-semibold mb-4">📨 تلگرام آماده</h3>
             <ul className="space-y-3 text-sm text-muted-foreground">
-              <li>🇬🇧 انگلیس (+44): ۳۵۰ هزار تومان</li>
-              <li>🇦🇺 استرالیا (+61): ۱,۲۵۰ هزار تومان</li>
-              <li>🇺🇸 آمریکا (+1): ۳۰۰ هزار تومان</li>
-              <li>🇨🇦 کانادا (+1): ۳۰۰ هزار تومان</li>
+              <li>🇬🇧 انگلیس (+44): {new Intl.NumberFormat("fa-IR").format(getPrice("vnum_tg_uk") / 1000)} هزار تومان</li>
+              <li>🇦🇺 استرالیا (+61): {new Intl.NumberFormat("fa-IR").format(getPrice("vnum_tg_au") / 1000)} هزار تومان</li>
+              <li>🇺🇸 آمریکا (+1): {new Intl.NumberFormat("fa-IR").format(getPrice("vnum_tg_us") / 1000)} هزار تومان</li>
+              <li>🇨🇦 کانادا (+1): {new Intl.NumberFormat("fa-IR").format(getPrice("vnum_tg_ca") / 1000)} هزار تومان</li>
             </ul>
           </div>
           <div className="glass rounded-2xl p-6">
             <h3 className="text-lg font-semibold mb-4">💬 واتساپ آماده</h3>
             <ul className="space-y-3 text-sm text-muted-foreground">
-              <li>🇬🇧 انگلیس (+44): ۳۵۰ هزار تومان</li>
-              <li>🇨🇦 کانادا (+1): ۳۵۰ هزار تومان</li>
+              <li>🇬🇧 انگلیس (+44): {new Intl.NumberFormat("fa-IR").format(getPrice("vnum_wa_uk") / 1000)} هزار تومان</li>
+              <li>🇨🇦 کانادا (+1): {new Intl.NumberFormat("fa-IR").format(getPrice("vnum_wa_ca") / 1000)} هزار تومان</li>
             </ul>
           </div>
         </div>
       </div>
     </section>
   );
+
+  const lowestPrice = Math.min(...plans.map(p => p.price));
 
   return (
     <>
@@ -116,6 +125,28 @@ const VirtualNumberPage = () => {
           name="description"
           content="خرید شماره مجازی دائمی خارجی - انگلیس، آمریکا، کانادا، استرالیا. مناسب ثبت‌نام Gmail, Facebook, Apple ID."
         />
+        
+        {/* Product Schema with dynamic price */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "شماره مجازی خارجی",
+            "description": "خرید شماره مجازی دائمی خارجی برای ثبت‌نام در سرویس‌های بین‌المللی",
+            "brand": {
+              "@type": "Brand",
+              "name": "Nova AI Shop"
+            },
+            "offers": {
+              "@type": "AggregateOffer",
+              "priceCurrency": "IRR",
+              "lowPrice": lowestPrice,
+              "highPrice": Math.max(...plans.map(p => p.price)),
+              "offerCount": plans.length,
+              "availability": "https://schema.org/InStock"
+            }
+          })}
+        </script>
       </Helmet>
       <ServicePageLayout
         icon={Phone}

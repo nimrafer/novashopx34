@@ -1,8 +1,11 @@
 import { MessageCircle, Clock, RefreshCw, Zap, Headphones, Image, Brain, Twitter } from "lucide-react";
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
+import { usePricesContext } from "@/contexts/PricesContext";
 
 const GrokPage = () => {
+  const { getPrice } = usePricesContext();
+
   const features = [
     "پاسخ به سوالات حساس بدون فیلتر و سانسور",
     "دسترسی به مدل‌های Grok-3 و Grok-4 (Heavy)",
@@ -20,27 +23,16 @@ const GrokPage = () => {
 
   const plans = [
     {
-      name: "Super Grok اشتراکی",
+      name: "Super Grok ماهانه",
       duration: "۱ ماهه - ۳۰ دلار",
-      price: 3097000,
+      price: getPrice("grok_monthly"),
+      priceKey: "grok_monthly",
       popular: true,
       features: [
         "تمام قابلیت‌های Super Grok",
-        "اشتراکی با ۱ نفر دیگر",
         "دسترسی به Grok-3 و Grok-4",
         "تولید تصویر نامحدود با Aurora",
         "دسترسی به اطلاعات لحظه‌ای X",
-      ],
-    },
-    {
-      name: "Super Grok اختصاصی",
-      duration: "۱ ماهه - ۳۰ دلار",
-      price: 4500000,
-      features: [
-        "کاملاً شخصی و اختصاصی",
-        "تمام قابلیت‌های Super Grok",
-        "فعال‌سازی روی اکانت شخصی",
-        "تاریخچه چت خصوصی",
       ],
     },
   ];
@@ -258,6 +250,8 @@ const GrokPage = () => {
     </>
   );
 
+  const lowestPrice = plans[0].price;
+
   return (
     <>
       <Helmet>
@@ -267,6 +261,26 @@ const GrokPage = () => {
           content="خرید اشتراک Super Grok - هوش مصنوعی بدون سانسور xAI و ایلان ماسک. پاسخ به سوالات حساس، تولید تصویر نامحدود با Aurora، دسترسی لحظه‌ای به X."
         />
         <meta name="keywords" content="خرید Grok, Super Grok, xAI, ایلان ماسک, هوش مصنوعی بدون سانسور, Aurora, توییتر" />
+        
+        {/* Product Schema with dynamic price */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "اشتراک Super Grok",
+            "description": "خرید اشتراک Super Grok - هوش مصنوعی بدون سانسور xAI",
+            "brand": {
+              "@type": "Brand",
+              "name": "Nova AI Shop"
+            },
+            "offers": {
+              "@type": "Offer",
+              "priceCurrency": "IRR",
+              "price": lowestPrice,
+              "availability": "https://schema.org/InStock"
+            }
+          })}
+        </script>
       </Helmet>
       <ServicePageLayout
         icon={MessageCircle}

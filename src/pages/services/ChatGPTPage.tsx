@@ -1,8 +1,11 @@
 import { Bot, Clock, RefreshCw, Zap, Shield, Wifi, Headphones } from "lucide-react";
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
+import { usePricesContext } from "@/contexts/PricesContext";
 
 const ChatGPTPage = () => {
+  const { getPrice, loading } = usePricesContext();
+
   const features = [
     "مبتنی بر مدل GPT-4o (Omni) با قابلیت‌های چندوجهی: متن، تصویر، صدا",
     "دسترسی به DALL-E 3 برای ساخت و ویرایش تصویر",
@@ -22,7 +25,8 @@ const ChatGPTPage = () => {
     {
       name: "اکانت اشتراکی Plus",
       duration: "۱ ماهه - اقتصادی",
-      price: 497000,
+      price: getPrice("cgpt_pro_shared"),
+      priceKey: "cgpt_pro_shared",
       features: [
         "دسترسی به GPT-4o",
         "اشتراکی با ۱-۲ نفر دیگر",
@@ -34,9 +38,10 @@ const ChatGPTPage = () => {
       ],
     },
     {
-      name: "اکانت Plus اختصاصی",
+      name: "اکانت Plus اختصاصی ۳۰ روزه",
       duration: "۱ ماهه - ۲۰ دلار",
-      price: 1479000,
+      price: getPrice("cgpt_pro_30day"),
+      priceKey: "cgpt_pro_30day",
       popular: true,
       features: [
         "اشتراک کاملاً شخصی و اختصاصی",
@@ -47,26 +52,37 @@ const ChatGPTPage = () => {
       ],
     },
     {
-      name: "اکانت اشتراکی Pro",
-      duration: "۱ ماهه - ۲۰۰ دلار",
-      price: 3697000,
+      name: "اکانت Plus اختصاصی ۳۷ روزه",
+      duration: "۳۷ روزه - ویژه",
+      price: getPrice("cgpt_pro_37day"),
+      priceKey: "cgpt_pro_37day",
       features: [
-        "دسترسی به O3 Pro و GPT-5",
-        "اشتراکی با ۱ نفر دیگر",
-        "قدرت استدلال بسیار بالا",
-        "مناسب تحلیل‌های پیچیده",
+        "اشتراک کاملاً شخصی و اختصاصی",
+        "۷ روز اضافه‌تر!",
+        "تمام قابلیت‌های Plus",
+        "مناسب استفاده طولانی‌تر",
       ],
     },
     {
-      name: "اکانت Pro اختصاصی",
-      duration: "۱ ماهه - ۲۰۰ دلار",
-      price: 14500000,
+      name: "اکانت Plus تیمی",
+      duration: "۱ ماهه - تیمی",
+      price: getPrice("cgpt_plus_team"),
+      priceKey: "cgpt_plus_team",
       features: [
-        "دسترسی به O3 Pro و GPT-5",
-        "کاملاً شخصی و اختصاصی",
-        "بدون محدودیت مصرف",
-        "مناسب شرکت‌ها و محققان",
-        "بالاترین سطح امکانات",
+        "مناسب تیم‌ها و شرکت‌ها",
+        "مدیریت مرکزی کاربران",
+        "امنیت سازمانی",
+      ],
+    },
+    {
+      name: "ChatGPT GO یکساله",
+      duration: "۱ ساله - صرفه‌جویی",
+      price: getPrice("cgpt_go_yearly"),
+      priceKey: "cgpt_go_yearly",
+      features: [
+        "یک سال کامل",
+        "صرفه‌جویی قابل توجه",
+        "بهترین ارزش برای پول",
       ],
     },
   ];
@@ -293,6 +309,9 @@ const ChatGPTPage = () => {
     </>
   );
 
+  // Get the lowest price for schema
+  const lowestPrice = Math.min(...plans.map(p => p.price));
+
   return (
     <>
       <Helmet>
@@ -302,13 +321,35 @@ const ChatGPTPage = () => {
           content="خرید اکانت ChatGPT Plus و Pro با قیمت مناسب. اکانت‌های اورجینال و اختصاصی با تحویل فوری، پشتیبانی ۲۴ ساعته واقعی، ضمانت تعویض و اتصال بدون VPN."
         />
         <meta name="keywords" content="خرید ChatGPT, اکانت ChatGPT Plus, اشتراک ChatGPT Pro, خرید GPT-4, هوش مصنوعی, GPT-5, O3 Pro" />
+        
+        {/* Product Schema with dynamic price */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "اکانت ChatGPT Plus و Pro",
+            "description": "خرید اکانت ChatGPT Plus و Pro با تحویل فوری و ضمانت تعویض",
+            "brand": {
+              "@type": "Brand",
+              "name": "Nova AI Shop"
+            },
+            "offers": {
+              "@type": "AggregateOffer",
+              "priceCurrency": "IRR",
+              "lowPrice": lowestPrice,
+              "highPrice": Math.max(...plans.map(p => p.price)),
+              "offerCount": plans.length,
+              "availability": "https://schema.org/InStock"
+            }
+          })}
+        </script>
       </Helmet>
       <ServicePageLayout
         icon={Bot}
         title="ChatGPT Plus / Pro"
         subtitle="هوش مصنوعی OpenAI"
-        description="در دنیای امروز که سرعت تحولات فناوری سرسام‌آور است، هوش مصنوعی از یک مفهوم تخیلی به ابزاری حیاتی برای پیشرفت و افزایش بهره‌وری تبدیل شده است. در قلب این انقلاب، ChatGPT قرار دارد؛ مدلی شگفت‌انگیز که توانایی درک، تحلیل و تولید زبان انسان را به سطحی بی‌سابقه رسانده است."
-        color="#10B981"
+        description="ChatGPT پیشرفته‌ترین هوش مصنوعی OpenAI است که با مدل‌های GPT-4o، GPT-5 و O3 Pro می‌تواند متن بنویسد، کد تولید کند، تصویر بسازد و به سوالات پیچیده پاسخ دهد. با نسخه Plus و Pro، سرعت بالا، بدون محدودیت و با تمام قابلیت‌ها."
+        color="#10A37F"
         features={features}
         plans={plans}
         comparison={comparison}

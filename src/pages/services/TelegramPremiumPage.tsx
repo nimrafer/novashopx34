@@ -1,8 +1,11 @@
 import { Star } from "lucide-react";
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
+import { usePricesContext } from "@/contexts/PricesContext";
 
 const TelegramPremiumPage = () => {
+  const { getPrice } = usePricesContext();
+
   const features = [
     "بدون تبلیغات در کانال‌ها",
     "آپلود فایل تا ۴ گیگابایت",
@@ -20,7 +23,8 @@ const TelegramPremiumPage = () => {
     {
       name: "پلن ۳ ماهه",
       duration: "۳ ماهه",
-      price: 1730000,
+      price: getPrice("tgpremium_3month"),
+      priceKey: "tgpremium_3month",
       features: [
         "تمام امکانات Premium",
         "فعال‌سازی گیفت (بدون لاگین)",
@@ -30,7 +34,8 @@ const TelegramPremiumPage = () => {
     {
       name: "پلن ۶ ماهه",
       duration: "۶ ماهه",
-      price: 2230000,
+      price: getPrice("tgpremium_6month"),
+      priceKey: "tgpremium_6month",
       popular: true,
       features: [
         "صرفه‌جویی قابل توجه",
@@ -41,11 +46,12 @@ const TelegramPremiumPage = () => {
     {
       name: "پلن یکساله",
       duration: "۱ ساله - بهترین قیمت",
-      price: 3900000,
+      price: getPrice("tgpremium_12month"),
+      priceKey: "tgpremium_12month",
       features: [
         "اقتصادی‌ترین انتخاب",
-        "معادل ماهانه ~۳۲۵ هزار تومان",
         "یک سال بدون دغدغه",
+        "بهترین ارزش برای پول",
       ],
     },
   ];
@@ -79,6 +85,8 @@ const TelegramPremiumPage = () => {
     },
   ];
 
+  const lowestPrice = Math.min(...plans.map(p => p.price));
+
   return (
     <>
       <Helmet>
@@ -87,6 +95,28 @@ const TelegramPremiumPage = () => {
           name="description"
           content="خرید تلگرام پرمیوم با فعال‌سازی گیفت. بدون نیاز به لاگین، بدون تبلیغات، آپلود ۴ گیگ، استیکر پرمیوم."
         />
+        
+        {/* Product Schema with dynamic price */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "تلگرام پرمیوم",
+            "description": "خرید تلگرام پرمیوم با فعال‌سازی گیفت",
+            "brand": {
+              "@type": "Brand",
+              "name": "Nova AI Shop"
+            },
+            "offers": {
+              "@type": "AggregateOffer",
+              "priceCurrency": "IRR",
+              "lowPrice": lowestPrice,
+              "highPrice": Math.max(...plans.map(p => p.price)),
+              "offerCount": plans.length,
+              "availability": "https://schema.org/InStock"
+            }
+          })}
+        </script>
       </Helmet>
       <ServicePageLayout
         icon={Star}

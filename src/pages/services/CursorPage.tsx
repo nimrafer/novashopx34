@@ -1,8 +1,11 @@
 import { Code, Clock, RefreshCw, Zap, Headphones, Terminal, Cpu, GitBranch } from "lucide-react";
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
+import { usePricesContext } from "@/contexts/PricesContext";
 
 const CursorPage = () => {
+  const { getPrice } = usePricesContext();
+
   const features = [
     "تکمیل خودکار کد با مدل‌های قدرتمند AI",
     "دسترسی به Claude 3.5 Sonnet، GPT-4 و Gemini",
@@ -20,9 +23,21 @@ const CursorPage = () => {
 
   const plans = [
     {
+      name: "پلن Pro هفتگی",
+      duration: "۱ هفته",
+      price: getPrice("cursor_weekly"),
+      priceKey: "cursor_weekly",
+      features: [
+        "دسترسی کامل به همه امکانات",
+        "مناسب تست و پروژه‌های کوتاه",
+        "دسترسی به Claude، GPT-4، Gemini",
+      ],
+    },
+    {
       name: "پلن Pro ماهانه",
       duration: "۱ ماهه - ۲۰ دلار",
-      price: 3997000,
+      price: getPrice("cursor_monthly"),
+      priceKey: "cursor_monthly",
       popular: true,
       features: [
         "دسترسی کامل به همه امکانات",
@@ -30,17 +45,6 @@ const CursorPage = () => {
         "درخواست‌های کند نامحدود",
         "فعال‌سازی روی اکانت شخصی",
         "دسترسی به Claude، GPT-4، Gemini",
-      ],
-    },
-    {
-      name: "پلن Business",
-      duration: "۱ ماهه - تیمی",
-      price: 6000000,
-      features: [
-        "مناسب تیم‌ها و شرکت‌ها",
-        "مدیریت مرکزی کاربران",
-        "پشتیبانی اولویت‌دار",
-        "امنیت سازمانی",
       ],
     },
   ];
@@ -278,6 +282,8 @@ const CursorPage = () => {
     </>
   );
 
+  const lowestPrice = Math.min(...plans.map(p => p.price));
+
   return (
     <>
       <Helmet>
@@ -287,6 +293,28 @@ const CursorPage = () => {
           content="خرید اشتراک Cursor Pro - ادیتور کدنویسی هوشمند با AI. دسترسی به Claude 3.5 Sonnet و GPT-4. سرعت کدنویسی ۲ برابر. بهتر از GitHub Copilot."
         />
         <meta name="keywords" content="خرید Cursor, Cursor Pro, ادیتور کد AI, کدنویسی هوشمند, GitHub Copilot, Claude, GPT-4" />
+        
+        {/* Product Schema with dynamic price */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": "اشتراک Cursor Pro",
+            "description": "خرید اشتراک Cursor Pro - ادیتور کدنویسی هوشمند با AI",
+            "brand": {
+              "@type": "Brand",
+              "name": "Nova AI Shop"
+            },
+            "offers": {
+              "@type": "AggregateOffer",
+              "priceCurrency": "IRR",
+              "lowPrice": lowestPrice,
+              "highPrice": Math.max(...plans.map(p => p.price)),
+              "offerCount": plans.length,
+              "availability": "https://schema.org/InStock"
+            }
+          })}
+        </script>
       </Helmet>
       <ServicePageLayout
         icon={Code}
