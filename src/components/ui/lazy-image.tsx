@@ -8,12 +8,12 @@ interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   placeholderClassName?: string;
 }
 
-const LazyImage = ({ 
-  src, 
-  alt, 
-  className, 
+const LazyImage = ({
+  src,
+  alt,
+  className,
   placeholderClassName,
-  ...props 
+  ...props
 }: LazyImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
@@ -28,7 +28,7 @@ const LazyImage = ({
         }
       },
       {
-        rootMargin: "100px",
+        rootMargin: "50px", // Load slightly earlier
         threshold: 0.01,
       }
     );
@@ -44,14 +44,14 @@ const LazyImage = ({
     <div ref={imgRef} className={cn("relative overflow-hidden", className)}>
       {/* Placeholder skeleton */}
       {!isLoaded && (
-        <div 
+        <div
           className={cn(
-            "absolute inset-0 bg-muted animate-pulse",
+            "absolute inset-0 bg-gradient-to-r from-muted/50 via-muted to-muted/50 animate-pulse",
             placeholderClassName
           )}
         />
       )}
-      
+
       {/* Actual image - only load when in view */}
       {isInView && (
         <img
@@ -61,8 +61,8 @@ const LazyImage = ({
           decoding="async"
           onLoad={() => setIsLoaded(true)}
           className={cn(
-            "w-full h-full object-contain transition-opacity duration-300",
-            isLoaded ? "opacity-100" : "opacity-0"
+            "w-full h-full object-contain transition-all duration-700 ease-out",
+            isLoaded ? "opacity-100 blur-0 scale-100" : "opacity-0 blur-lg scale-95"
           )}
           {...props}
         />
