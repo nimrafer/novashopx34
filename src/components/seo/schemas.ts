@@ -4,8 +4,8 @@ export const organizationSchema = {
   "@type": "Organization",
   "name": "نوا شاپ - Nova AI Shop",
   "alternateName": ["نوا ای آی شاپ", "Nova Shop", "نوا"],
-  "url": "https://nova-ai-shop.lovable.app",
-  "logo": "https://nova-ai-shop.lovable.app/logos/chatgpt.png",
+  "url": "https://novateam.shop",
+  "logo": "https://novateam.shop/logos/chatgpt.png",
   "description": "فروشگاه تخصصی اکانت‌های پریمیوم هوش مصنوعی در ایران - خرید اشتراک ChatGPT، Gemini، Grok، Claude و Cursor با تحویل فوری و پشتیبانی دائمی",
   "foundingDate": "2022",
   "address": {
@@ -32,7 +32,7 @@ export const websiteSchema = {
   "@type": "WebSite",
   "name": "نوا شاپ - Nova AI Shop",
   "alternateName": "فروشگاه نوا",
-  "url": "https://nova-ai-shop.lovable.app",
+  "url": "https://novateam.shop",
   "description": "خرید اکانت‌های پریمیوم هوش مصنوعی ChatGPT، Gemini، Grok، Claude، Cursor با تحویل فوری و پشتیبانی دائمی",
   "inLanguage": "fa-IR",
   "publisher": {
@@ -43,7 +43,7 @@ export const websiteSchema = {
     "@type": "SearchAction",
     "target": {
       "@type": "EntryPoint",
-      "urlTemplate": "https://nova-ai-shop.lovable.app/?search={search_term_string}"
+      "urlTemplate": "https://novateam.shop/?search={search_term_string}"
     },
     "query-input": "required name=search_term_string"
   }
@@ -82,7 +82,7 @@ export const createProductSchema = ({
   "name": name,
   "description": description,
   "image": image,
-  "url": `https://nova-ai-shop.lovable.app${url}`,
+  "url": `https://novateam.shop${url}`,
   "sku": sku,
   "category": category || "اشتراک هوش مصنوعی",
   "brand": {
@@ -145,7 +145,7 @@ export const createBreadcrumbSchema = (items: { name: string; url: string }[]) =
     "@type": "ListItem",
     "position": index + 1,
     "name": item.name,
-    "item": `https://nova-ai-shop.lovable.app${item.url}`
+    "item": `https://novateam.shop${item.url}`
   }))
 });
 
@@ -155,9 +155,9 @@ export const localBusinessSchema = {
   "@type": "LocalBusiness",
   "name": "نوا شاپ - Nova AI Shop",
   "description": "فروشگاه آنلاین اکانت‌های پریمیوم هوش مصنوعی - خرید ChatGPT، Gemini، Grok، Claude، Cursor",
-  "url": "https://nova-ai-shop.lovable.app",
+  "url": "https://novateam.shop",
   "telephone": "+98",
-  "image": "https://nova-ai-shop.lovable.app/logos/chatgpt.png",
+  "image": "https://novateam.shop/logos/chatgpt.png",
   "address": {
     "@type": "PostalAddress",
     "addressCountry": "IR",
@@ -207,7 +207,7 @@ export const createServiceSchema = ({
   "serviceType": category || "اشتراک هوش مصنوعی",
   "name": name,
   "description": description,
-  "url": `https://nova-ai-shop.lovable.app${url}`,
+  "url": `https://novateam.shop${url}`,
   "image": image,
   "provider": {
     "@type": "Organization",
@@ -250,7 +250,7 @@ export const createArticleSchema = ({
   "headline": title,
   "description": description,
   "image": image,
-  "url": `https://nova-ai-shop.lovable.app${url}`,
+  "url": `https://novateam.shop${url}`,
   "datePublished": datePublished,
   "dateModified": dateModified || datePublished,
   "author": {
@@ -262,12 +262,12 @@ export const createArticleSchema = ({
     "name": "Nova AI Shop",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://nova-ai-shop.lovable.app/logos/chatgpt.png"
+      "url": "https://novateam.shop/logos/chatgpt.png"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": `https://nova-ai-shop.lovable.app${url}`
+    "@id": `https://novateam.shop${url}`
   }
 });
 
@@ -279,7 +279,7 @@ export const createItemListSchema = (items: { name: string; url: string; positio
     "@type": "ListItem",
     "position": item.position,
     "name": item.name,
-    "url": `https://nova-ai-shop.lovable.app${item.url}`
+    "url": `https://novateam.shop${item.url}`
   }))
 });
 

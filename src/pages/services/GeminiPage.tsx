@@ -314,7 +314,7 @@ const GeminiPage = () => {
     description: "خرید اشتراک Gemini Pro گوگل با ۲ ترابایت فضای ابری Google One، Deep Research و یکپارچگی کامل با Gmail, Drive و Docs.",
     price: lowestPrice,
     url: "/services/gemini",
-    image: "https://nova-ai-shop.lovable.app/logos/gemini.png",
+    image: "https://novateam.shop/logos/gemini.png",
     category: "اشتراک هوش مصنوعی",
     sku: "GEM-PRO",
     ratingValue: 4.8,
@@ -330,7 +330,7 @@ const GeminiPage = () => {
           content="خرید اشتراک Gemini Pro گوگل با ۲ ترابایت فضای ابری. یکپارچه با Gmail, Drive و Docs. ساخت ویدیو با Veo، Deep Research و پشتیبانی ۲۴ ساعته."
         />
         <meta name="keywords" content="خرید Gemini, اشتراک Gemini Pro, هوش مصنوعی گوگل, Google One, Deep Research, Veo, خرید جمینی ایران" />
-        <link rel="canonical" href="https://nova-ai-shop.lovable.app/services/gemini" />
+        <link rel="canonical" href="https://novateam.shop/services/gemini" />
         
         {/* Structured Data */}
         <script type="application/ld+json">

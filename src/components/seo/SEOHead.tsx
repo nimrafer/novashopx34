@@ -35,7 +35,7 @@ const SEOHead = ({
   article,
   product,
 }: SEOHeadProps) => {
-  const siteUrl = "https://nova-ai-shop.lovable.app";
+  const siteUrl = "https://novateam.shop";
   const fullCanonicalUrl = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
   
   // Ensure title is under 60 chars and description under 160 chars

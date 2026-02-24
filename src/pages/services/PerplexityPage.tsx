@@ -86,7 +86,7 @@ const PerplexityPage = () => {
     description: "خرید اشتراک Perplexity Pro - موتور جستجوی هوشمند با منابع. پاسخ‌های دقیق با ذکر لینک، دسترسی به GPT-4 و Claude 3.",
     price: lowestPrice,
     url: "/services/perplexity",
-    image: "https://nova-ai-shop.lovable.app/logos/perplexity.png",
+    image: "https://novateam.shop/logos/perplexity.png",
     category: "ابزار تحقیقاتی",
     sku: "PERP-PRO",
     ratingValue: 4.7,
@@ -102,7 +102,7 @@ const PerplexityPage = () => {
           content="خرید اشتراک Perplexity Pro - موتور جستجوی هوشمند با منابع معتبر. پاسخ‌های دقیق با ذکر لینک، دسترسی به GPT-4 و Claude 3. تحقیقات حرفه‌ای."
         />
         <meta name="keywords" content="خرید Perplexity, Perplexity Pro, موتور جستجوی AI, تحقیق هوشمند, GPT-4, Claude, خرید پرپلکسیتی ایران" />
-        <link rel="canonical" href="https://nova-ai-shop.lovable.app/services/perplexity" />
+        <link rel="canonical" href="https://novateam.shop/services/perplexity" />
         
         {/* Structured Data */}
         <script type="application/ld+json">

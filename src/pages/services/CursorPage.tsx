@@ -296,7 +296,7 @@ const CursorPage = () => {
     description: "خرید اشتراک Cursor Pro - ادیتور کدنویسی هوشمند با AI. دسترسی به Claude 3.5 Sonnet و GPT-4. سرعت کدنویسی ۲ برابر.",
     price: lowestPrice,
     url: "/services/cursor",
-    image: "https://nova-ai-shop.lovable.app/logos/cursor.png",
+    image: "https://novateam.shop/logos/cursor.png",
     category: "ابزار برنامه‌نویسی",
     sku: "CURSOR-PRO",
     ratingValue: 4.9,
@@ -312,7 +312,7 @@ const CursorPage = () => {
           content="خرید اشتراک Cursor Pro - ادیتور کدنویسی هوشمند با AI. دسترسی به Claude 3.5 Sonnet و GPT-4. سرعت کدنویسی ۲ برابر. بهتر از GitHub Copilot."
         />
         <meta name="keywords" content="خرید Cursor, Cursor Pro, ادیتور کد AI, کدنویسی هوشمند, GitHub Copilot, Claude, GPT-4, خرید کرسور ایران" />
-        <link rel="canonical" href="https://nova-ai-shop.lovable.app/services/cursor" />
+        <link rel="canonical" href="https://novateam.shop/services/cursor" />
         
         {/* Structured Data */}
         <script type="application/ld+json">

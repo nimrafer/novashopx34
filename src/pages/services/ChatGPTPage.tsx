@@ -324,7 +324,7 @@ const ChatGPTPage = () => {
     description: "خرید اکانت ChatGPT Plus و Pro با تحویل فوری، اتصال بدون VPN و ضمانت تعویض. دسترسی به GPT-4o، GPT-5 و O3 Pro.",
     price: lowestPrice,
     url: "/services/chatgpt",
-    image: "https://nova-ai-shop.lovable.app/logos/chatgpt.png",
+    image: "https://novateam.shop/logos/chatgpt.png",
     category: "اشتراک هوش مصنوعی",
     sku: "CGPT-PLUS",
     ratingValue: 4.9,
@@ -340,7 +340,7 @@ const ChatGPTPage = () => {
           content="خرید اکانت ChatGPT Plus و Pro با قیمت مناسب. اکانت اورجینال با تحویل فوری، پشتیبانی ۲۴ ساعته، ضمانت تعویض و اتصال بدون VPN. GPT-4o و GPT-5"
         />
         <meta name="keywords" content="خرید ChatGPT, اکانت ChatGPT Plus, اشتراک ChatGPT Pro, خرید GPT-4, خرید GPT-5, هوش مصنوعی, O3 Pro, خرید اکانت ChatGPT ایران" />
-        <link rel="canonical" href="https://nova-ai-shop.lovable.app/services/chatgpt" />
+        <link rel="canonical" href="https://novateam.shop/services/chatgpt" />
         
         {/* Structured Data */}
         <script type="application/ld+json">

@@ -264,7 +264,7 @@ const ClaudePage = () => {
     description: "خرید اشتراک Claude Pro از Anthropic. پنجره کانتکست ۲۰۰ هزار توکنی، بهترین انتخاب برای تحلیل کتاب‌ها و کدنویسی حرفه‌ای.",
     price: lowestPrice,
     url: "/services/claude",
-    image: "https://nova-ai-shop.lovable.app/logos/claude.png",
+    image: "https://novateam.shop/logos/claude.png",
     category: "اشتراک هوش مصنوعی",
     sku: "CLAUDE-PRO",
     ratingValue: 4.8,
@@ -280,7 +280,7 @@ const ClaudePage = () => {
           content="خرید اشتراک Claude Pro از Anthropic. پنجره کانتکست ۲۰۰ هزار توکنی، بهترین انتخاب برای تحلیل کتاب‌ها، کدنویسی حرفه‌ای و تحقیقات."
         />
         <meta name="keywords" content="خرید Claude, اشتراک Claude Pro, Anthropic, هوش مصنوعی, Claude 3.5 Sonnet, Claude Opus, خرید کلود ایران" />
-        <link rel="canonical" href="https://nova-ai-shop.lovable.app/services/claude" />
+        <link rel="canonical" href="https://novateam.shop/services/claude" />
         
         {/* Structured Data */}
         <script type="application/ld+json">

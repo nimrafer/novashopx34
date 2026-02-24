@@ -264,7 +264,7 @@ const GrokPage = () => {
     description: "خرید اشتراک Super Grok - هوش مصنوعی بدون سانسور xAI ایلان ماسک. تولید تصویر نامحدود با Aurora و دسترسی لحظه‌ای به X.",
     price: lowestPrice,
     url: "/services/grok",
-    image: "https://nova-ai-shop.lovable.app/logos/grok.png",
+    image: "https://novateam.shop/logos/grok.png",
     category: "اشتراک هوش مصنوعی",
     sku: "GROK-SUPER",
     ratingValue: 4.7,
@@ -280,7 +280,7 @@ const GrokPage = () => {
           content="خرید اشتراک Super Grok - هوش مصنوعی بدون سانسور xAI و ایلان ماسک. پاسخ به سوالات حساس، تولید تصویر نامحدود با Aurora، دسترسی لحظه‌ای به X."
         />
         <meta name="keywords" content="خرید Grok, Super Grok, xAI, ایلان ماسک, هوش مصنوعی بدون سانسور, Aurora, توییتر, خرید گروک ایران" />
-        <link rel="canonical" href="https://nova-ai-shop.lovable.app/services/grok" />
+        <link rel="canonical" href="https://novateam.shop/services/grok" />
         
         {/* Structured Data */}
         <script type="application/ld+json">
