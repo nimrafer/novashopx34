@@ -83,7 +83,7 @@ const Dashboard = () => {
   const [sendingMessageId, setSendingMessageId] = useState<string | null>(null);
   const [sendingPaymentId, setSendingPaymentId] = useState<string | null>(null);
 
-  const isAdmin = !!user && ADMIN_EMAILS.includes(user.email.toLowerCase());
+  const isAdmin = !!user && (user.isAdmin || ADMIN_EMAILS.includes(user.email.toLowerCase()));
 
   const loadOrders = async () => {
     if (!user) return;

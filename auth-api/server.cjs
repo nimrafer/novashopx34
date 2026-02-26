@@ -506,7 +506,11 @@ function normalizeCatalogPlan(plan) {
 
 function normalizeDiscount(discount) {
   if (!discount || typeof discount !== 'object') return null;
-  const id = normalizeSlug(discount.id || discount.code, 120);
+  const discountIdCandidate = normalizeSlug(discount.id || discount.code, 120);
+  const id =
+    discountIdCandidate && !/^[-_]+$/.test(discountIdCandidate)
+      ? discountIdCandidate
+      : `dsc-${crypto.randomBytes(4).toString('hex')}`;
   const code = normalizeDiscountCode(discount.code || discount.id);
   if (!id || !code) return null;
 
@@ -536,7 +540,11 @@ function normalizeDiscount(discount) {
 
 function normalizeOffer(offer) {
   if (!offer || typeof offer !== 'object') return null;
-  const id = normalizeSlug(offer.id || offer.title, 120);
+  const offerIdCandidate = normalizeSlug(offer.id || offer.title, 120);
+  const id =
+    offerIdCandidate && !/^[-_]+$/.test(offerIdCandidate)
+      ? offerIdCandidate
+      : `off-${crypto.randomBytes(4).toString('hex')}`;
   if (!id) return null;
 
   const type = normalizePriceModifierType(offer.type);
@@ -690,8 +698,12 @@ function normalizeSlug(value, maxLength = 120) {
     .toLowerCase()
     .replace(/\s+/g, '-')
     .replace(/[^a-z0-9_\-]/g, '')
+    .replace(/[-_]{2,}/g, '-')
+    .replace(/^[-_]+|[-_]+$/g, '')
     .slice(0, maxLength);
-  return normalized || '';
+  if (!normalized) return '';
+  if (!/[a-z0-9]/.test(normalized)) return '';
+  return normalized;
 }
 
 function normalizeNullableSlug(value, maxLength = 120) {
@@ -1374,7 +1386,26 @@ async function handleRequest(req, res) {
     return;
   }
 
-  if (method === 'GET' && segments.length === 4 && segments[0] === 'api' && segments[1] === 'auth' && segments[2] === 'orders') {
+  if (method === 'GET' && pathname === '/api/auth/orders/admin') {
+    const identity = requireAdmin(req, res);
+    if (!identity) return;
+
+    const orders = state.orders
+      .slice()
+      .sort((a, b) => Number(new Date(b.createdAt)) - Number(new Date(a.createdAt)));
+
+    ok(res, { orders });
+    return;
+  }
+
+  if (
+    method === 'GET' &&
+    segments.length === 4 &&
+    segments[0] === 'api' &&
+    segments[1] === 'auth' &&
+    segments[2] === 'orders' &&
+    segments[3] !== 'admin'
+  ) {
     const identity = requireAuth(req, res);
     if (!identity) return;
 
@@ -1565,18 +1596,6 @@ async function handleRequest(req, res) {
       message: 'اطلاعات پرداخت ثبت شد',
       order,
     });
-    return;
-  }
-
-  if (method === 'GET' && pathname === '/api/auth/orders/admin') {
-    const identity = requireAdmin(req, res);
-    if (!identity) return;
-
-    const orders = state.orders
-      .slice()
-      .sort((a, b) => Number(new Date(b.createdAt)) - Number(new Date(a.createdAt)));
-
-    ok(res, { orders });
     return;
   }
 
@@ -1802,9 +1821,10 @@ async function handleRequest(req, res) {
     if (!identity) return;
 
     const body = await readBody(req);
+    const fallbackServiceId = `svc-${crypto.randomBytes(3).toString('hex')}`;
 
     const service = normalizeCatalogService({
-      id: body.id || body.slug || normalizeSlug(body.name, 80),
+      id: body.id || body.slug || normalizeSlug(body.name, 80) || fallbackServiceId,
       slug: body.slug,
       name: body.name,
       description: body.description,
@@ -1890,14 +1910,17 @@ async function handleRequest(req, res) {
     if (!identity) return;
 
     const body = await readBody(req);
+    const fallbackPlanId = `plan-${crypto.randomBytes(4).toString('hex')}`;
+    const generatedPlanId = normalizeSlug(`${body.serviceId || ''}-${body.name || ''}`, 120) || fallbackPlanId;
+    const generatedPriceKey = normalizeSlug(body.priceKey || generatedPlanId, 120) || generatedPlanId;
 
     const plan = normalizeCatalogPlan({
-      id: body.id || body.priceKey || normalizeSlug(`${body.serviceId || ''}-${body.name || ''}`, 120),
+      id: body.id || body.priceKey || generatedPlanId,
       serviceId: body.serviceId,
       name: body.name,
       subtitle: body.subtitle,
       duration: body.duration,
-      priceKey: body.priceKey,
+      priceKey: generatedPriceKey,
       price: body.price,
       badge: body.badge,
       description: body.description,
@@ -2019,9 +2042,14 @@ async function handleRequest(req, res) {
 
     const body = await readBody(req);
     const now = new Date().toISOString();
+    const rawDiscountId = normalizeSlug(body.id || body.code, 120);
+    const discountId =
+      rawDiscountId && !/^[-_]+$/.test(rawDiscountId)
+        ? rawDiscountId
+        : `dsc-${crypto.randomBytes(4).toString('hex')}`;
 
     const discount = normalizeDiscount({
-      id: normalizeSlug(body.id || body.code, 120) || `dsc-${crypto.randomBytes(3).toString('hex')}`,
+      id: discountId,
       code: body.code,
       title: body.title,
       description: body.description,
@@ -2116,9 +2144,14 @@ async function handleRequest(req, res) {
 
     const body = await readBody(req);
     const now = new Date().toISOString();
+    const rawOfferId = normalizeSlug(body.id || body.title, 120);
+    const offerId =
+      rawOfferId && !/^[-_]+$/.test(rawOfferId)
+        ? rawOfferId
+        : `off-${crypto.randomBytes(4).toString('hex')}`;
 
     const offer = normalizeOffer({
-      id: normalizeSlug(body.id || body.title, 120) || `off-${crypto.randomBytes(3).toString('hex')}`,
+      id: offerId,
       title: body.title,
       description: body.description,
       type: body.type,
