@@ -2,9 +2,7 @@ import { MessageCircle, Send, ShieldCheck, Clock3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import novaLogo from "@/assets/nova-logo.jpeg";
-
-const SUPPORT_USERNAME = "Nova_AI_Support";
-const CHANNEL_USERNAME = "nova_ai_shop";
+import { CHANNEL_TELEGRAM_URL } from "@/constants/support";
 
 const ShopFooter = () => {
   return (
@@ -18,19 +16,17 @@ const ShopFooter = () => {
                 سفارش را مستقیم داخل سایت ثبت کن، از پنل کاربری وضعیت را ببین و اگر سوال داشتی همان لحظه با پشتیبانی در ارتباط باش.
               </p>
               <div className="mt-5 flex flex-col sm:flex-row gap-3">
-                <Button
-                  size="lg"
-                  className="bg-gradient-primary text-primary-foreground hover:opacity-95"
-                  onClick={() => window.open(`https://t.me/${SUPPORT_USERNAME}`, "_blank")}
-                >
-                  <MessageCircle className="w-5 h-5 ml-2" />
-                  ارتباط با پشتیبانی
+                <Button size="lg" className="bg-gradient-primary text-primary-foreground hover:opacity-95" asChild>
+                  <Link to="/support">
+                    <MessageCircle className="w-5 h-5 ml-2" />
+                    ارتباط با پشتیبانی
+                  </Link>
                 </Button>
                 <Button
                   size="lg"
                   variant="outline"
                   className="border-border"
-                  onClick={() => window.open(`https://t.me/${CHANNEL_USERNAME}`, "_blank")}
+                  onClick={() => window.open(CHANNEL_TELEGRAM_URL, "_blank")}
                 >
                   <Send className="w-5 h-5 ml-2" />
                   عضویت در کانال
@@ -63,7 +59,7 @@ const ShopFooter = () => {
               </div>
             </Link>
             <p className="text-sm text-muted-foreground leading-7">
-              فروشگاه تخصصی اشتراک‌های هوش مصنوعی برای کاربران فارسی‌زبان با ساختار سفارش شفاف، تحویل سریع و پشتیبانی واقعی.
+              فروشگاه تخصصی اشتراک‌های هوش مصنوعی برای کاربران فارسی‌زبان با ساختار سفارش شفاف، تحویل سریع و پشتیبانی فوری.
             </p>
           </div>
 
@@ -73,6 +69,7 @@ const ShopFooter = () => {
               <Link to="/" className="block text-muted-foreground hover:text-foreground">صفحه اصلی</Link>
               <Link to="/dashboard" className="block text-muted-foreground hover:text-foreground">پنل کاربری</Link>
               <Link to="/support" className="block text-muted-foreground hover:text-foreground">پشتیبانی</Link>
+              <Link to="/about" className="block text-muted-foreground hover:text-foreground">درباره ما</Link>
               <Link to="/blog" className="block text-muted-foreground hover:text-foreground">وبلاگ</Link>
               <Link to="/contact" className="block text-muted-foreground hover:text-foreground">تماس با ما</Link>
             </div>

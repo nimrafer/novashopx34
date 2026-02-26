@@ -1,14 +1,23 @@
 import { useParams, Link } from "react-router-dom";
-import { Calendar, Clock, ArrowRight, User, Tag, Share2 } from "lucide-react";
+import { useMemo } from "react";
+import { Calendar, Clock, ArrowRight, User, Tag } from "lucide-react";
 import ShopHeader from "@/components/shop/ShopHeader";
 import ShopFooter from "@/components/shop/ShopFooter";
 import SEOHead from "@/components/seo/SEOHead";
 import { Button } from "@/components/ui/button";
 import { blogPosts } from "@/data/blogPosts";
+import { marked } from "marked";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const post = slug ? blogPosts[slug] : null;
+  const renderedContent = useMemo(() => {
+    if (!post) return "";
+    return marked.parse(post.content, {
+      gfm: true,
+      breaks: true,
+    }) as string;
+  }, [post]);
 
   if (!post) {
     return (
@@ -29,7 +38,7 @@ const BlogPost = () => {
         title={`${post.title} | بلاگ نوا`}
         description={post.excerpt}
         keywords={post.tags.join("، ")}
-        canonicalUrl={`https://nova-ai.shop/blog/${post.id}`}
+        canonicalUrl={`https://nova-shop.co/blog/${post.id}`}
         ogImage={post.image}
         jsonLd={{
           "@context": "https://schema.org",
@@ -104,17 +113,8 @@ const BlogPost = () => {
             {/* Content */}
             <div className="prose prose-invert prose-lg max-w-none mb-12">
               <div 
-                className="text-foreground/90 leading-relaxed"
-                dangerouslySetInnerHTML={{ 
-                  __html: post.content
-                    .replace(/## (.*)/g, '<h2 class="text-2xl font-bold mt-8 mb-4 text-foreground">$1</h2>')
-                    .replace(/### (.*)/g, '<h3 class="text-xl font-semibold mt-6 mb-3 text-foreground">$1</h3>')
-                    .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-foreground">$1</strong>')
-                    .replace(/\n\n/g, '</p><p class="mb-4 text-muted-foreground">')
-                    .replace(/^\|.*\|$/gm, (match) => {
-                      return `<div class="overflow-x-auto my-4"><table class="w-full border-collapse">${match}</table></div>`;
-                    })
-                }}
+                className="[&_h2]:text-2xl [&_h2]:font-black [&_h2]:mt-8 [&_h2]:mb-4 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:mt-6 [&_h3]:mb-3 [&_p]:text-muted-foreground [&_p]:leading-8 [&_p]:mb-4 [&_ul]:list-disc [&_ul]:pr-5 [&_ul]:space-y-2 [&_ol]:list-decimal [&_ol]:pr-5 [&_ol]:space-y-2 [&_a]:text-primary [&_a]:font-semibold [&_a]:underline [&_table]:w-full [&_table]:border-collapse [&_th]:border [&_th]:border-border [&_th]:bg-card [&_th]:p-2 [&_td]:border [&_td]:border-border [&_td]:p-2 [&_blockquote]:border-r-4 [&_blockquote]:border-primary [&_blockquote]:pr-4 [&_blockquote]:text-muted-foreground"
+                dangerouslySetInnerHTML={{ __html: renderedContent }}
               />
             </div>
             

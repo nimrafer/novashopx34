@@ -11,12 +11,12 @@ interface PricesData {
 
 const FALLBACK_PRICES: PricesData = {
   // ChatGPT (bot-aligned)
-  cgpt_pro_30day: { name: "ChatGPT Pro 30 روزه", price: 499000 },
-  cgpt_pro_37day: { name: "ChatGPT Pro 37 روزه", price: 599000 },
+  cgpt_pro_30day: { name: "چت جی پی تی (ChatGPT) Pro-Business 30 روزه", price: 499000 },
+  cgpt_pro_37day: { name: "چت جی پی تی (ChatGPT) Pro-Business 37 روزه", price: 599000 },
   cgpt_plus_team: { name: "ChatGPT Plus ۵ نفره", price: 1249000 },
   cgpt_team: { name: "ChatGPT Team (بیزنسی)", price: 2750000 },
   cgpt_go_yearly: { name: "ChatGPT GO یکساله", price: 0 },
-  cgpt_pro_shared: { name: "ChatGPT Pro اشتراکی", price: 427000 },
+  cgpt_pro_shared: { name: "چت جی پی تی (ChatGPT) Pro-Business اشتراکی", price: 427000 },
 
   // Gemini (bot-aligned)
   gem_month: { name: "Gemini ماهانه", price: 649000 },
@@ -66,8 +66,8 @@ const FALLBACK_PRICES: PricesData = {
   vnum_wa_ca: { name: "واتساپ کانادا", price: 350000 },
 
   // Legacy keys (kept for old pages)
-  cgpt_pro_200: { name: "ChatGPT Pro ۲۰۰ دلاری", price: 12500000 },
-  cgpt_pro_monthly: { name: "ChatGPT Pro ماهانه", price: 500000 },
+  cgpt_pro_200: { name: "چت جی پی تی (ChatGPT) Pro-Business ۲۰۰ دلاری", price: 12500000 },
+  cgpt_pro_monthly: { name: "چت جی پی تی (ChatGPT) Pro-Business ماهانه", price: 500000 },
   claude_pro: { name: "Claude Pro ماهانه", price: 2797000 },
   claude_pro_shared: { name: "Claude Pro اشتراکی", price: 450000 },
   gemini_ultra: { name: "Gemini Ultra ماهانه", price: 29500000 },

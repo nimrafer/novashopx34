@@ -1,4 +1,5 @@
-import { MessageCircle, RefreshCw, Zap, Headphones, Image, Brain, Twitter } from "lucide-react";
+import { MessageCircle, RefreshCw, Zap, Headphones, Twitter } from "lucide-react";
+import { Link } from "react-router-dom";
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
 import { usePricesContext } from "@/contexts/PricesContext";
@@ -8,229 +9,110 @@ const GrokPage = () => {
   const { getPrice } = usePricesContext();
 
   const features = [
-    "پاسخ به سوالات حساس بدون فیلتر و سانسور",
-    "دسترسی به مدل‌های Grok-4 و Grok-4 Heavy",
-    "تولید تصویر با Aurora",
-    "حالت استدلال پیشرفته (Reasoning Mode)",
-    "دسترسی لحظه‌ای به اطلاعات X (توییتر)",
-    "تحلیل داده و آپلود فایل",
-    "سرعت پردازش بالا در ساعات شلوغ",
-    "اولویت‌بندی در صف پاسخ‌گویی",
-    "مکالمه آزاد در هر موضوعی",
-    "DeepSearch برای جستجوی عمیق",
-    "تضمین جایگزینی و پشتیبانی ۲۴ ساعته",
+    "دسترسی به داده های زنده پلتفرم X برای تحلیل ترندها و خبرها",
+    "تولید متن خلاقانه با لحن خودمانی و سبک پاسخ متفاوت",
+    "مناسب تحلیل فضای رسانه ای و ایده پردازی محتوای شبکه اجتماعی",
+    "ادغام طبیعی با محیط X برای استفاده سریع تر",
+    "دسترسی به نسخه های به روز Grok از مسیر اشتراک های Premium و Premium+",
+    "تحویل سریع و فعال سازی در کوتاه ترین زمان",
+    "پشتیبانی فارسی و پیگیری فعال سازی تا نتیجه نهایی",
+    "ارسال راهنمای شروع پس از خرید",
   ];
 
   const plans = [
     {
       id: "grok_monthly",
-      name: "Super Grok ماهانه",
-      duration: "۱ ماهه - ۳۰ دلار",
+      name: "دسترسی Grok (ماهانه)",
+      duration: "یک ماهه",
       price: getPrice("grok_monthly"),
       priceKey: "grok_monthly",
       popular: true,
       features: [
-        "تمام قابلیت‌های Super Grok",
-        "دسترسی به Grok-4 و Grok-4 Heavy",
-        "تولید تصویر با Aurora",
-        "دسترسی به اطلاعات لحظه‌ای X",
+        "دسترسی به Grok روی پلتفرم X",
+        "مناسب رصد خبر، ترند و تولید ایده",
+        "پشتیبانی فارسی در کل مسیر خرید",
       ],
     },
   ];
 
   const comparison = [
-    { feature: "دسترسی به Grok-4/4 Heavy", free: false, premium: true },
-    { feature: "پاسخ بدون سانسور", free: "محدود", premium: "کامل" },
-    { feature: "تولید تصویر با Aurora", free: "بسیار محدود", premium: "نامحدود" },
-    { feature: "حالت استدلال پیشرفته", free: false, premium: true },
-    { feature: "سرعت پاسخ", free: "عادی", premium: "سریع" },
-    { feature: "آپلود فایل", free: false, premium: true },
-    { feature: "اولویت پردازش", free: false, premium: true },
-    { feature: "اطلاعات لحظه‌ای X", free: "محدود", premium: "کامل" },
+    { feature: "داده زنده شبکه اجتماعی X", free: "محدود", premium: "بالاتر" },
+    { feature: "تحلیل ترند و موج خبری", free: "پایه", premium: "پیشرفته" },
+    { feature: "ایده پردازی برای محتوا", free: "محدود", premium: "کامل تر" },
+    { feature: "پشتیبانی خرید", free: false, premium: true },
   ];
 
   const faqs = [
     {
-      question: "Grok چیست و چه تفاوتی با ChatGPT دارد؟",
+      question: "Grok دقیقا چیست؟",
       answer:
-        "Grok ساخته xAI و ایلان ماسک است و به خاطر پاسخ‌های بی‌پرده و بدون سانسور معروف است. برخلاف ChatGPT که فیلترهای اخلاقی دارد، Grok به سوالات حساس پاسخ می‌دهد. همچنین به اطلاعات لحظه‌ای X (توییتر سابق) دسترسی دارد که هیچ AI دیگری ندارد.",
+        "Grok هوش مصنوعی شرکت xAI است که روی پلتفرم X فعال است و برای تحلیل فضای رسانه ای و ترندها کاربرد زیادی دارد.",
     },
     {
-      question: "آیا Grok واقعاً بدون سانسور است؟",
+      question: "دسترسی Grok از چه طریقی ارائه می شود؟",
       answer:
-        "بله، Grok برای پاسخ‌گویی آزادانه طراحی شده و به سوالاتی که سایر AIها رد می‌کنند پاسخ می‌دهد. البته محتوای کاملاً غیرقانونی همچنان ممنوع است اما فیلترهای اخلاقی بسیار کمتری دارد.",
+        "این دسترسی از مسیر اشتراک های Premium یا Premium+ در پلتفرم X فراهم می شود و با پلن انتخابی شما فعال می گردد.",
     },
     {
-      question: "Aurora چیست؟",
+      question: "این سرویس برای چه افرادی مناسب است؟",
       answer:
-        "Aurora سیستم تولید تصویر Grok است که می‌توانید با آن تصاویر متنوع بسازید، حتی تصاویری که سایر AIها مثل DALL-E یا Midjourney تولید نمی‌کنند. محدودیت‌های بسیار کمتری نسبت به رقبا دارد.",
+        "برای ادمین های شبکه اجتماعی، فعالان حوزه کریپتو و تکنولوژی، و افرادی که رصد لحظه ای اخبار برایشان مهم است مناسب است.",
     },
     {
-      question: "Grok-4 Heavy برای چه کسانی مناسب است؟",
+      question: "زمان تحویل سفارش چقدر است؟",
       answer:
-        "نسخه Heavy برای کاربرانی مناسب است که تحلیل‌های عمیق‌تر، پاسخ‌های طولانی‌تر و استدلال چندمرحله‌ای پیشرفته‌تر نیاز دارند.",
-    },
-    {
-      question: "دسترسی به X یعنی چه؟",
-      answer:
-        "Grok به اطلاعات لحظه‌ای توییتر (X) دسترسی دارد. یعنی می‌توانید درباره آخرین اخبار، ترندها و توییت‌های مهم سوال بپرسید و پاسخ به‌روز دریافت کنید.",
+        "پس از ثبت سفارش، فرایند فعال سازی بلافاصله شروع می شود و در کوتاه ترین زمان انجام می گردد.",
     },
   ];
 
-  // Extra content sections
   const extraContent = (
     <>
-      {/* Stats Section */}
       <section className="py-12">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="glass rounded-2xl p-8 text-center">
-              <div className="text-4xl font-bold text-white mb-2">۰٪</div>
-              <div className="text-lg font-semibold mb-1">سانسور</div>
-              <p className="text-muted-foreground text-sm">پاسخ آزاد به هر سوالی</p>
-            </div>
-            <div className="glass rounded-2xl p-8 text-center">
-              <div className="text-4xl font-bold text-white mb-2">∞</div>
-              <div className="text-lg font-semibold mb-1">تصویر با Aurora</div>
-              <p className="text-muted-foreground text-sm">تولید تصویر نامحدود</p>
-            </div>
-            <div className="glass rounded-2xl p-8 text-center">
-              <div className="text-4xl font-bold text-white mb-2">لحظه‌ای</div>
-              <div className="text-lg font-semibold mb-1">اطلاعات X</div>
-              <p className="text-muted-foreground text-sm">دسترسی به توییتر زنده</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* What is Grok Section */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-6">🤖 Grok چیست؟</h2>
+          <h2 className="text-2xl font-bold mb-6">این سرویس برای چه کسانی مناسب است؟</h2>
           <div className="glass rounded-3xl p-8 max-w-4xl">
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              گروک ساخته xAI و ایلان ماسک، یکی از بی‌پرده‌ترین هوش‌های مصنوعی دنیاست! برخلاف AIهای دیگه که پشت فیلترهای اخلاقی قایم می‌شن، گروک مستقیم میره سر اصل مطلب.
-            </p>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              الهام‌گرفته از جارویس (دستیار آیرون‌من) و راهنمای کهکشان، گروک نه تنها باهوشه، بلکه شوخ‌طبع و صادق هم هست.
-            </p>
-            <p className="text-muted-foreground leading-relaxed">
-              گروک به اطلاعات لحظه‌ای X (توییتر) دسترسی دارد که هیچ AI دیگری این قابلیت را ندارد. می‌توانید درباره آخرین اخبار و ترندها سوال بپرسید.
-            </p>
+            <ul className="space-y-3 text-muted-foreground leading-8">
+              <li>• ادمین های صفحات و برندها در X</li>
+              <li>• فعالان کریپتو، تکنولوژی و اخبار با نیاز به رصد لحظه ای</li>
+              <li>• کسانی که دنبال سبک پاسخ متفاوت و خودمانی هستند</li>
+            </ul>
           </div>
         </div>
       </section>
 
-      {/* Key Features Section */}
       <section className="py-12">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-8">🌟 قابلیت‌های کلیدی Grok</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="glass rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
-                  <MessageCircle className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="font-bold text-lg">بدون سانسور</h3>
+          <h2 className="text-2xl font-bold mb-8">مزیت خرید از نوا شاپ</h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="glass rounded-2xl p-6 text-center">
+              <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-4">
+                <Zap className="w-8 h-8 text-white" />
               </div>
-              <p className="text-muted-foreground text-sm">
-                پاسخ به سوالاتی که سایر AIها رد می‌کنند. مکالمه آزاد در هر موضوعی بدون فیلترهای اخلاقی محدودکننده.
-              </p>
+              <h3 className="font-bold text-lg mb-2">تحویل سریع</h3>
+              <p className="text-muted-foreground text-sm">سفارش شما سریع وارد فرایند فعال سازی می شود.</p>
             </div>
-            <div className="glass rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
-                  <Image className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="font-bold text-lg">Aurora نامحدود</h3>
-              </div>
-              <p className="text-muted-foreground text-sm">
-                تولید تصویر بدون محدودیت‌های معمول. ساخت تصاویری که DALL-E و Midjourney اجازه نمی‌دهند.
-              </p>
-            </div>
-            <div className="glass rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
-                  <Twitter className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="font-bold text-lg">اطلاعات لحظه‌ای X</h3>
-              </div>
-              <p className="text-muted-foreground text-sm">
-                دسترسی به آخرین توییت‌ها، ترندها و اخبار. هیچ AI دیگری این قابلیت را ندارد.
-              </p>
-            </div>
-            <div className="glass rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
-                  <Brain className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="font-bold text-lg">استدلال پیشرفته</h3>
-              </div>
-              <p className="text-muted-foreground text-sm">
-                حالت Reasoning Mode برای تحلیل‌های پیچیده. Grok-4 با قدرت استدلال بسیار بالا.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why Us Section */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-8">🏆 چرا ما بهترین انتخاب هستیم؟</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="glass rounded-2xl p-6 text-center">
               <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-4">
                 <Headphones className="w-8 h-8 text-white" />
               </div>
-              <h3 className="font-bold text-lg mb-2">پشتیبانی ۲۴ ساعته</h3>
-              <p className="text-muted-foreground text-sm">
-                تیم پشتیبانی متخصص و همیشه در دسترس
-              </p>
+              <h3 className="font-bold text-lg mb-2">پشتیبانی فارسی</h3>
+              <p className="text-muted-foreground text-sm">راهنمایی مرحله به مرحله تا فعال سازی کامل.</p>
+            </div>
+            <div className="glass rounded-2xl p-6 text-center">
+              <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-4">
+                <Twitter className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="font-bold text-lg mb-2">تمرکز روی X</h3>
+              <p className="text-muted-foreground text-sm">مناسب کاربرانی که تحلیل جریان های X برایشان مهم است.</p>
             </div>
             <div className="glass rounded-2xl p-6 text-center">
               <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-4">
                 <RefreshCw className="w-8 h-8 text-white" />
               </div>
-              <h3 className="font-bold text-lg mb-2">تضمین جایگزینی</h3>
+              <h3 className="font-bold text-lg mb-2">راهنمای شروع</h3>
               <p className="text-muted-foreground text-sm">
-                در صورت هر مشکلی، اکانت جدید دریافت می‌کنید
+                بعد از خرید راهنمای کوتاه می گیرید. <Link to="/support" className="text-primary hover:underline">مشاهده راهنما</Link>
               </p>
-            </div>
-            <div className="glass rounded-2xl p-6 text-center">
-              <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-4">
-                <Zap className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="font-bold text-lg mb-2">تحویل فوری</h3>
-              <p className="text-muted-foreground text-sm">
-                بلافاصله پس از پرداخت، اکانت فعال می‌شود
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How to Buy Section */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-8">📋 نحوه خرید در ۳ مرحله</h2>
-          <div className="glass rounded-3xl p-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="w-14 h-14 rounded-full bg-white text-background font-bold text-2xl flex items-center justify-center mx-auto mb-4">۱</div>
-                <h3 className="font-bold text-lg mb-2">انتخاب پلن</h3>
-                <p className="text-muted-foreground text-sm">پلن اشتراکی یا اختصاصی را انتخاب کنید</p>
-              </div>
-              <div className="text-center">
-                <div className="w-14 h-14 rounded-full bg-white text-background font-bold text-2xl flex items-center justify-center mx-auto mb-4">۲</div>
-                <h3 className="font-bold text-lg mb-2">ثبت سفارش در سایت</h3>
-                <p className="text-muted-foreground text-sm">سفارش را داخل سایت ثبت کنید و وضعیت را از پنل کاربری ببینید.</p>
-              </div>
-              <div className="text-center">
-                <div className="w-14 h-14 rounded-full bg-white text-background font-bold text-2xl flex items-center justify-center mx-auto mb-4">۳</div>
-                <h3 className="font-bold text-lg mb-2">دسترسی فوری</h3>
-                <p className="text-muted-foreground text-sm">پس از پرداخت، اکانت همان لحظه فعال می‌شود</p>
-              </div>
             </div>
           </div>
         </div>
@@ -240,47 +122,48 @@ const GrokPage = () => {
 
   const lowestPrice = plans[0].price;
 
-  // Generate SEO schemas
   const faqSchema = createFAQSchema(faqs);
   const breadcrumbSchema = createBreadcrumbSchema([
     { name: "خانه", url: "/" },
-    { name: "خرید Grok", url: "/services/grok" }
+    { name: "خرید دسترسی گراک (Grok)", url: "/services/grok" },
   ]);
   const productSchema = createProductSchema({
-    name: "اشتراک Super Grok",
-    description: "خرید اشتراک Super Grok - هوش مصنوعی xAI ایلان ماسک با Grok-4/4 Heavy، Aurora و دسترسی لحظه‌ای به X.",
+    name: "خرید دسترسی گراک (Grok)",
+    description:
+      "خرید دسترسی Grok روی پلتفرم X با تحویل سریع، پشتیبانی فارسی و مناسب تحلیل ترندها و اخبار زنده.",
     price: lowestPrice,
     url: "/services/grok",
-    image: "https://nova-shop.co/logos/grok.svg",
+    image: "https://nova-shop.co/logos/grok.png",
     category: "اشتراک هوش مصنوعی",
-    sku: "GROK-SUPER",
+    sku: "GROK-X",
     ratingValue: 4.7,
-    reviewCount: 650
+    reviewCount: 650,
   });
 
   return (
     <>
       <Helmet>
-        <title>خرید اشتراک Super Grok | AI بدون سانسور ایلان ماسک - نوا شاپ</title>
+        <title>خرید دسترسی گراک (Grok) | هوش مصنوعی xAI روی پلتفرم X</title>
         <meta
           name="description"
-          content="خرید اشتراک Super Grok - هوش مصنوعی xAI و ایلان ماسک. دسترسی به Grok-4/4 Heavy، تولید تصویر با Aurora و دسترسی لحظه‌ای به X."
+          content="خرید دسترسی گراک (Grok) روی پلتفرم X برای تحلیل ترندها و تولید محتوای خلاقانه. تحویل سریع، پشتیبانی فارسی و فعال سازی مطمئن."
         />
-        <meta name="keywords" content="خرید Grok, Super Grok, xAI, ایلان ماسک, هوش مصنوعی بدون سانسور, Aurora, توییتر, خرید گروک ایران" />
+        <meta
+          name="keywords"
+          content="خرید Grok, خرید گراک, خرید دسترسی Grok, xAI, Grok روی X, خرید اشتراک Premium X"
+        />
         <link rel="canonical" href="https://nova-shop.co/services/grok" />
 
-        {/* Structured Data */}
-        <script type="application/ld+json">
-          {JSON.stringify([productSchema, faqSchema, breadcrumbSchema])}
-        </script>
+        <script type="application/ld+json">{JSON.stringify([productSchema, faqSchema, breadcrumbSchema])}</script>
       </Helmet>
+
       <ServicePageLayout
         serviceId="grok"
         icon={MessageCircle}
-        logoSrc="/logos/grok.svg"
-        title="Super Grok"
-        subtitle="هوش مصنوعی بدون سانسور"
-        description="گروک ساخته xAI و ایلان ماسک، یکی از بی‌پرده‌ترین هوش‌های مصنوعی دنیاست! برخلاف AIهای دیگه که پشت فیلترهای اخلاقی قایم می‌شن، گروک مستقیم میره سر اصل مطلب. الهام‌گرفته از جارویس و راهنمای کهکشان، گروک نه تنها باهوشه، بلکه شوخ‌طبع و صادق هم هست."
+        logoSrc="/logos/grok.png"
+        title="خرید دسترسی گراک (Grok) | هوش مصنوعی xAI روی پلتفرم X"
+        subtitle="Grok by xAI on X"
+        description="Grok هوش مصنوعی ساخته شرکت xAI است که روی پلتفرم X فعال است و به داده های زنده این شبکه اجتماعی دسترسی دارد. با تهیه اشتراک، به نسخه های به روز Grok برای تحلیل ترندها، تولید محتوا و پاسخ گویی خلاقانه دسترسی پیدا می کنید. سفارش شما با پشتیبانی فارسی تحویل می شود."
         color="#FFFFFF"
         features={features}
         plans={plans}

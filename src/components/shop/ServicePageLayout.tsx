@@ -1,5 +1,5 @@
 import { ReactNode, useMemo, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { LucideIcon, MessageCircle, ArrowRight, Check, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,8 +8,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { createOrder } from "@/lib/orders";
 import ShopHeader from "./ShopHeader";
 import ShopFooter from "./ShopFooter";
-
-const SUPPORT_USERNAME = "Nova_AI_Support";
 
 interface Plan {
   id?: string;
@@ -71,7 +69,9 @@ const ServicePageLayout = ({
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
   const [submittingPlan, setSubmittingPlan] = useState<string | null>(null);
+  const highlightedPlanId = (searchParams.get("plan") || "").trim();
 
   const paddedPlans = useMemo(() => {
     const rows = plans.map((plan, idx) => ({
@@ -275,26 +275,44 @@ const ServicePageLayout = ({
         <section className="py-12">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold mb-8">🛍 پلن‌های خرید</h2>
+            <div className="glass rounded-2xl p-4 mb-6 flex items-center justify-between gap-3">
+              <p className="text-sm text-muted-foreground">
+                بعد از ثبت سفارش، وضعیت سفارش از داخل پنل کاربری قابل پیگیری است.
+              </p>
+              <Button variant="outline" asChild>
+                <Link to="/dashboard">مشاهده پنل کاربری</Link>
+              </Button>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {paddedPlans.map((item) => {
                 if (item.kind === "placeholder") {
-                  return <div key={item.key} className="hidden lg:block" aria-hidden />;
+                  return (
+                    <div
+                      key={item.key}
+                      className="hidden lg:block rounded-3xl border border-dashed border-border/50 bg-card/20"
+                      aria-hidden
+                    />
+                  );
                 }
 
                 const { plan } = item;
                 const isSubmitting = submittingPlan === plan.name;
+                const isHighlighted =
+                  highlightedPlanId.length > 0 &&
+                  (plan.id === highlightedPlanId || `${plan.id}`.toLowerCase() === highlightedPlanId.toLowerCase());
 
                 return (
                   <div
                     key={item.key}
-                    className={`glass rounded-3xl p-6 relative ${
-                      plan.popular ? "border-2" : ""
+                    className={`glass rounded-3xl p-6 relative transition-all duration-300 ${
+                      plan.popular || isHighlighted ? "border-2 shadow-lg" : "border border-border/50"
                     }`}
-                    style={plan.popular ? { borderColor: color } : {}}
+                    style={plan.popular || isHighlighted ? { borderColor: color } : {}}
                   >
-                    {plan.popular && (
-                      <div className="absolute -top-3 right-6">
-                        <Badge style={{ backgroundColor: color }}>پرفروش</Badge>
+                    {(plan.popular || isHighlighted) && (
+                      <div className="absolute -top-3 right-6 flex gap-2">
+                        {plan.popular ? <Badge style={{ backgroundColor: color }}>پرفروش</Badge> : null}
+                        {isHighlighted ? <Badge variant="secondary">پلن انتخاب‌شده</Badge> : null}
                       </div>
                     )}
 
@@ -343,7 +361,7 @@ const ServicePageLayout = ({
                       ) : (
                         <MessageCircle className="w-4 h-4 ml-2" />
                       )}
-                      {isSubmitting ? "در حال ثبت..." : "ثبت سفارش"}
+                      {isSubmitting ? "در حال ثبت..." : "ثبت سفارش و ادامه"}
                     </Button>
                   </div>
                 );
@@ -382,18 +400,14 @@ const ServicePageLayout = ({
                 سوالی دارید؟
               </h3>
               <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-                برای مشاوره رایگان و انتخاب بهترین پلن، همین الان با پشتیبانی
-                تماس بگیرید.
+                برای مشاوره رایگان و انتخاب بهترین پلن، وارد صفحه پشتیبانی شوید و
+                مستقیم با ادمین تلگرام در ارتباط باشید.
               </p>
-              <Button
-                size="lg"
-                style={{ backgroundColor: color }}
-                onClick={() =>
-                  window.open(`https://t.me/${SUPPORT_USERNAME}`, "_blank")
-                }
-              >
-                <MessageCircle className="w-5 h-5 ml-2" />
-                پیام به پشتیبانی
+              <Button size="lg" style={{ backgroundColor: color }} asChild>
+                <Link to="/support">
+                  <MessageCircle className="w-5 h-5 ml-2" />
+                  مشاهده صفحه پشتیبانی
+                </Link>
               </Button>
             </div>
           </div>
@@ -411,10 +425,10 @@ const ServicePageLayout = ({
                   در عصری که <strong className="text-foreground">هوش مصنوعی</strong> مرزهای توانمندی انسان را جابه‌جا کرده، دسترسی بدون محدودیت به برترین ابزارها دیگر یک انتخاب نیست، بلکه <strong className="text-foreground">یک ضرورت</strong> است. <strong className="text-foreground">نوا شاپ</strong> به عنوان <strong className="text-foreground">بزرگترین فروشگاه اکانت هوش مصنوعی</strong> در ایران، با هدف حذف تحریم‌ها و موانع پرداخت ارزی، بستری امن و مطمئن برای <strong className="text-foreground">خرید اکانت AI</strong> فراهم کرده است.
                 </p>
                 <p>
-                  برخلاف مجموعه‌های تک‌محصولی، ما در نوا شاپ <strong className="text-foreground">پکیج کاملی از قدرت</strong> را به شما ارائه می‌دهیم: از <Link to="/services/chatgpt" className="text-primary hover:underline font-semibold">خرید اکانت ChatGPT Plus/Pro</Link> با دسترسی به مدل‌های پیشرفته OpenAI، تا <Link to="/services/grok" className="text-primary hover:underline font-semibold">خرید اشتراک Grok AI</Link> برای تجربه xAI. همچنین <Link to="/services/perplexity" className="text-primary hover:underline font-semibold">Perplexity Pro</Link> برای جستجوی هوشمند و <Link to="/services/cursor" className="text-primary hover:underline font-semibold">Cursor Pro</Link> برای برنامه‌نویسی حرفه‌ای در دسترس شماست.
+                  برخلاف مجموعه‌های تک‌محصولی، ما در نوا شاپ <strong className="text-foreground">پکیج کاملی از قدرت</strong> را به شما ارائه می‌دهیم: از <Link to="/services/chatgpt" className="text-primary hover:underline font-semibold">خرید چت جی پی تی (ChatGPT) Plus / Pro-Business</Link> با دسترسی به مدل‌های پیشرفته OpenAI، تا <Link to="/services/grok" className="text-primary hover:underline font-semibold">خرید اشتراک گراک (Grok)</Link> برای تجربه xAI. همچنین <Link to="/services/perplexity" className="text-primary hover:underline font-semibold">پرپلکسیتی پرو (Perplexity Pro)</Link> برای جستجوی هوشمند و <Link to="/services/cursor" className="text-primary hover:underline font-semibold">کرسور پرو (Cursor Pro)</Link> برای برنامه‌نویسی حرفه‌ای در دسترس شماست.
                 </p>
                 <p>
-                  متخصصان و برنامه‌نویسان نیز می‌توانند با <Link to="/services/cursor" className="text-primary hover:underline font-semibold">خرید اکانت Cursor Pro</Link>، کدنویسی خود را به سطح جدیدی ببرند یا با <Link to="/services/gemini" className="text-primary hover:underline font-semibold">خرید Gemini Advanced</Link> از اکوسیستم قدرتمند گوگل و <strong className="text-foreground">فضای ابری ۲ ترابایتی</strong> بهره‌مند شوند. برای سرگرمی و موسیقی هم <Link to="/services/spotify" className="text-primary hover:underline font-semibold">اشتراک Spotify Premium</Link> و <Link to="/services/telegram-premium" className="text-primary hover:underline font-semibold">تلگرام پریمیوم</Link> داریم!
+                  متخصصان و برنامه‌نویسان نیز می‌توانند با <Link to="/services/cursor" className="text-primary hover:underline font-semibold">خرید اکانت کرسور پرو (Cursor Pro)</Link>، کدنویسی خود را به سطح جدیدی ببرند یا با <Link to="/services/gemini" className="text-primary hover:underline font-semibold">خرید جمینای پرو (Gemini Pro) و Ultra</Link> از اکوسیستم قدرتمند گوگل و <strong className="text-foreground">فضای ابری ۲ ترابایتی</strong> بهره‌مند شوند. برای سرگرمی و موسیقی هم <Link to="/services/spotify" className="text-primary hover:underline font-semibold">اشتراک اسپاتیفای پریمیوم (Spotify Premium)</Link> و <Link to="/services/telegram-premium" className="text-primary hover:underline font-semibold">تلگرام پریمیوم</Link> داریم.
                 </p>
                 <p>
                   تمامی اشتراک‌های ما به صورت <strong className="text-foreground">کاملاً قانونی</strong>، <strong className="text-foreground">اختصاصی</strong> و با <strong className="text-foreground">تحویل آنی</strong> ارائه می‌شوند. اولویت ما در نوا شاپ، <strong className="text-foreground">تضمین پایداری ۱۰۰٪</strong>، <strong className="text-foreground">پشتیبانی ۲۴ ساعته</strong> و <strong className="text-foreground">کیفیت تضمین‌شده</strong> است تا هیچ مانعی میان شما و آینده وجود نداشته باشد.

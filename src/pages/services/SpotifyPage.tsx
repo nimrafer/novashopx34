@@ -109,7 +109,7 @@ const SpotifyPage = () => {
       <ServicePageLayout
         serviceId="spotify"
         icon={Music}
-        logoSrc="/logos/spotify.svg"
+        logoSrc="/logos/spotify.png"
         title="Spotify Premium"
         subtitle="موسیقی بدون محدودیت"
         description="اسپاتیفای بزرگ‌ترین پلتفرم موسیقی در جهان است؛ بدون تبلیغ، با کیفیت بالا و قابلیت دانلود آفلاین."

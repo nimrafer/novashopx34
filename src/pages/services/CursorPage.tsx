@@ -298,7 +298,7 @@ const CursorPage = () => {
     description: "خرید اشتراک Cursor Pro - ادیتور کدنویسی هوشمند با AI. دسترسی به مدل‌های پیشرفته OpenAI، Claude و Gemini.",
     price: lowestPrice,
     url: "/services/cursor",
-    image: "https://nova-shop.co/logos/cursor.svg",
+    image: "https://nova-shop.co/logos/cursor.png",
     category: "ابزار برنامه‌نویسی",
     sku: "CURSOR-PRO",
     ratingValue: 4.9,
@@ -324,7 +324,7 @@ const CursorPage = () => {
       <ServicePageLayout
         serviceId="cursor"
         icon={Code}
-        logoSrc="/logos/cursor.svg"
+        logoSrc="/logos/cursor.png"
         title="Cursor Pro"
         subtitle="ادیتور کدنویسی هوشمند"
         description="Cursor یک ادیتور کدنویسی نسل جدید است که از ابتدا برای کار با هوش مصنوعی طراحی شده. با دسترسی به Claude 3.5 Sonnet، GPT-4 و Gemini، سرعت کدنویسی‌تان ۲ برابر می‌شود. درک کامل کل پروژه، تغییرات چند فایلی با Composer و Tab Completion پیشرفته."

@@ -17,11 +17,11 @@ import ShopFooter from "@/components/shop/ShopFooter";
 const Index = () => {
   // Product listing for SEO
   const productList = createItemListSchema([
-    { name: "اکانت ChatGPT Plus", url: "/services/chatgpt", position: 1 },
-    { name: "اکانت Gemini Pro", url: "/services/gemini", position: 2 },
-    { name: "اکانت Grok", url: "/services/grok", position: 3 },
-    { name: "اکانت Cursor Pro", url: "/services/cursor", position: 4 },
-    { name: "اکانت Perplexity Pro", url: "/services/perplexity", position: 5 },
+    { name: "اکانت چت جی پی تی (ChatGPT) Plus", url: "/services/chatgpt", position: 1 },
+    { name: "اکانت جمینای (Gemini) Pro", url: "/services/gemini", position: 2 },
+    { name: "اکانت گراک (Grok)", url: "/services/grok", position: 3 },
+    { name: "اکانت کرسور (Cursor) Pro", url: "/services/cursor", position: 4 },
+    { name: "اکانت پرپلکسیتی (Perplexity) Pro", url: "/services/perplexity", position: 5 },
     { name: "تلگرام پریمیوم", url: "/services/telegram-premium", position: 6 },
   ]);
 
@@ -70,9 +70,9 @@ const Index = () => {
   return (
     <>
       <SEOHead
-        title="نوا شاپ | خرید اکانت ChatGPT، Gemini، Grok با تحویل فوری"
-        description="خرید اشتراک ChatGPT Plus/Pro، Gemini Pro، Grok، Cursor، Perplexity، تلگرام پریمیوم و سرویس‌های مکمل با تحویل فوری، گارانتی تعویض و پشتیبانی ۲۴ ساعته."
-        keywords="خرید ChatGPT, اشتراک ChatGPT Pro, خرید Gemini Pro, خرید Grok, خرید Cursor, خرید Perplexity, تلگرام پریمیوم, اکانت هوش مصنوعی, خرید اکانت AI ایران, نوا شاپ"
+        title="نوا شاپ | خرید چت جی پی تی (ChatGPT)، جمینای (Gemini)، گراک (Grok)"
+        description="خرید اشتراک چت جی پی تی (ChatGPT) Plus/Pro-Business، جمینای (Gemini)، گراک (Grok)، کرسور (Cursor)، پرپلکسیتی (Perplexity) و سرویس‌های مکمل با تحویل فوری و پشتیبانی فارسی."
+        keywords="خرید چت جی پی تی, خرید ChatGPT, اشتراک ChatGPT Pro-Business, خرید جمینای, خرید Gemini, خرید Grok, خرید Cursor, خرید Perplexity, تلگرام پریمیوم"
         canonicalUrl="/"
         ogType="website"
         jsonLd={jsonLdSchemas}
@@ -99,11 +99,11 @@ const Index = () => {
                   </p>
 
                   <p>
-                    برخلاف مجموعه‌های تک‌محصولی، ما یک فروشگاه <strong className="text-foreground">چندمحصولی</strong> هستیم و <strong className="text-foreground">موجودی دائمی و کامل</strong> از سرویس‌های محبوب را یکجا ارائه می‌دهیم: از <Link to="/services/chatgpt" className="text-primary hover:underline font-semibold">خرید اکانت ChatGPT Plus/Pro</Link> برای دسترسی به مدل‌های پیشرفته OpenAI، تا <Link to="/services/grok" className="text-primary hover:underline font-semibold">خرید اشتراک Grok AI</Link> برای تجربه هوش مصنوعی X. علاوه بر این، <Link to="/services/perplexity" className="text-primary hover:underline font-semibold">Perplexity Pro</Link> برای کارهای تحقیقاتی، <Link to="/services/cursor" className="text-primary hover:underline font-semibold">Cursor Pro</Link> برای برنامه‌نویسی حرفه‌ای، و همچنین <Link to="/services/telegram-premium" className="text-primary hover:underline font-semibold">تلگرام پریمیوم</Link> و <Link to="/services/spotify" className="text-primary hover:underline font-semibold">Spotify Premium</Link> برای استفاده روزمره همیشه در دسترس هستند.
+                    برخلاف مجموعه‌های تک‌محصولی، ما یک فروشگاه <strong className="text-foreground">چندمحصولی</strong> هستیم و <strong className="text-foreground">موجودی دائمی و کامل</strong> از سرویس‌های محبوب را یکجا ارائه می‌دهیم: از <Link to="/services/chatgpt" className="text-primary hover:underline font-semibold">خرید چت جی پی تی (ChatGPT) Plus / Pro-Business</Link> برای دسترسی به مدل‌های پیشرفته OpenAI، تا <Link to="/services/grok" className="text-primary hover:underline font-semibold">خرید اشتراک گراک (Grok)</Link> برای تجربه هوش مصنوعی X. علاوه بر این، <Link to="/services/perplexity" className="text-primary hover:underline font-semibold">پرپلکسیتی پرو (Perplexity Pro)</Link> برای کارهای تحقیقاتی، <Link to="/services/cursor" className="text-primary hover:underline font-semibold">کرسور پرو (Cursor Pro)</Link> برای برنامه‌نویسی حرفه‌ای، و همچنین <Link to="/services/telegram-premium" className="text-primary hover:underline font-semibold">تلگرام پریمیوم</Link> و <Link to="/services/spotify" className="text-primary hover:underline font-semibold">اسپاتیفای پریمیوم (Spotify Premium)</Link> برای استفاده روزمره همیشه در دسترس هستند.
                   </p>
 
                   <p>
-                    برای برنامه‌نویسان و تیم‌های فنی نیز امکان <Link to="/services/cursor" className="text-primary hover:underline font-semibold">خرید اکانت Cursor Pro</Link> فراهم است تا سرعت کدنویسی و کیفیت خروجی چند برابر شود. اگر اکوسیستم گوگل را ترجیح می‌دهید، با <Link to="/services/gemini" className="text-primary hover:underline font-semibold">خرید Gemini Advanced</Link> می‌توانید از قابلیت‌های قدرتمند گوگل و <strong className="text-foreground">فضای ابری ۲ ترابایتی</strong> بهره‌مند شوید.
+                    برای برنامه‌نویسان و تیم‌های فنی نیز امکان <Link to="/services/cursor" className="text-primary hover:underline font-semibold">خرید اکانت کرسور پرو (Cursor Pro)</Link> فراهم است تا سرعت کدنویسی و کیفیت خروجی چند برابر شود. اگر اکوسیستم گوگل را ترجیح می‌دهید، با <Link to="/services/gemini" className="text-primary hover:underline font-semibold">خرید جمینای (Gemini) Pro و Ultra</Link> می‌توانید از قابلیت‌های قدرتمند گوگل و <strong className="text-foreground">فضای ابری ۲ ترابایتی</strong> بهره‌مند شوید.
                   </p>
 
                   <p>
@@ -127,7 +127,7 @@ const Index = () => {
                     </div>
                     <div className="flex items-start gap-2">
                       <span className="text-primary">✓</span>
-                      <span><strong className="text-foreground">پشتیبانی ۲۴/۷:</strong> تیم پشتیبانی واقعی همیشه در دسترس شماست</span>
+                      <span><strong className="text-foreground">پشتیبانی ۲۴/۷:</strong> تیم پشتیبانی فوری همیشه در دسترس شماست</span>
                     </div>
                     <div className="flex items-start gap-2">
                       <span className="text-primary">✓</span>

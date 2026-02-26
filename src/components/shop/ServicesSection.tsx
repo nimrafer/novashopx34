@@ -1,22 +1,19 @@
 import { useMemo, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft, Check, Loader2, MessageCircle } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowLeft, Check, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { usePricesContext } from "@/contexts/PricesContext";
-import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
-import { createOrder } from "@/lib/orders";
 
-const SUPPORT_URL = "https://t.me/Nova_AI_Support";
+const SUPPORT_ROUTE = "/support";
 
 const logos = {
-  chatgpt: "/logos/chatgpt.svg",
-  gemini: "/logos/gemini.svg",
-  grok: "/logos/grok.svg",
-  perplexity: "/logos/perplexity.svg",
-  spotify: "/logos/spotify.svg",
-  cursor: "/logos/cursor.svg",
-  telegram: "/logos/telegram.svg",
+  chatgpt: "/logos/chatgpt.png",
+  gemini: "/logos/gemini.png",
+  grok: "/logos/grok.png",
+  perplexity: "/logos/perplexity.png",
+  spotify: "/logos/spotify.png",
+  cursor: "/logos/cursor.png",
+  telegram: "/logos/telegram.png",
   cards: "/logos/mastercard.svg",
 };
 
@@ -48,17 +45,13 @@ const formatPrice = (price: number): string => {
 
 const ServicesSection = () => {
   const { getPrice } = usePricesContext();
-  const { user } = useAuth();
-  const { toast } = useToast();
   const navigate = useNavigate();
-  const location = useLocation();
-  const [submittingPlanId, setSubmittingPlanId] = useState<string | null>(null);
 
   const categories: CategoryItem[] = useMemo(
     () => [
       {
         id: "chatgpt",
-        title: "ChatGPT",
+        title: "چت جی پی تی (ChatGPT)",
         subtitle: "۶ پلن فعال",
         color: "#10B981",
         logo: logos.chatgpt,
@@ -66,20 +59,20 @@ const ServicesSection = () => {
         plans: [
           {
             id: "cgpt_pro_30day",
-            title: "Pro ۳۰ روزه شخصی",
-            subtitle: "اختصاصی",
+            title: "Pro-Business اختصاصی ۳۰ روزه",
+            subtitle: "چت جی پی تی (ChatGPT)",
             priceKey: "cgpt_pro_30day",
             badge: "پرفروش",
           },
           {
             id: "cgpt_pro_37day",
-            title: "Pro ۳۷ روزه شخصی",
-            subtitle: "اختصاصی",
+            title: "Pro-Business اختصاصی ۳۷ روزه",
+            subtitle: "چت جی پی تی (ChatGPT)",
             priceKey: "cgpt_pro_37day",
           },
           {
             id: "cgpt_pro_shared",
-            title: "Pro اشتراکی",
+            title: "Pro-Business اشتراکی",
             subtitle: "اقتصادی",
             priceKey: "cgpt_pro_shared",
           },
@@ -105,7 +98,7 @@ const ServicesSection = () => {
       },
       {
         id: "gemini",
-        title: "Gemini",
+        title: "جمینای (Gemini)",
         subtitle: "۵ پلن فعال",
         color: "#3B82F6",
         logo: logos.gemini,
@@ -114,39 +107,39 @@ const ServicesSection = () => {
           {
             id: "gem_month",
             title: "پلن یک‌ماهه",
-            subtitle: "Gemini Pro",
+            subtitle: "Gemini Pro / Ultra",
             priceKey: "gem_month",
           },
           {
             id: "gem_3month",
             title: "پلن سه‌ماهه",
-            subtitle: "Gemini Pro",
+            subtitle: "Gemini Pro / Ultra",
             priceKey: "gem_3month",
             badge: "محبوب",
           },
           {
             id: "gem_6month",
             title: "پلن شش‌ماهه",
-            subtitle: "Gemini Pro",
+            subtitle: "Gemini Pro / Ultra",
             priceKey: "gem_6month",
           },
           {
             id: "gem_year_personal",
             title: "یکساله جیمیل شخصی",
-            subtitle: "Gemini Pro",
+            subtitle: "Gemini Pro / Ultra",
             priceKey: "gem_year_personal",
           },
           {
             id: "gem_year_ready",
             title: "یکساله جیمیل آماده",
-            subtitle: "Gemini Pro",
+            subtitle: "Gemini Pro / Ultra",
             priceKey: "gem_year_ready",
           },
         ],
       },
       {
         id: "grok",
-        title: "Super Grok",
+        title: "گراک (Grok)",
         subtitle: "۱ پلن فعال",
         color: "#0F172A",
         logo: logos.grok,
@@ -162,7 +155,7 @@ const ServicesSection = () => {
       },
       {
         id: "perplexity",
-        title: "Perplexity",
+        title: "پرپلکسیتی (Perplexity)",
         subtitle: "۲ پلن فعال",
         color: "#14B8A6",
         logo: logos.perplexity,
@@ -184,7 +177,7 @@ const ServicesSection = () => {
       },
       {
         id: "spotify",
-        title: "Spotify",
+        title: "اسپاتیفای (Spotify)",
         subtitle: "۲ پلن فعال",
         color: "#1DB954",
         logo: logos.spotify,
@@ -206,7 +199,7 @@ const ServicesSection = () => {
       },
       {
         id: "cursor",
-        title: "Cursor",
+        title: "کرسور (Cursor)",
         subtitle: "۲ پلن فعال",
         color: "#6366F1",
         logo: logos.cursor,
@@ -229,7 +222,7 @@ const ServicesSection = () => {
       },
       {
         id: "telegram_premium",
-        title: "Telegram Premium",
+        title: "تلگرام پریمیوم (Telegram Premium)",
         subtitle: "۳ پلن فعال",
         color: "#0284C7",
         logo: logos.telegram,
@@ -354,7 +347,7 @@ const ServicesSection = () => {
         subtitle: "ساخت تصویر AI",
         color: "#F59E0B",
         emoji: "🍌",
-        externalHref: SUPPORT_URL,
+        externalHref: SUPPORT_ROUTE,
         plans: [
           {
             id: "imggen_text",
@@ -425,50 +418,18 @@ const ServicesSection = () => {
     return [...entries, ...placeholders];
   }, [activeCategory]);
 
-  const handleOrder = async (plan: PlanItem) => {
-    if (!plan.priceKey) {
-      window.open(SUPPORT_URL, "_blank");
+  const handleOrder = (plan: PlanItem) => {
+    if (plan.priceKey && activeCategory.href) {
+      navigate(`${activeCategory.href}?plan=${encodeURIComponent(plan.id)}`);
       return;
     }
 
-    if (!user) {
-      toast({
-        title: "ابتدا وارد حساب شوید",
-        description: "برای ثبت سفارش، ابتدا با ایمیل وارد شوید.",
-        variant: "destructive",
-      });
-      navigate(`/auth?next=${encodeURIComponent(location.pathname)}`);
+    if (activeCategory.externalHref?.startsWith("/")) {
+      navigate(activeCategory.externalHref);
       return;
     }
 
-    const price = getPrice(plan.priceKey);
-    setSubmittingPlanId(plan.id);
-
-    const result = await createOrder({
-      serviceId: activeCategory.id,
-      serviceName: activeCategory.title,
-      planId: plan.id,
-      planName: plan.title,
-      planDuration: plan.subtitle,
-      price,
-    });
-
-    setSubmittingPlanId(null);
-
-    if ("error" in result) {
-      toast({
-        title: "ثبت سفارش ناموفق بود",
-        description: result.error,
-        variant: "destructive",
-      });
-      return;
-    }
-
-    toast({
-      title: "سفارش ثبت شد",
-      description: `شناسه سفارش: ${result.data.order.id}`,
-    });
-    navigate("/dashboard");
+    navigate(SUPPORT_ROUTE);
   };
 
   return (
@@ -486,7 +447,13 @@ const ServicesSection = () => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
           {paddedCategories.map((item) => {
             if (item.kind === "placeholder") {
-              return <div key={item.key} className="hidden lg:block" aria-hidden />;
+              return (
+                <div
+                  key={item.key}
+                  className="hidden lg:block rounded-2xl border border-dashed border-border/50 bg-card/20"
+                  aria-hidden
+                />
+              );
             }
 
             const { category } = item;
@@ -562,15 +529,25 @@ const ServicesSection = () => {
             </div>
 
             {activeCategory.externalHref ? (
-              <a
-                href={activeCategory.externalHref}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-border/60 bg-background/40 hover:border-primary/40 transition-colors text-sm"
-              >
-                <span>ارتباط با پشتیبانی</span>
-                <ArrowLeft className="w-4 h-4" />
-              </a>
+              activeCategory.externalHref.startsWith("/") ? (
+                <Link
+                  to={activeCategory.externalHref}
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-border/60 bg-background/40 hover:border-primary/40 transition-colors text-sm"
+                >
+                  <span>ارتباط با پشتیبانی</span>
+                  <ArrowLeft className="w-4 h-4" />
+                </Link>
+              ) : (
+                <a
+                  href={activeCategory.externalHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-border/60 bg-background/40 hover:border-primary/40 transition-colors text-sm"
+                >
+                  <span>ارتباط با پشتیبانی</span>
+                  <ArrowLeft className="w-4 h-4" />
+                </a>
+              )
             ) : (
               activeCategory.href && (
                 <Link
@@ -587,13 +564,18 @@ const ServicesSection = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {paddedPlans.map((item) => {
               if (item.kind === "placeholder") {
-                return <div key={item.key} className="hidden lg:block" aria-hidden />;
+                return (
+                  <div
+                    key={item.key}
+                    className="hidden lg:block rounded-2xl border border-dashed border-border/50 bg-card/20"
+                    aria-hidden
+                  />
+                );
               }
 
               const { plan } = item;
               const planPrice = plan.priceKey ? getPrice(plan.priceKey) : null;
               const priceText = plan.staticPrice ?? formatPrice(planPrice ?? 0);
-              const isSubmitting = submittingPlanId === plan.id;
 
               return (
                 <div
@@ -620,19 +602,10 @@ const ServicesSection = () => {
                     type="button"
                     className="w-full mt-auto"
                     style={{ backgroundColor: activeCategory.color }}
-                    disabled={isSubmitting}
                     onClick={() => handleOrder(plan)}
                   >
-                    {isSubmitting ? (
-                      <Loader2 className="w-4 h-4 ml-2 animate-spin" />
-                    ) : (
-                      <MessageCircle className="w-4 h-4 ml-2" />
-                    )}
-                    {isSubmitting
-                      ? "در حال ثبت..."
-                      : plan.priceKey
-                        ? "ثبت سفارش"
-                        : "ارتباط با پشتیبانی"}
+                    <MessageCircle className="w-4 h-4 ml-2" />
+                    {plan.priceKey ? "مشاهده و ثبت سفارش" : "ارتباط با پشتیبانی"}
                   </Button>
                 </div>
               );

@@ -7,9 +7,8 @@ import ShopFooter from "@/components/shop/ShopFooter";
 import SEOHead from "@/components/seo/SEOHead";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-
-const SUPPORT_USERNAME = "Nova_AI_Support";
-const CHANNEL_USERNAME = "nova_ai_shop";
+import supportImage from "@/assets/telegram-support.jpg";
+import { CHANNEL_USERNAME, SUPPORT_USERNAME } from "@/constants/support";
 
 const ContactPage = () => {
     const [name, setName] = useState("");
@@ -57,6 +56,17 @@ const ContactPage = () => {
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
                             {/* Contact Info */}
                             <div className="space-y-6">
+                                <div className="glass rounded-2xl p-4">
+                                    <img
+                                        src={supportImage}
+                                        alt="تصویر پیوی پشتیبانی تلگرام"
+                                        className="w-full rounded-xl border border-border object-cover"
+                                    />
+                                    <p className="text-xs text-muted-foreground mt-3">
+                                        برای ارتباط فوری، از دکمه‌های پشتیبانی تلگرام استفاده کنید.
+                                    </p>
+                                </div>
+
                                 <div className="glass rounded-2xl p-6 glass-hover">
                                     <div className="flex items-center gap-4">
                                         <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center flex-shrink-0">
@@ -119,7 +129,7 @@ const ContactPage = () => {
                                         <div>
                                             <h3 className="font-bold text-lg">موقعیت</h3>
                                             <p className="text-sm text-muted-foreground">
-                                                تهران، ایران
+                                                تهران، خیابان انقلاب، خیابان ۱۹ آذر - پلاک ۳۱
                                             </p>
                                         </div>
                                     </div>

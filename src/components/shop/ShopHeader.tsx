@@ -19,7 +19,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useState, useRef, useEffect } from "react";
 import novaLogo from "@/assets/nova-logo.jpeg";
 
-const CHANNEL_USERNAME = "nova_ai_shop";
+const CHANNEL_USERNAME = "Nova_Ai_Shop";
 const ADMIN_EMAILS = String(import.meta.env.VITE_ADMIN_EMAILS || "admin@nova-shop.co")
   .split(",")
   .map((email) => email.trim().toLowerCase())
@@ -35,7 +35,7 @@ interface ServiceItem {
 }
 
 const services: ServiceItem[] = [
-  { name: "چت جی‌پی‌تی", nameEn: "ChatGPT", description: "هوش مصنوعی OpenAI", href: "/services/chatgpt", icon: "🤖", color: "text-green-600" },
+  { name: "چت جی پی تی", nameEn: "ChatGPT", description: "هوش مصنوعی OpenAI", href: "/services/chatgpt", icon: "🤖", color: "text-green-600" },
   { name: "جمینای", nameEn: "Gemini", description: "هوش مصنوعی گوگل", href: "/services/gemini", icon: "✨", color: "text-blue-600" },
   { name: "گراک", nameEn: "Grok", description: "هوش مصنوعی ایکس", href: "/services/grok", icon: "⚡", color: "text-slate-700" },
   { name: "کرسور", nameEn: "Cursor", description: "کدنویسی با AI", href: "/services/cursor", icon: "💻", color: "text-indigo-600" },
@@ -169,10 +169,10 @@ const ShopHeader = () => {
               )}
             </div>
 
-            <Link
-              to="/blog"
-              className="px-3 py-2 rounded-full text-sm text-muted-foreground hover:text-foreground hover:bg-secondary"
-            >
+            <Link to="/about" className="px-3 py-2 rounded-full text-sm text-muted-foreground hover:text-foreground hover:bg-secondary">
+              درباره ما
+            </Link>
+            <Link to="/blog" className="px-3 py-2 rounded-full text-sm text-muted-foreground hover:text-foreground hover:bg-secondary">
               وبلاگ
             </Link>
             <Link
@@ -266,6 +266,10 @@ const ShopHeader = () => {
                 <Link to="/blog" className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-secondary" onClick={() => setIsMobileMenuOpen(false)}>
                   <Info className="w-5 h-5 text-muted-foreground" />
                   <span className="font-medium">وبلاگ</span>
+                </Link>
+                <Link to="/about" className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-secondary" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Info className="w-5 h-5 text-muted-foreground" />
+                  <span className="font-medium">درباره ما</span>
                 </Link>
                 <Link to="/contact" className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-secondary" onClick={() => setIsMobileMenuOpen(false)}>
                   <Phone className="w-5 h-5 text-muted-foreground" />

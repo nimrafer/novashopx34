@@ -6,7 +6,7 @@ export const organizationSchema = {
   "alternateName": ["نوا ای آی شاپ", "Nova Shop", "نوا"],
   "url": "https://nova-shop.co",
   "logo": "https://nova-shop.co/nova-logo.jpeg",
-  "description": "فروشگاه تخصصی اکانت‌های پریمیوم هوش مصنوعی در ایران - خرید اشتراک ChatGPT، Gemini، Grok، Perplexity و Cursor با تحویل فوری و پشتیبانی دائمی",
+  "description": "فروشگاه تخصصی اکانت‌های پریمیوم هوش مصنوعی در ایران - خرید اشتراک چت جی پی تی (ChatGPT)، جمینای (Gemini)، گراک (Grok)، پرپلکسیتی (Perplexity) و کرسور (Cursor) با تحویل فوری و پشتیبانی دائمی",
   "foundingDate": "2022",
   "address": {
     "@type": "PostalAddress",
@@ -17,12 +17,12 @@ export const organizationSchema = {
     "@type": "ContactPoint",
     "contactType": "customer service",
     "availableLanguage": ["Persian", "English"],
-    "url": "https://t.me/Nova_AI_Support",
+    "url": "https://t.me/Nova_Ai_Support",
     "areaServed": "IR"
   },
   "sameAs": [
-    "https://t.me/nova_ai_shop",
-    "https://t.me/Nova_AI_Support"
+    "https://t.me/Nova_Ai_Shop",
+    "https://t.me/Nova_Ai_Support"
   ]
 };
 
@@ -33,7 +33,7 @@ export const websiteSchema = {
   "name": "نوا شاپ - Nova AI Shop",
   "alternateName": "فروشگاه نوا",
   "url": "https://nova-shop.co",
-  "description": "خرید اکانت‌های پریمیوم هوش مصنوعی ChatGPT، Gemini، Grok، Perplexity، Cursor با تحویل فوری و پشتیبانی دائمی",
+  "description": "خرید اکانت‌های پریمیوم هوش مصنوعی چت جی پی تی (ChatGPT)، جمینای (Gemini)، گراک (Grok)، پرپلکسیتی (Perplexity)، کرسور (Cursor) با تحویل فوری و پشتیبانی دائمی",
   "inLanguage": "fa-IR",
   "publisher": {
     "@type": "Organization",
@@ -154,14 +154,16 @@ export const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "نوا شاپ - Nova AI Shop",
-  "description": "فروشگاه آنلاین اکانت‌های پریمیوم هوش مصنوعی - خرید ChatGPT، Gemini، Grok، Perplexity، Cursor",
+  "description": "فروشگاه آنلاین اکانت‌های پریمیوم هوش مصنوعی - خرید چت جی پی تی (ChatGPT)، جمینای (Gemini)، گراک (Grok)، پرپلکسیتی (Perplexity)، کرسور (Cursor)",
   "url": "https://nova-shop.co",
-  "telephone": "+98",
+  "telephone": "+98 999 970 8896",
   "image": "https://nova-shop.co/nova-logo.jpeg",
   "address": {
     "@type": "PostalAddress",
     "addressCountry": "IR",
-    "addressLocality": "ایران"
+    "addressLocality": "تهران",
+    "streetAddress": "خیابان انقلاب، خیابان ۱۹ آذر - پلاک ۳۱",
+    "postalCode": "11367"
   },
   "geo": {
     "@type": "GeoCoordinates",

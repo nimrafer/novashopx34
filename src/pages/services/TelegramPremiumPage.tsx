@@ -124,7 +124,7 @@ const TelegramPremiumPage = () => {
       <ServicePageLayout
         serviceId="telegram_premium"
         icon={Star}
-        logoSrc="/logos/telegram.svg"
+        logoSrc="/logos/telegram.png"
         title="تلگرام پرمیوم"
         subtitle="ارتقای حساب کاربری"
         description="تلگرام پرمیوم مجموعه‌ای از امکانات ویژه و انحصاری است که تجربه استفاده از تلگرام را برای شما متحول می‌کند!"

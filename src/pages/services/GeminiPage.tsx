@@ -1,4 +1,5 @@
-import { Sparkles, Clock, RefreshCw, Zap, Headphones, Wifi, Database } from "lucide-react";
+import { Sparkles, Headphones, RefreshCw, Zap } from "lucide-react";
+import { Link } from "react-router-dom";
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
 import { usePricesContext } from "@/contexts/PricesContext";
@@ -8,310 +9,148 @@ const GeminiPage = () => {
   const { getPrice } = usePricesContext();
 
   const features = [
-    "دسترسی به Gemini 3 Pro برای تحلیل‌های سنگین",
-    "دسترسی به Deep Research برای تحقیقات عمیق",
-    "یکپارچه با اکوسیستم گوگل (Gmail, Docs, Drive, Photos)",
-    "۲ ترابایت فضای ابری Google One",
-    "دسترسی به Veo 3 در Gemini و Flow",
-    "پشتیبانی از Veo 3.1 در اکوسیستم توسعه‌دهنده گوگل",
-    "NotebookLM با سقف بالاتر برای تحقیقات",
-    "Gemini Code Assist برای برنامه‌نویسان",
-    "دسترسی به Google AI Studio",
-    "تحلیل تصویر، صدا و ویدیو پیشرفته",
-    "پشتیبانی از زبان فارسی",
-    "قابل فعال‌سازی روی Gmail شخصی شما",
-    "تضمین جایگزینی در صورت مشکل",
-    "پشتیبانی ۲۴ ساعته واقعی",
+    "دسترسی به نانو بنانا پرو (Nano Banana Pro) برای تولید و ادیت تصویر حرفه ای",
+    "دسترسی به Veo 3.1 برای تولید ویدیو و تولید محتوای چندرسانه ای",
+    "دسترسی به Flow برای ساخت صحنه های سینمایی با Veo 3.1",
+    "دسترسی به Jules گوگل برای کمک در کدنویسی و تسک های توسعه",
+    "دسترسی به NoteBookLLM (NotebookLM) برای خلاصه سازی و تحلیل منابع",
+    "پشتیبانی از ورودی چندحالته: متن، تصویر، فایل و سناریوهای ویدیویی",
+    "ادغام با سرویس های گوگل مثل Drive و Docs بر اساس پلن انتخابی",
+    "تولید محتوای چندزبانه و ترجمه با کیفیت بالا",
+    "تحلیل و خلاصه سازی اسناد طولانی برای کارهای آموزشی و حرفه ای",
+    "برداشته شدن بخش زیادی از محدودیت های نسخه رایگان و دسترسی پایدارتر",
+    "مناسب ایده پردازی، طراحی، تحقیق و تولید محتوای روزانه",
+    "تحویل سریع سفارش و فعال سازی در کوتاه ترین زمان",
+    "پشتیبانی فارسی برای راه اندازی و استفاده بهتر",
+    "ارسال راهنمای شروع بعد از خرید",
   ];
 
   const plans = [
     {
       id: "gem_month",
-      name: "پلن یک‌ماهه",
-      duration: "۱ ماهه",
+      name: "پلن یک ماهه",
+      duration: "یک ماهه",
       price: getPrice("gem_month"),
       priceKey: "gem_month",
-      features: [
-        "اکانت کاملاً اختصاصی",
-        "تمام امکانات Gemini Pro",
-        "فعال‌سازی روی Gmail شما",
-      ],
+      features: ["اکانت اختصاصی", "مناسب شروع سریع", "فعال سازی با پشتیبانی فارسی"],
     },
     {
       id: "gem_3month",
-      name: "پلن سه‌ماهه",
-      duration: "۳ ماهه",
+      name: "پلن سه ماهه",
+      duration: "سه ماهه",
       price: getPrice("gem_3month"),
       priceKey: "gem_3month",
       popular: true,
-      features: [
-        "اکانت کاملاً اختصاصی",
-        "صرفه‌جویی قابل توجه",
-        "مناسب استفاده طولانی‌مدت",
-      ],
+      features: ["استفاده پایدارتر", "صرفه اقتصادی بیشتر", "مناسب کار مداوم"],
     },
     {
       id: "gem_6month",
-      name: "پلن شش‌ماهه",
-      duration: "۶ ماهه",
+      name: "پلن شش ماهه",
+      duration: "شش ماهه",
       price: getPrice("gem_6month"),
       priceKey: "gem_6month",
-      features: [
-        "اکانت کاملاً اختصاصی",
-        "بهترین ارزش برای پول",
-        "صرفه‌جویی بیشتر",
-      ],
+      features: ["مناسب پروژه های بلندمدت", "صرفه جویی بیشتر", "پشتیبانی مستمر"],
     },
     {
       id: "gem_year_personal",
       name: "پلن یکساله (جیمیل شخصی)",
-      duration: "۱۲ ماهه",
+      duration: "یکساله",
       price: getPrice("gem_year_personal"),
       priceKey: "gem_year_personal",
-      features: [
-        "اکانت کاملاً اختصاصی",
-        "فعالسازی مستقیم روی Gmail شخصی",
-        "مناسب استفاده حرفه‌ای بلندمدت",
-      ],
+      features: ["فعال سازی روی جیمیل شخصی", "اکانت اختصاصی", "بهترین انتخاب حرفه ای"],
     },
     {
       id: "gem_year_ready",
       name: "پلن یکساله (جیمیل آماده)",
-      duration: "۱۲ ماهه",
+      duration: "یکساله",
       price: getPrice("gem_year_ready"),
       priceKey: "gem_year_ready",
-      features: [
-        "تحویل سریع با اکانت آماده",
-        "تمام امکانات Gemini Pro",
-        "مناسب راه‌اندازی فوری",
-      ],
+      features: ["تحویل سریع با جیمیل آماده", "مناسب شروع فوری", "پشتیبانی کامل"],
     },
   ];
 
   const comparison = [
-    { feature: "دسترسی به Gemini 3 Pro", free: "محدود", premium: "کامل" },
-    { feature: "Deep Research", free: false, premium: true },
-    { feature: "فضای Google One", free: "۱۵ گیگ", premium: "۲ ترابایت" },
-    { feature: "ساخت ویدیو با Veo", free: "محدود", premium: "سطح Pro" },
-    { feature: "NotebookLM", free: "محدود", premium: "نامحدود" },
-    { feature: "Google AI Studio", free: "محدود", premium: "کامل" },
-    { feature: "Code Assist", free: false, premium: true },
-    { feature: "یکپارچگی با Workspace", free: false, premium: true },
-    { feature: "پشتیبانی ویژه", free: false, premium: true },
+    { feature: "نانو بنانا پرو (Nano Banana Pro)", free: "ندارد", premium: "دارد" },
+    { feature: "Veo 3.1 و Flow برای ویدیو", free: "ندارد", premium: "دارد" },
+    { feature: "ابزار Jules برای کدنویسی", free: "ندارد", premium: "دارد" },
+    { feature: "دسترسی به NoteBookLLM (NotebookLM)", free: "محدود", premium: "کامل تر" },
+    { feature: "تحلیل اسناد طولانی", free: "محدود", premium: "پیشرفته" },
+    { feature: "ادغام با ابزارهای گوگل", free: "پایه", premium: "کامل تر" },
+    { feature: "سطح لیمیت و سقف استفاده", free: "محدود", premium: "بسیار بالاتر" },
+    { feature: "تولید تصویر و محتوای ترکیبی", free: "پایه", premium: "سطح حرفه ای" },
+    { feature: "پشتیبانی خرید", free: false, premium: true },
   ];
 
   const faqs = [
     {
-      question: "Gemini چیست و چه تفاوتی با ChatGPT دارد؟",
+      question: "تفاوت Gemini Pro و Gemini Ultra چیست؟",
       answer:
-        "هوش مصنوعی جمینی، جدیدترین مدل زبان بزرگ و چندوجهی گوگل است که توسط تیم دیپ‌مایند توسعه یافته و می‌تواند متن، کد، تصویر، صدا و ویدیو را به طور یکپارچه درک کند. با سرویس‌های گوگل یکپارچه است و برای کسانی که زیاد از Gmail, Drive و Docs استفاده می‌کنند بهترین انتخاب است.",
+        "Gemini Pro برای بیشتر کاربران حرفه ای کافی است و تعادل خوبی بین سرعت و کیفیت می دهد. Gemini Ultra برای سناریوهای سنگین تر و نیازهای سازمانی مناسب تر است.",
     },
     {
-      question: "Deep Research چیست؟",
+      question: "آیا روی جیمیل شخصی فعال می شود؟",
       answer:
-        "Deep Research یک قابلیت پیشرفته است که به Gemini اجازه می‌دهد تحقیقات عمیق انجام دهد، منابع متعدد را بررسی کند و گزارش جامع ارائه دهد. مناسب تحقیقات دانشگاهی، تولید محتوای تخصصی و تحلیل‌های پیچیده.",
+        "بله. بر اساس پلن انتخابی، فعال سازی می تواند روی جیمیل شخصی شما انجام شود.",
     },
     {
-      question: "۲ ترابایت فضا برای چیست؟",
+      question: "این سرویس برای چه کارهایی کاربردی است؟",
       answer:
-        "این فضا در Google Drive, Photos و Gmail قابل استفاده است. می‌توانید فایل‌ها، عکس‌ها و ویدیوهایتان را ذخیره کنید. همچنین بک‌آپ گوشی هم در این فضا ذخیره می‌شود. این فضا به تنهایی ارزش ماهانه ۱۰ دلار دارد!",
+        "برای نوشتن متن، ایده پردازی، تحلیل فایل، خلاصه سازی مقاله، تولید تصویر با Nano Banana Pro، ویدیو با Veo 3.1 و Flow و همچنین کمک کدنویسی با Jules بسیار مناسب است.",
     },
     {
-      question: "آیا روی Gmail شخصی من فعال می‌شود؟",
+      question: "آیا NotebookLM، Veo 3.1 و Jules هم شامل می شود؟",
       answer:
-        "بله، در پلن‌های یکساله می‌توانید اشتراک را روی Gmail شخصی خودتان فعال کنید و کاملاً اختصاصی است.",
+        "بله، در پلن های پرمیوم دسترسی به NoteBookLLM (NotebookLM)، Veo 3.1، Flow و Jules لحاظ می شود. دسترسی نهایی ممکن است بر اساس منطقه و پلن شما متفاوت باشد.",
     },
     {
-      question: "تخفیف دانشجویی دارید؟",
-      answer:
-        "بله! برای دانشجویان تخفیف ویژه داریم. پلن‌های ماهانه، ۳ ماهه، ۶ ماهه و یکساله با قیمت‌های فوق‌العاده. با پشتیبانی تماس بگیرید.",
+      question: "زمان تحویل سفارش چقدر است؟",
+      answer: "سفارش شما سریع ثبت می شود و فعال سازی در کوتاه ترین زمان انجام می گردد.",
     },
   ];
 
-  // Extra content sections
   const extraContent = (
     <>
-      {/* Stats Section */}
       <section className="py-12">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="glass rounded-2xl p-8 text-center">
-              <div className="text-4xl font-bold text-blue-500 mb-2">+۱۰,۰۰۰</div>
-              <div className="text-lg font-semibold mb-1">کاربر راضی</div>
-              <p className="text-muted-foreground text-sm">از سرویس‌های ما استفاده می‌کنند</p>
-            </div>
-            <div className="glass rounded-2xl p-8 text-center">
-              <div className="text-4xl font-bold text-blue-500 mb-2">۲ TB</div>
-              <div className="text-lg font-semibold mb-1">فضای ابری</div>
-              <p className="text-muted-foreground text-sm">با هر اشتراک Gemini Pro</p>
-            </div>
-            <div className="glass rounded-2xl p-8 text-center">
-              <div className="text-4xl font-bold text-blue-500 mb-2">۱۰۰٪</div>
-              <div className="text-lg font-semibold mb-1">تضمین رضایت</div>
-              <p className="text-muted-foreground text-sm">گارانتی تعویض و پشتیبانی کامل</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Student Discount Section */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-6">🎓 تخفیف دانشجویی</h2>
-          <div className="glass rounded-3xl p-8 max-w-4xl" style={{ background: "linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, transparent 50%)" }}>
-            <p className="text-muted-foreground mb-6">
-              با ارائه کارت دانشجویی معتبر، از تخفیف‌های ویژه بهره‌مند شوید:
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center p-4 bg-background/50 rounded-xl">
-                <div className="text-2xl font-bold text-blue-500">{new Intl.NumberFormat("fa-IR").format(getPrice("gem_student_month") / 1000)}</div>
-                <div className="text-sm text-muted-foreground">هزار تومان / ماهانه</div>
-              </div>
-              <div className="text-center p-4 bg-background/50 rounded-xl">
-                <div className="text-2xl font-bold text-blue-500">{new Intl.NumberFormat("fa-IR").format(getPrice("gem_student_3month") / 1000)}</div>
-                <div className="text-sm text-muted-foreground">هزار تومان / ۳ ماهه</div>
-              </div>
-              <div className="text-center p-4 bg-background/50 rounded-xl">
-                <div className="text-2xl font-bold text-blue-500">{new Intl.NumberFormat("fa-IR").format(getPrice("gem_student_6month") / 1000)}</div>
-                <div className="text-sm text-muted-foreground">هزار تومان / ۶ ماهه</div>
-              </div>
-              <div className="text-center p-4 bg-background/50 rounded-xl">
-                <div className="text-2xl font-bold text-blue-500">{new Intl.NumberFormat("fa-IR").format(getPrice("gem_student_year") / 1000)}</div>
-                <div className="text-sm text-muted-foreground">هزار تومان / یکساله</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* What is Gemini Section */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-6">🤖 Gemini چیست؟</h2>
+          <h2 className="text-2xl font-bold mb-6">این سرویس برای چه کسانی مناسب است؟</h2>
           <div className="glass rounded-3xl p-8 max-w-4xl">
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              هوش مصنوعی جمینی، جدیدترین مدل زبان بزرگ و چندوجهی گوگل است که توسط تیم دیپ‌مایند توسعه یافته و می‌تواند متن، کد، تصویر، صدا و ویدیو را به طور یکپارچه درک کند.
-            </p>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              خانواده Gemini در نسخه‌های مختلف برای استفاده روزمره تا سناریوهای حرفه‌ای ارائه می‌شود و در اکوسیستم گوگل به‌صورت عمیق یکپارچه است.
-            </p>
-            <p className="text-muted-foreground leading-relaxed">
-              جمینی با قابلیت‌های استدلال پیشرفته و کدنویسی، در حال ادغام در تمام محصولات گوگل از جمله جستجو، اندروید و ورکرسپیس است تا تجربه‌ای هوشمندتر و یکپارچه‌تر فراهم کند.
-            </p>
+            <ul className="space-y-3 text-muted-foreground leading-8">
+              <li>• کاربرانی که از Gmail، Google Docs و Google Drive استفاده می کنند</li>
+              <li>• طراحان و خالقان محتوا که متن، تصویر و ویدیو را ترکیب می کنند</li>
+              <li>• دانشجویان و پژوهشگران برای خلاصه سازی مقالات و مستندات</li>
+              <li>• برنامه نویس هایی که از Jules برای تسریع توسعه استفاده می کنند</li>
+              <li>• کسب و کارهایی که به هوش مصنوعی چندحالته نیاز دارند</li>
+            </ul>
           </div>
         </div>
       </section>
 
-      {/* Features Deep Dive */}
       <section className="py-12">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-8">🌟 قابلیت‌های کلیدی Gemini Pro</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="glass rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
-                  <Database className="w-6 h-6 text-blue-500" />
-                </div>
-                <h3 className="font-bold text-lg">۲ ترابایت فضای ابری</h3>
-              </div>
-              <p className="text-muted-foreground text-sm">
-                ذخیره‌سازی نامحدود عکس، ویدیو و فایل در Google Drive و Photos. بک‌آپ کامل گوشی و دسترسی از هر دستگاه.
-              </p>
-            </div>
-            <div className="glass rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
-                  <Sparkles className="w-6 h-6 text-blue-500" />
-                </div>
-                <h3 className="font-bold text-lg">Deep Research</h3>
-              </div>
-              <p className="text-muted-foreground text-sm">
-                تحقیقات عمیق با بررسی منابع متعدد. تولید گزارش‌های جامع برای تحقیقات دانشگاهی و محتوای تخصصی.
-              </p>
-            </div>
-            <div className="glass rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
-                  <Zap className="w-6 h-6 text-blue-500" />
-                </div>
-                <h3 className="font-bold text-lg">ساخت ویدیو با Veo</h3>
-              </div>
-              <p className="text-muted-foreground text-sm">
-                تولید ویدیو با هوش مصنوعی Veo 3 و 3.1. ساخت ویدیوهای حرفه‌ای از متن یا تصویر.
-              </p>
-            </div>
-            <div className="glass rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
-                  <RefreshCw className="w-6 h-6 text-blue-500" />
-                </div>
-                <h3 className="font-bold text-lg">یکپارچگی با گوگل</h3>
-              </div>
-              <p className="text-muted-foreground text-sm">
-                کار مستقیم با Gmail, Docs, Sheets و Drive. خلاصه‌سازی ایمیل‌ها، نوشتن متن و تحلیل داده‌ها.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why Us Section */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-8">🏆 چرا ما بهترین انتخاب هستیم؟</h2>
+          <h2 className="text-2xl font-bold mb-8">مزیت خرید از نوا شاپ</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="glass rounded-2xl p-6 text-center">
+              <div className="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-4">
+                <Zap className="w-8 h-8 text-blue-500" />
+              </div>
+              <h3 className="font-bold text-lg mb-2">تحویل سریع</h3>
+              <p className="text-muted-foreground text-sm">فعال سازی سفارش شما با سرعت بالا انجام می شود.</p>
+            </div>
             <div className="glass rounded-2xl p-6 text-center">
               <div className="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-4">
                 <Headphones className="w-8 h-8 text-blue-500" />
               </div>
-              <h3 className="font-bold text-lg mb-2">پشتیبانی ۲۴ ساعته</h3>
-              <p className="text-muted-foreground text-sm">
-                تیم پشتیبانی متخصص و همیشه در دسترس
-              </p>
+              <h3 className="font-bold text-lg mb-2">پشتیبانی فارسی</h3>
+              <p className="text-muted-foreground text-sm">از ثبت سفارش تا استفاده روزانه، پاسخگوی شما هستیم.</p>
             </div>
             <div className="glass rounded-2xl p-6 text-center">
               <div className="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-4">
                 <RefreshCw className="w-8 h-8 text-blue-500" />
               </div>
-              <h3 className="font-bold text-lg mb-2">تضمین جایگزینی</h3>
+              <h3 className="font-bold text-lg mb-2">راهنمای شروع</h3>
               <p className="text-muted-foreground text-sm">
-                در صورت هر مشکلی، اکانت جدید دریافت می‌کنید
+                بعد از خرید، آموزش کوتاه استفاده را دریافت می کنید. <Link to="/support" className="text-primary hover:underline">مشاهده راهنما</Link>
               </p>
-            </div>
-            <div className="glass rounded-2xl p-6 text-center">
-              <div className="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-4">
-                <Zap className="w-8 h-8 text-blue-500" />
-              </div>
-              <h3 className="font-bold text-lg mb-2">تحویل فوری</h3>
-              <p className="text-muted-foreground text-sm">
-                بلافاصله پس از پرداخت، اکانت فعال می‌شود
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How to Buy Section */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-8">📋 نحوه خرید در ۳ مرحله</h2>
-          <div className="glass rounded-3xl p-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="w-14 h-14 rounded-full bg-blue-500 text-background font-bold text-2xl flex items-center justify-center mx-auto mb-4">۱</div>
-                <h3 className="font-bold text-lg mb-2">انتخاب پلن</h3>
-                <p className="text-muted-foreground text-sm">پلن مناسب خود را انتخاب کنید</p>
-              </div>
-              <div className="text-center">
-                <div className="w-14 h-14 rounded-full bg-blue-500 text-background font-bold text-2xl flex items-center justify-center mx-auto mb-4">۲</div>
-                <h3 className="font-bold text-lg mb-2">ثبت سفارش در سایت</h3>
-                <p className="text-muted-foreground text-sm">پلن را در سایت ثبت کنید و وضعیت را از پنل کاربری ببینید</p>
-              </div>
-              <div className="text-center">
-                <div className="w-14 h-14 rounded-full bg-blue-500 text-background font-bold text-2xl flex items-center justify-center mx-auto mb-4">۳</div>
-                <h3 className="font-bold text-lg mb-2">دسترسی فوری</h3>
-                <p className="text-muted-foreground text-sm">پس از پرداخت، اکانت همان لحظه فعال می‌شود</p>
-              </div>
             </div>
           </div>
         </div>
@@ -319,49 +158,50 @@ const GeminiPage = () => {
     </>
   );
 
-  const lowestPrice = Math.min(...plans.map(p => p.price));
+  const lowestPrice = Math.min(...plans.map((p) => p.price));
 
-  // Generate SEO schemas
   const faqSchema = createFAQSchema(faqs);
   const breadcrumbSchema = createBreadcrumbSchema([
     { name: "خانه", url: "/" },
-    { name: "خرید Gemini Pro", url: "/services/gemini" }
+    { name: "خرید اشتراک Gemini", url: "/services/gemini" },
   ]);
   const productSchema = createProductSchema({
-    name: "اشتراک Gemini Pro گوگل",
-    description: "خرید اشتراک Gemini Pro گوگل با ۲ ترابایت فضای ابری Google One، Deep Research، Veo 3 و یکپارچگی کامل با Gmail, Drive و Docs.",
+    name: "خرید اشتراک Gemini",
+    description:
+      "خرید اشتراک Gemini Pro و Gemini Ultra با دسترسی به Nano Banana Pro، NoteBookLLM، Veo 3.1، Flow و Jules همراه با پشتیبانی فارسی و تحویل سریع.",
     price: lowestPrice,
     url: "/services/gemini",
-    image: "https://nova-shop.co/logos/gemini.svg",
+    image: "https://nova-shop.co/logos/gemini.png",
     category: "اشتراک هوش مصنوعی",
-    sku: "GEM-PRO",
+    sku: "GEM-PRO-ULTRA",
     ratingValue: 4.8,
-    reviewCount: 890
+    reviewCount: 890,
   });
 
   return (
     <>
       <Helmet>
-        <title>خرید اشتراک Gemini Pro | ۲ ترابایت فضا + Deep Research - نوا شاپ</title>
+        <title>خرید اشتراک Gemini | هوش مصنوعی گوگل برای متن، تصویر و تحلیل داده + دسترسی به نانو بنانا پرو 🍌 + NoteBookLLM و Veo3.1</title>
         <meta
           name="description"
-          content="خرید اشتراک Gemini Pro گوگل با ۲ ترابایت فضای ابری. یکپارچه با Gmail, Drive و Docs. دسترسی به Veo 3/3.1، Deep Research و پشتیبانی ۲۴ ساعته."
+          content="خرید اشتراک Gemini با دسترسی به نانو بنانا پرو، NoteBookLLM، Veo 3.1، Flow و Jules گوگل. مناسب متن، تصویر، ویدیو، تحلیل داده و کدنویسی با پشتیبانی فارسی."
         />
-        <meta name="keywords" content="خرید Gemini, اشتراک Gemini Pro, هوش مصنوعی گوگل, Google One, Deep Research, Veo, خرید جمینی ایران" />
+        <meta
+          name="keywords"
+          content="خرید اشتراک Gemini, خرید اکانت Gemini, Gemini Pro, Gemini Ultra, Nano Banana Pro, NoteBookLLM, Veo 3.1, Jules"
+        />
         <link rel="canonical" href="https://nova-shop.co/services/gemini" />
 
-        {/* Structured Data */}
-        <script type="application/ld+json">
-          {JSON.stringify([productSchema, faqSchema, breadcrumbSchema])}
-        </script>
+        <script type="application/ld+json">{JSON.stringify([productSchema, faqSchema, breadcrumbSchema])}</script>
       </Helmet>
+
       <ServicePageLayout
         serviceId="gemini"
         icon={Sparkles}
-        logoSrc="/logos/gemini.svg"
-        title="Gemini Pro"
-        subtitle="هوش مصنوعی گوگل"
-        description="Gemini Pro سرویس پریمیوم هوش مصنوعی گوگل است که با Gemini 3 Pro، Deep Research، Veo و یکپارچگی کامل با Workspace برای کار حرفه‌ای، تحقیق و تولید محتوا طراحی شده است."
+        logoSrc="/logos/gemini.png"
+        title="خرید اشتراک Gemini | هوش مصنوعی گوگل برای متن، تصویر و تحلیل داده + دسترسی به نانو بنانا پرو 🍌 + NoteBookLLM و Veo3.1"
+        subtitle="Gemini Pro / Gemini Ultra"
+        description="با خرید اشتراک Gemini، از هوش مصنوعی چندحالته گوگل برای نوشتن متن، تولید تصویر، تحلیل داده، تولید ویدیو با Veo 3.1 و ساخت صحنه های سینمایی با Flow استفاده کنید. در این پلن ها دسترسی به Nano Banana Pro، NoteBookLLM (NotebookLM) و ابزار Jules گوگل برای کدنویسی نیز لحاظ شده و محدودیت های نسخه رایگان تا حد زیادی برداشته می شود."
         color="#3B82F6"
         features={features}
         plans={plans}

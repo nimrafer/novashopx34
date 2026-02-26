@@ -1,10 +1,10 @@
 {
   "cgpt_pro_30day": {
-    "name": "ChatGPT Pro 30 روزه",
+    "name": "چت جی پی تی (ChatGPT) Pro-Business 30 روزه",
     "price": 499000
   },
   "cgpt_pro_37day": {
-    "name": "ChatGPT Pro 37 روزه",
+    "name": "چت جی پی تی (ChatGPT) Pro-Business 37 روزه",
     "price": 599000
   },
   "cgpt_plus_team": {
@@ -20,7 +20,7 @@
     "price": 0
   },
   "cgpt_pro_shared": {
-    "name": "ChatGPT Pro اشتراکی",
+    "name": "چت جی پی تی (ChatGPT) Pro-Business اشتراکی",
     "price": 427000
   },
   "gem_month": {

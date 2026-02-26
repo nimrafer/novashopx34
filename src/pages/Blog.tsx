@@ -20,15 +20,15 @@ const Blog = () => {
     <>
       <SEOHead
         title="بلاگ نوا | مقالات آموزشی هوش مصنوعی"
-        description="مقالات آموزشی درباره هوش مصنوعی، ChatGPT، Claude، Cursor و سایر ابزارهای AI. راهنمای استفاده و نکات کاربردی."
-        keywords="بلاگ هوش مصنوعی، آموزش ChatGPT، آموزش Claude، مقالات AI، هوش مصنوعی فارسی"
-        canonicalUrl="https://nova-ai.shop/blog"
+        description="مقالات آموزشی و مقایسه ای درباره چت جی پی تی (ChatGPT)، جمینای (Gemini)، پرپلکسیتی (Perplexity)، گراک (Grok) و ابزارهای کاربردی هوش مصنوعی."
+        keywords="بلاگ هوش مصنوعی، آموزش چت جی پی تی، آموزش Gemini، آموزش Perplexity، مقالات AI فارسی"
+        canonicalUrl="https://nova-shop.co/blog"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "Blog",
           "name": "بلاگ نوا",
           "description": "مقالات آموزشی درباره هوش مصنوعی و ابزارهای AI",
-          "url": "https://nova-ai.shop/blog",
+          "url": "https://nova-shop.co/blog",
           "publisher": {
             "@type": "Organization",
             "name": "Nova AI Shop"
@@ -140,19 +140,19 @@ const Blog = () => {
               <div className="prose prose-invert max-w-none text-muted-foreground text-sm leading-relaxed space-y-4">
                 <p>
                   در بلاگ نوا، جدیدترین مقالات آموزشی درباره ابزارهای هوش مصنوعی را می‌خوانید. از آموزش
-                  <Link to="/services/chatgpt" className="text-primary hover:underline mx-1 font-medium">ChatGPT</Link>
+                  <Link to="/services/chatgpt" className="text-primary hover:underline mx-1 font-medium">چت جی پی تی (ChatGPT)</Link>
                   و
-                  <Link to="/services/claude" className="text-primary hover:underline mx-1 font-medium">Claude</Link>
+                  <Link to="/services/gemini" className="text-primary hover:underline mx-1 font-medium">جمینای (Gemini)</Link>
                   گرفته تا نکات پیشرفته استفاده از
-                  <Link to="/services/cursor" className="text-primary hover:underline mx-1 font-medium">Cursor</Link>
+                  <Link to="/services/cursor" className="text-primary hover:underline mx-1 font-medium">کرسور (Cursor)</Link>
                   برای برنامه‌نویسی.
                 </p>
                 <p>
                   همچنین مقالات مقایسه‌ای بین ابزارهای مختلف مثل
-                  <Link to="/services/gemini" className="text-primary hover:underline mx-1 font-medium">Gemini</Link>،
-                  <Link to="/services/grok" className="text-primary hover:underline mx-1 font-medium">Grok</Link>
+                  <Link to="/services/gemini" className="text-primary hover:underline mx-1 font-medium">جمینای (Gemini)</Link>،
+                  <Link to="/services/grok" className="text-primary hover:underline mx-1 font-medium">گراک (Grok)</Link>
                   و
-                  <Link to="/services/perplexity" className="text-primary hover:underline mx-1 font-medium">Perplexity</Link>
+                  <Link to="/services/perplexity" className="text-primary hover:underline mx-1 font-medium">پرپلکسیتی (Perplexity)</Link>
                   را منتشر می‌کنیم تا بتوانید بهترین انتخاب را داشته باشید.
                 </p>
                 <p>

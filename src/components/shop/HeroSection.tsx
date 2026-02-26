@@ -1,7 +1,6 @@
 import { Sparkles, Bot, ShieldCheck, Clock3, WalletCards, BrainCircuit } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const SUPPORT_USERNAME = "Nova_AI_Support";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
@@ -36,13 +35,8 @@ const HeroSection = () => {
               >
                 مشاهده اشتراک‌ها و قیمت
               </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="h-12 px-7 border-border"
-                onClick={() => window.open(`https://t.me/${SUPPORT_USERNAME}`, "_blank")}
-              >
-                مشاوره قبل از خرید
+              <Button size="lg" variant="outline" className="h-12 px-7 border-border" asChild>
+                <Link to="/support">مشاوره قبل از خرید</Link>
               </Button>
             </div>
 
@@ -56,8 +50,8 @@ const HeroSection = () => {
                 <p className="text-xs text-muted-foreground mt-1">ورود مستقیم به صف فعال‌سازی</p>
               </div>
               <div className="glass rounded-2xl p-4">
-                <p className="text-2xl font-black text-accent">پشتیبانی واقعی</p>
-                <p className="text-xs text-muted-foreground mt-1">پاسخ‌گویی روزانه و مستمر</p>
+                <p className="text-2xl font-black text-accent">پشتیبانی فوری</p>
+                <p className="text-xs text-muted-foreground mt-1">پاسخگویی ساعتی و مستمر</p>
               </div>
             </div>
           </div>
@@ -96,8 +90,8 @@ const HeroSection = () => {
               <div className="rounded-2xl bg-secondary/80 border border-border p-4 flex items-start gap-3">
                 <ShieldCheck className="w-5 h-5 mt-0.5 text-gemini" />
                 <div>
-                  <p className="font-semibold">ساختار آماده برای پنل ادمین</p>
-                  <p className="text-sm text-muted-foreground">مدیریت سفارش‌ها، تغییر وضعیت و رسیدگی حرفه‌ای در پنل مدیریت.</p>
+                  <p className="font-semibold">پشتیبانی ۲۴/۷ ساعته در تلگرام</p>
+                  <p className="text-sm text-muted-foreground">پیگیری فوری و در ارتباط بودن با کارشناسان همیشه آنلاین ما در تلگرام برای هر گونه سوال یا ابهام.</p>
                 </div>
               </div>
             </div>
