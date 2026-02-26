@@ -28,16 +28,16 @@ const SEOHead = ({
   description,
   keywords,
   canonicalUrl,
-  ogImage = "https://storage.googleapis.com/gpt-engineer-file-uploads/2BLhx4pGbbVjvWowaDBmvYeT3Ec2/social-images/social-1758825622907-Linea OG Image.png",
+  ogImage = "https://nova-shop.co/nova-logo.jpeg",
   ogType = "website",
   jsonLd,
   noindex = false,
   article,
   product,
 }: SEOHeadProps) => {
-  const siteUrl = "https://novateam.shop";
+  const siteUrl = "https://nova-shop.co";
   const fullCanonicalUrl = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
-  
+
   // Ensure title is under 60 chars and description under 160 chars
   const optimizedTitle = title.length > 60 ? title.substring(0, 57) + "..." : title;
   const optimizedDescription = description.length > 160 ? description.substring(0, 157) + "..." : description;
@@ -50,7 +50,7 @@ const SEOHead = ({
       <meta name="description" content={optimizedDescription} />
       {keywords && <meta name="keywords" content={keywords} />}
       <link rel="canonical" href={fullCanonicalUrl} />
-      
+
       {/* Open Graph */}
       <meta property="og:title" content={optimizedTitle} />
       <meta property="og:description" content={optimizedDescription} />
@@ -62,7 +62,7 @@ const SEOHead = ({
       <meta property="og:image:alt" content={optimizedTitle} />
       <meta property="og:locale" content="fa_IR" />
       <meta property="og:site_name" content="نوا شاپ - Nova AI Shop" />
-      
+
       {/* Product specific OG tags */}
       {product && (
         <>
@@ -71,7 +71,7 @@ const SEOHead = ({
           <meta property="product:availability" content={product.availability || "in stock"} />
         </>
       )}
-      
+
       {/* Article specific OG tags */}
       {article && (
         <>
@@ -82,7 +82,7 @@ const SEOHead = ({
           {article.tags?.map((tag, i) => <meta key={i} property="article:tag" content={tag} />)}
         </>
       )}
-      
+
       {/* Twitter Card */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={optimizedTitle} />
@@ -91,7 +91,7 @@ const SEOHead = ({
       <meta name="twitter:image:alt" content={optimizedTitle} />
       <meta name="twitter:site" content="@NovaAIShop" />
       <meta name="twitter:creator" content="@NovaAIShop" />
-      
+
       {/* Additional SEO */}
       <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
       <meta name="googlebot" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large"} />
@@ -103,40 +103,40 @@ const SEOHead = ({
       <meta name="copyright" content="Nova AI Shop" />
       <meta name="rating" content="general" />
       <meta name="distribution" content="global" />
-      
+
       {/* Geo Tags */}
       <meta name="geo.region" content="IR" />
       <meta name="geo.placename" content="Iran" />
       <meta name="geo.position" content="35.6892;51.3890" />
       <meta name="ICBM" content="35.6892, 51.3890" />
       <meta name="content-language" content="fa" />
-      
+
       {/* Mobile optimization */}
       <meta name="format-detection" content="telephone=no" />
-      <meta name="theme-color" content="#8B5CF6" />
+      <meta name="theme-color" content="#9FE870" />
       <meta name="mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       <meta name="apple-mobile-web-app-title" content="نوا شاپ" />
       <meta name="application-name" content="نوا شاپ" />
-      <meta name="msapplication-TileColor" content="#8B5CF6" />
+      <meta name="msapplication-TileColor" content="#9FE870" />
       <meta name="msapplication-config" content="/browserconfig.xml" />
-      
+
       {/* Security & Performance */}
       <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
       <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
       <meta name="referrer" content="origin-when-cross-origin" />
-      
+
       {/* Preconnect for performance */}
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       <link rel="dns-prefetch" href="https://www.google-analytics.com" />
       <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-      
+
       {/* Alternate languages (for future) */}
       <link rel="alternate" hrefLang="fa" href={fullCanonicalUrl} />
       <link rel="alternate" hrefLang="x-default" href={fullCanonicalUrl} />
-      
+
       {/* JSON-LD Structured Data */}
       {jsonLd && (
         <script type="application/ld+json">

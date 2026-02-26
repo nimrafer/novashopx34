@@ -4,9 +4,9 @@ export const organizationSchema = {
   "@type": "Organization",
   "name": "نوا شاپ - Nova AI Shop",
   "alternateName": ["نوا ای آی شاپ", "Nova Shop", "نوا"],
-  "url": "https://novateam.shop",
-  "logo": "https://novateam.shop/logos/chatgpt.png",
-  "description": "فروشگاه تخصصی اکانت‌های پریمیوم هوش مصنوعی در ایران - خرید اشتراک ChatGPT، Gemini، Grok، Claude و Cursor با تحویل فوری و پشتیبانی دائمی",
+  "url": "https://nova-shop.co",
+  "logo": "https://nova-shop.co/nova-logo.jpeg",
+  "description": "فروشگاه تخصصی اکانت‌های پریمیوم هوش مصنوعی در ایران - خرید اشتراک ChatGPT، Gemini، Grok، Perplexity و Cursor با تحویل فوری و پشتیبانی دائمی",
   "foundingDate": "2022",
   "address": {
     "@type": "PostalAddress",
@@ -32,8 +32,8 @@ export const websiteSchema = {
   "@type": "WebSite",
   "name": "نوا شاپ - Nova AI Shop",
   "alternateName": "فروشگاه نوا",
-  "url": "https://novateam.shop",
-  "description": "خرید اکانت‌های پریمیوم هوش مصنوعی ChatGPT، Gemini، Grok، Claude، Cursor با تحویل فوری و پشتیبانی دائمی",
+  "url": "https://nova-shop.co",
+  "description": "خرید اکانت‌های پریمیوم هوش مصنوعی ChatGPT، Gemini، Grok، Perplexity، Cursor با تحویل فوری و پشتیبانی دائمی",
   "inLanguage": "fa-IR",
   "publisher": {
     "@type": "Organization",
@@ -43,7 +43,7 @@ export const websiteSchema = {
     "@type": "SearchAction",
     "target": {
       "@type": "EntryPoint",
-      "urlTemplate": "https://novateam.shop/?search={search_term_string}"
+      "urlTemplate": "https://nova-shop.co/?search={search_term_string}"
     },
     "query-input": "required name=search_term_string"
   }
@@ -82,7 +82,7 @@ export const createProductSchema = ({
   "name": name,
   "description": description,
   "image": image,
-  "url": `https://novateam.shop${url}`,
+  "url": `https://nova-shop.co${url}`,
   "sku": sku,
   "category": category || "اشتراک هوش مصنوعی",
   "brand": {
@@ -145,7 +145,7 @@ export const createBreadcrumbSchema = (items: { name: string; url: string }[]) =
     "@type": "ListItem",
     "position": index + 1,
     "name": item.name,
-    "item": `https://novateam.shop${item.url}`
+    "item": `https://nova-shop.co${item.url}`
   }))
 });
 
@@ -154,10 +154,10 @@ export const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "نوا شاپ - Nova AI Shop",
-  "description": "فروشگاه آنلاین اکانت‌های پریمیوم هوش مصنوعی - خرید ChatGPT، Gemini، Grok، Claude، Cursor",
-  "url": "https://novateam.shop",
+  "description": "فروشگاه آنلاین اکانت‌های پریمیوم هوش مصنوعی - خرید ChatGPT، Gemini، Grok، Perplexity، Cursor",
+  "url": "https://nova-shop.co",
   "telephone": "+98",
-  "image": "https://novateam.shop/logos/chatgpt.png",
+  "image": "https://nova-shop.co/nova-logo.jpeg",
   "address": {
     "@type": "PostalAddress",
     "addressCountry": "IR",
@@ -207,7 +207,7 @@ export const createServiceSchema = ({
   "serviceType": category || "اشتراک هوش مصنوعی",
   "name": name,
   "description": description,
-  "url": `https://novateam.shop${url}`,
+  "url": `https://nova-shop.co${url}`,
   "image": image,
   "provider": {
     "@type": "Organization",
@@ -250,7 +250,7 @@ export const createArticleSchema = ({
   "headline": title,
   "description": description,
   "image": image,
-  "url": `https://novateam.shop${url}`,
+  "url": `https://nova-shop.co${url}`,
   "datePublished": datePublished,
   "dateModified": dateModified || datePublished,
   "author": {
@@ -262,12 +262,12 @@ export const createArticleSchema = ({
     "name": "Nova AI Shop",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://novateam.shop/logos/chatgpt.png"
+      "url": "https://nova-shop.co/nova-logo.jpeg"
     }
   },
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": `https://novateam.shop${url}`
+    "@id": `https://nova-shop.co${url}`
   }
 });
 
@@ -279,7 +279,7 @@ export const createItemListSchema = (items: { name: string; url: string; positio
     "@type": "ListItem",
     "position": item.position,
     "name": item.name,
-    "url": `https://novateam.shop${item.url}`
+    "url": `https://nova-shop.co${item.url}`
   }))
 });
 

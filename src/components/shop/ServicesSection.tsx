@@ -1,363 +1,642 @@
-import { Link } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ArrowLeft, Check, Loader2, MessageCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { usePricesContext } from "@/contexts/PricesContext";
-import { ArrowLeft } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
+import { createOrder } from "@/lib/orders";
 
-// Logo paths
+const SUPPORT_URL = "https://t.me/Nova_AI_Support";
+
 const logos = {
-  chatgpt: "/logos/chatgpt.png",
-  gemini: "/logos/gemini.png",
-  grok: "/logos/grok.png",
-  claude: "/logos/claude.png",
-  perplexity: "/logos/perplexity.png",
-  spotify: "/logos/spotify.png",
-  cursor: "/logos/cursor.png",
-  telegram: "/logos/telegram.png",
+  chatgpt: "/logos/chatgpt.svg",
+  gemini: "/logos/gemini.svg",
+  grok: "/logos/grok.svg",
+  perplexity: "/logos/perplexity.svg",
+  spotify: "/logos/spotify.svg",
+  cursor: "/logos/cursor.svg",
+  telegram: "/logos/telegram.svg",
+  cards: "/logos/mastercard.svg",
 };
 
-interface ServiceItem {
+interface PlanItem {
   id: string;
-  priceKey: string;
-  logo: string;
   title: string;
-  description: string;
-  color: string;
-  href: string;
+  subtitle: string;
+  priceKey?: string;
+  staticPrice?: string;
   badge?: string;
 }
 
-const formatPrice = (price: number) => {
-  if (price === 0) return "تماس بگیرید";
-  return new Intl.NumberFormat("fa-IR").format(price);
+interface CategoryItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  color: string;
+  logo?: string;
+  emoji?: string;
+  href?: string;
+  externalHref?: string;
+  plans: PlanItem[];
+}
+
+const formatPrice = (price: number): string => {
+  if (price <= 0) return "تماس بگیرید";
+  return `${new Intl.NumberFormat("fa-IR").format(price)} تومان`;
 };
 
 const ServicesSection = () => {
   const { getPrice } = usePricesContext();
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [submittingPlanId, setSubmittingPlanId] = useState<string | null>(null);
 
-  // All services as individual items - one per row, no duplicate plans
-  const services: ServiceItem[] = [
-    // ChatGPT
-    {
-      id: "chatgpt-plus-shared",
-      priceKey: "cgpt_pro_shared",
-      logo: logos.chatgpt,
-      title: "ChatGPT Plus اشتراکی",
-      description: "اشتراک با ۲ نفر • GPT-4o • اقتصادی",
-      color: "#10B981",
-      href: "/services/chatgpt",
-    },
-    {
-      id: "chatgpt-plus-30",
-      priceKey: "cgpt_pro_30day",
-      logo: logos.chatgpt,
-      title: "ChatGPT Plus اختصاصی ۳۰ روزه",
-      description: "GPT-4o • GPT-5 • DALL-E 3 • اختصاصی",
-      color: "#10B981",
-      href: "/services/chatgpt",
-      badge: "پرفروش",
-    },
-    {
-      id: "chatgpt-plus-37",
-      priceKey: "cgpt_pro_37day",
-      logo: logos.chatgpt,
-      title: "ChatGPT Plus اختصاصی ۳۷ روزه",
-      description: "GPT-4o • GPT-5 • DALL-E 3 • تمدید آسان",
-      color: "#10B981",
-      href: "/services/chatgpt",
-    },
-    {
-      id: "chatgpt-pro",
-      priceKey: "cgpt_pro_200",
-      logo: logos.chatgpt,
-      title: "ChatGPT Pro ۲۰۰ دلاری",
-      description: "O3-Pro • بدون محدودیت • حرفه‌ای",
-      color: "#8B5CF6",
-      href: "/services/chatgpt",
-      badge: "ویژه",
-    },
-    {
-      id: "chatgpt-team",
-      priceKey: "cgpt_plus_team",
-      logo: logos.chatgpt,
-      title: "ChatGPT Plus تیمی",
-      description: "تا ۷ نفر • مناسب شرکت‌ها",
-      color: "#3B82F6",
-      href: "/services/chatgpt",
-    },
+  const categories: CategoryItem[] = useMemo(
+    () => [
+      {
+        id: "chatgpt",
+        title: "ChatGPT",
+        subtitle: "۶ پلن فعال",
+        color: "#10B981",
+        logo: logos.chatgpt,
+        href: "/services/chatgpt",
+        plans: [
+          {
+            id: "cgpt_pro_30day",
+            title: "Pro ۳۰ روزه شخصی",
+            subtitle: "اختصاصی",
+            priceKey: "cgpt_pro_30day",
+            badge: "پرفروش",
+          },
+          {
+            id: "cgpt_pro_37day",
+            title: "Pro ۳۷ روزه شخصی",
+            subtitle: "اختصاصی",
+            priceKey: "cgpt_pro_37day",
+          },
+          {
+            id: "cgpt_pro_shared",
+            title: "Pro اشتراکی",
+            subtitle: "اقتصادی",
+            priceKey: "cgpt_pro_shared",
+          },
+          {
+            id: "cgpt_plus_team",
+            title: "Plus تیمی ۵ نفره",
+            subtitle: "تیمی",
+            priceKey: "cgpt_plus_team",
+          },
+          {
+            id: "cgpt_team",
+            title: "Team تیمی (۳۷ روزه)",
+            subtitle: "بیزنسی",
+            priceKey: "cgpt_team",
+          },
+          {
+            id: "cgpt_go_yearly",
+            title: "GO یکساله",
+            subtitle: "سالانه",
+            priceKey: "cgpt_go_yearly",
+          },
+        ],
+      },
+      {
+        id: "gemini",
+        title: "Gemini",
+        subtitle: "۵ پلن فعال",
+        color: "#3B82F6",
+        logo: logos.gemini,
+        href: "/services/gemini",
+        plans: [
+          {
+            id: "gem_month",
+            title: "پلن یک‌ماهه",
+            subtitle: "Gemini Pro",
+            priceKey: "gem_month",
+          },
+          {
+            id: "gem_3month",
+            title: "پلن سه‌ماهه",
+            subtitle: "Gemini Pro",
+            priceKey: "gem_3month",
+            badge: "محبوب",
+          },
+          {
+            id: "gem_6month",
+            title: "پلن شش‌ماهه",
+            subtitle: "Gemini Pro",
+            priceKey: "gem_6month",
+          },
+          {
+            id: "gem_year_personal",
+            title: "یکساله جیمیل شخصی",
+            subtitle: "Gemini Pro",
+            priceKey: "gem_year_personal",
+          },
+          {
+            id: "gem_year_ready",
+            title: "یکساله جیمیل آماده",
+            subtitle: "Gemini Pro",
+            priceKey: "gem_year_ready",
+          },
+        ],
+      },
+      {
+        id: "grok",
+        title: "Super Grok",
+        subtitle: "۱ پلن فعال",
+        color: "#0F172A",
+        logo: logos.grok,
+        href: "/services/grok",
+        plans: [
+          {
+            id: "grok_monthly",
+            title: "پلن ماهانه",
+            subtitle: "Super Grok",
+            priceKey: "grok_monthly",
+          },
+        ],
+      },
+      {
+        id: "perplexity",
+        title: "Perplexity",
+        subtitle: "۲ پلن فعال",
+        color: "#14B8A6",
+        logo: logos.perplexity,
+        href: "/services/perplexity",
+        plans: [
+          {
+            id: "perplexity_monthly",
+            title: "پلن یک‌ماهه",
+            subtitle: "Perplexity Pro",
+            priceKey: "perplexity_monthly",
+          },
+          {
+            id: "perplexity_yearly",
+            title: "پلن یکساله",
+            subtitle: "Perplexity Pro",
+            priceKey: "perplexity_yearly",
+          },
+        ],
+      },
+      {
+        id: "spotify",
+        title: "Spotify",
+        subtitle: "۲ پلن فعال",
+        color: "#1DB954",
+        logo: logos.spotify,
+        href: "/services/spotify",
+        plans: [
+          {
+            id: "spotify_monthly",
+            title: "پلن ۱ ماهه",
+            subtitle: "Spotify Premium",
+            priceKey: "spotify_monthly",
+          },
+          {
+            id: "spotify_4month",
+            title: "پلن ۴ ماهه",
+            subtitle: "Spotify Premium",
+            priceKey: "spotify_4month",
+          },
+        ],
+      },
+      {
+        id: "cursor",
+        title: "Cursor",
+        subtitle: "۲ پلن فعال",
+        color: "#6366F1",
+        logo: logos.cursor,
+        href: "/services/cursor",
+        plans: [
+          {
+            id: "cursor_monthly",
+            title: "پلن یک‌ماهه",
+            subtitle: "Cursor Pro",
+            priceKey: "cursor_monthly",
+          },
+          {
+            id: "cursor_weekly",
+            title: "پلن ۷ روزه (آفر)",
+            subtitle: "Cursor Pro",
+            priceKey: "cursor_weekly",
+            badge: "آفر",
+          },
+        ],
+      },
+      {
+        id: "telegram_premium",
+        title: "Telegram Premium",
+        subtitle: "۳ پلن فعال",
+        color: "#0284C7",
+        logo: logos.telegram,
+        href: "/services/telegram-premium",
+        plans: [
+          {
+            id: "tgpremium_3month",
+            title: "پلن ۳ ماهه",
+            subtitle: "Telegram Premium",
+            priceKey: "tgpremium_3month",
+          },
+          {
+            id: "tgpremium_6month",
+            title: "پلن ۶ ماهه",
+            subtitle: "Telegram Premium",
+            priceKey: "tgpremium_6month",
+          },
+          {
+            id: "tgpremium_12month",
+            title: "پلن یکساله",
+            subtitle: "Telegram Premium",
+            priceKey: "tgpremium_12month",
+            badge: "بهترین قیمت",
+          },
+        ],
+      },
+      {
+        id: "cards",
+        title: "ویزا و مستر کارت",
+        subtitle: "۲ پلن فعال",
+        color: "#EAB308",
+        logo: logos.cards,
+        href: "/services/cards",
+        plans: [
+          {
+            id: "visa_card",
+            title: "ویزا کارت",
+            subtitle: "مجازی بین‌المللی",
+            priceKey: "visa_card",
+          },
+          {
+            id: "master_card",
+            title: "مستر کارت",
+            subtitle: "مجازی بین‌المللی",
+            priceKey: "master_card",
+          },
+        ],
+      },
+      {
+        id: "virtual_numbers",
+        title: "شماره مجازی",
+        subtitle: "۱۰ پلن فعال",
+        color: "#A855F7",
+        emoji: "📞",
+        href: "/services/virtual-number",
+        plans: [
+          {
+            id: "vnum_uk",
+            title: "شماره انگلیس (+44)",
+            subtitle: "شماره دائمی",
+            priceKey: "vnum_uk",
+          },
+          {
+            id: "vnum_us",
+            title: "شماره آمریکا (+1)",
+            subtitle: "شماره دائمی",
+            priceKey: "vnum_us",
+          },
+          {
+            id: "vnum_au",
+            title: "شماره استرالیا (+61)",
+            subtitle: "شماره دائمی",
+            priceKey: "vnum_au",
+          },
+          {
+            id: "vnum_ca",
+            title: "شماره کانادا (+1)",
+            subtitle: "شماره دائمی",
+            priceKey: "vnum_ca",
+          },
+          {
+            id: "vnum_tg_uk",
+            title: "تلگرام انگلیس",
+            subtitle: "حساب آماده",
+            priceKey: "vnum_tg_uk",
+          },
+          {
+            id: "vnum_tg_au",
+            title: "تلگرام استرالیا",
+            subtitle: "حساب آماده",
+            priceKey: "vnum_tg_au",
+          },
+          {
+            id: "vnum_tg_us",
+            title: "تلگرام آمریکا",
+            subtitle: "حساب آماده",
+            priceKey: "vnum_tg_us",
+          },
+          {
+            id: "vnum_tg_ca",
+            title: "تلگرام کانادا",
+            subtitle: "حساب آماده",
+            priceKey: "vnum_tg_ca",
+          },
+          {
+            id: "vnum_wa_uk",
+            title: "واتساپ انگلیس",
+            subtitle: "حساب آماده",
+            priceKey: "vnum_wa_uk",
+          },
+          {
+            id: "vnum_wa_ca",
+            title: "واتساپ کانادا",
+            subtitle: "حساب آماده",
+            priceKey: "vnum_wa_ca",
+          },
+        ],
+      },
+      {
+        id: "nano_banana",
+        title: "Nano Banana Pro",
+        subtitle: "ساخت تصویر AI",
+        color: "#F59E0B",
+        emoji: "🍌",
+        externalHref: SUPPORT_URL,
+        plans: [
+          {
+            id: "imggen_text",
+            title: "متن به عکس",
+            subtitle: "Gemini Image",
+            staticPrice: "هر تصویر ۳ ستاره",
+          },
+          {
+            id: "imggen_edit",
+            title: "ادیت تصویر",
+            subtitle: "با پرامپت دلخواه",
+            staticPrice: "هر تصویر ۳ ستاره",
+          },
+          {
+            id: "imggen_initial_credits",
+            title: "اعتبار شروع",
+            subtitle: "برای کاربر جدید",
+            staticPrice: "۲۰ ستاره",
+          },
+        ],
+      },
+    ],
+    []
+  );
 
-    // Gemini
-    {
-      id: "gemini-1m",
-      priceKey: "gem_exclusive_1month",
-      logo: logos.gemini,
-      title: "Gemini Pro اختصاصی یک‌ماهه",
-      description: "۲ ترابایت Google One • Veo 3",
-      color: "#60A5FA",
-      href: "/services/gemini",
-    },
-    {
-      id: "gemini-3m",
-      priceKey: "gem_exclusive_3month",
-      logo: logos.gemini,
-      title: "Gemini Pro اختصاصی سه‌ماهه",
-      description: "۲ ترابایت Google One • صرفه‌جویی ۲۰٪",
-      color: "#A855F7",
-      href: "/services/gemini",
-      badge: "پرفروش",
-    },
-    {
-      id: "gemini-6m",
-      priceKey: "gem_exclusive_6month",
-      logo: logos.gemini,
-      title: "Gemini Pro اختصاصی شش‌ماهه",
-      description: "۲ ترابایت Google One • بهترین ارزش",
-      color: "#F472B6",
-      href: "/services/gemini",
-    },
-    {
-      id: "gemini-9m",
-      priceKey: "gem_exclusive_9month",
-      logo: logos.gemini,
-      title: "Gemini Pro اختصاصی نه‌ماهه",
-      description: "۲ ترابایت Google One • بیشترین صرفه",
-      color: "#FBBF24",
-      href: "/services/gemini",
-    },
-    {
-      id: "gemini-ultra",
-      priceKey: "gemini_ultra",
-      logo: logos.gemini,
-      title: "Gemini Ultra",
-      description: "قدرتمندترین مدل گوگل • پروژه‌های حرفه‌ای",
-      color: "#10B981",
-      href: "/services/gemini",
-      badge: "پیشرفته",
-    },
+  const [activeCategoryId, setActiveCategoryId] = useState<string>(categories[0].id);
 
-    // Grok
-    {
-      id: "grok",
-      priceKey: "grok_monthly",
-      logo: logos.grok,
-      title: "Super Grok ماهانه",
-      description: "Grok-4 • Aurora • بدون سانسور",
-      color: "#374151",
-      href: "/services/grok",
-      badge: "بدون فیلتر",
-    },
+  const activeCategory =
+    categories.find((category) => category.id === activeCategoryId) ?? categories[0];
 
-    // Claude
-    {
-      id: "claude-pro",
-      priceKey: "claude_pro",
-      logo: logos.claude,
-      title: "Claude Pro ماهانه",
-      description: "Claude Opus 4.5 • ۲۰۰K توکن • Artifacts",
-      color: "#F97316",
-      href: "/services/claude",
-    },
-    {
-      id: "claude-shared",
-      priceKey: "claude_pro_shared",
-      logo: logos.claude,
-      title: "Claude Pro اشتراکی",
-      description: "Claude Opus • اقتصادی",
-      color: "#EA580C",
-      href: "/services/claude",
-    },
+  const paddedCategories = useMemo(() => {
+    const entries = categories.map((category) => ({
+      kind: "category" as const,
+      key: category.id,
+      category,
+    }));
 
-    // Cursor
-    {
-      id: "cursor-weekly",
-      priceKey: "cursor_weekly",
-      logo: logos.cursor,
-      title: "Cursor هفتگی",
-      description: "۷ روزه • مناسب تست پروژه",
-      color: "#3B82F6",
-      href: "/services/cursor",
-    },
-    {
-      id: "cursor-monthly",
-      priceKey: "cursor_monthly",
-      logo: logos.cursor,
-      title: "Cursor ماهانه",
-      description: "AI کدنویسی حرفه‌ای • تکمیل خودکار",
-      color: "#3B82F6",
-      href: "/services/cursor",
-      badge: "برنامه‌نویسان",
-    },
+    const remainder = entries.length % 4;
+    if (remainder === 0) {
+      return entries;
+    }
 
-    // Perplexity
-    {
-      id: "perplexity-m",
-      priceKey: "perplexity_monthly",
-      logo: logos.perplexity,
-      title: "Perplexity Pro ماهانه",
-      description: "جستجوی هوشمند • منابع معتبر",
-      color: "#14B8A6",
-      href: "/services/perplexity",
-    },
-    {
-      id: "perplexity-y",
-      priceKey: "perplexity_yearly",
-      logo: logos.perplexity,
-      title: "Perplexity Pro یکساله",
-      description: "جستجوی هوشمند • صرفه‌جویی ۷۰٪",
-      color: "#0D9488",
-      href: "/services/perplexity",
-      badge: "پیشنهادی",
-    },
+    const placeholders = Array.from({ length: 4 - remainder }, (_, idx) => ({
+      kind: "placeholder" as const,
+      key: `category-placeholder-${idx}`,
+    }));
 
-    // Spotify
-    {
-      id: "spotify-m",
-      priceKey: "spotify_monthly",
-      logo: logos.spotify,
-      title: "Spotify Premium ماهانه",
-      description: "موسیقی نامحدود • بدون تبلیغات",
-      color: "#1DB954",
-      href: "/services/spotify",
-    },
-    {
-      id: "spotify-4m",
-      priceKey: "spotify_4month",
-      logo: logos.spotify,
-      title: "Spotify Premium چهارماهه",
-      description: "موسیقی نامحدود • صرفه‌جویی",
-      color: "#1DB954",
-      href: "/services/spotify",
-    },
+    return [...entries, ...placeholders];
+  }, [categories]);
 
-    // Telegram
-    {
-      id: "tg-3m",
-      priceKey: "tgpremium_3month",
-      logo: logos.telegram,
-      title: "Telegram Premium سه‌ماهه",
-      description: "استیکرها • ترجمه • دانلود سریع",
-      color: "#0088CC",
-      href: "/services/telegram-premium",
-    },
-    {
-      id: "tg-6m",
-      priceKey: "tgpremium_6month",
-      logo: logos.telegram,
-      title: "Telegram Premium شش‌ماهه",
-      description: "استیکرها • ترجمه • صرفه‌جویی",
-      color: "#0088CC",
-      href: "/services/telegram-premium",
-    },
-    {
-      id: "tg-12m",
-      priceKey: "tgpremium_12month",
-      logo: logos.telegram,
-      title: "Telegram Premium یکساله",
-      description: "استیکرها • ترجمه • بهترین قیمت",
-      color: "#0088CC",
-      href: "/services/telegram-premium",
-      badge: "بهترین ارزش",
-    },
-  ];
+  const paddedPlans = useMemo(() => {
+    const entries = activeCategory.plans.map((plan) => ({
+      kind: "plan" as const,
+      key: plan.id,
+      plan,
+    }));
+
+    const remainder = entries.length % 4;
+    if (remainder === 0) {
+      return entries;
+    }
+
+    const placeholders = Array.from({ length: 4 - remainder }, (_, idx) => ({
+      kind: "placeholder" as const,
+      key: `plan-placeholder-${idx}`,
+    }));
+
+    return [...entries, ...placeholders];
+  }, [activeCategory]);
+
+  const handleOrder = async (plan: PlanItem) => {
+    if (!plan.priceKey) {
+      window.open(SUPPORT_URL, "_blank");
+      return;
+    }
+
+    if (!user) {
+      toast({
+        title: "ابتدا وارد حساب شوید",
+        description: "برای ثبت سفارش، ابتدا با ایمیل وارد شوید.",
+        variant: "destructive",
+      });
+      navigate(`/auth?next=${encodeURIComponent(location.pathname)}`);
+      return;
+    }
+
+    const price = getPrice(plan.priceKey);
+    setSubmittingPlanId(plan.id);
+
+    const result = await createOrder({
+      serviceId: activeCategory.id,
+      serviceName: activeCategory.title,
+      planId: plan.id,
+      planName: plan.title,
+      planDuration: plan.subtitle,
+      price,
+    });
+
+    setSubmittingPlanId(null);
+
+    if ("error" in result) {
+      toast({
+        title: "ثبت سفارش ناموفق بود",
+        description: result.error,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "سفارش ثبت شد",
+      description: `شناسه سفارش: ${result.data.order.id}`,
+    });
+    navigate("/dashboard");
+  };
 
   return (
     <section id="services" className="py-20 relative">
-      {/* Background Effect */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
 
       <div className="container mx-auto px-4">
-        {/* Section Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">
-            تمامی اشتراک‌های موجود
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            روی هر اشتراک کلیک کنید تا وارد صفحه توضیحات و خرید شوید
+        <div className="text-center mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">اشتراک‌های موجود</h2>
+          <p className="text-muted-foreground max-w-3xl mx-auto">
+            دسته موردنظر را انتخاب کنید تا همه پلن‌های همان بخش را با قیمت دقیق ببینید.
           </p>
         </div>
 
-        {/* Services Grid - Clean 4 column layout */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {services.map((service) => {
-            const price = getPrice(service.priceKey);
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+          {paddedCategories.map((item) => {
+            if (item.kind === "placeholder") {
+              return <div key={item.key} className="hidden lg:block" aria-hidden />;
+            }
+
+            const { category } = item;
+            const isActive = category.id === activeCategory.id;
+
             return (
-              <Link
-                key={service.id}
-                to={service.href}
-                className="group relative bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-4 hover:border-primary/50 hover:bg-card/80 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5"
+              <button
+                key={category.id}
+                type="button"
+                onClick={() => setActiveCategoryId(category.id)}
+                className={`group rounded-2xl border p-3 text-right transition-all duration-300 ${
+                  isActive
+                    ? "border-primary bg-primary/10 shadow-md shadow-primary/10"
+                    : "border-border/50 bg-card/40 hover:border-primary/40"
+                }`}
               >
-                {/* Badge */}
-                {service.badge && (
-                  <div className="absolute -top-2 -right-2 z-10">
-                    <span
-                      className="text-[10px] font-bold px-2 py-1 rounded-full text-white shadow-md"
-                      style={{ backgroundColor: service.color }}
-                    >
-                      {service.badge}
-                    </span>
-                  </div>
-                )}
-
-                <div className="flex items-center gap-3">
-                  {/* Logo */}
+                <div className="flex items-center gap-2 mb-2">
                   <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110"
-                    style={{ backgroundColor: `${service.color}20` }}
+                    className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                    style={{ backgroundColor: `${category.color}1f` }}
                   >
-                    <img
-                      src={service.logo}
-                      alt={service.title}
-                      className="w-8 h-8 object-contain"
-                      loading="lazy"
-                    />
+                    {category.logo ? (
+                      <img
+                        src={category.logo}
+                        alt={category.title}
+                        className="w-6 h-6 object-contain"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <span className="text-base">{category.emoji}</span>
+                    )}
                   </div>
-
-                  {/* Info */}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-sm text-foreground truncate group-hover:text-primary transition-colors">
-                      {service.title}
-                    </h3>
-                    <p className="text-xs text-muted-foreground truncate mt-0.5">
-                      {service.description}
-                    </p>
+                  <div className="min-w-0">
+                    <p className="font-semibold text-sm truncate">{category.title}</p>
+                    <p className="text-[11px] text-muted-foreground truncate">{category.subtitle}</p>
                   </div>
                 </div>
 
-                {/* Price Row */}
-                <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/30">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-lg font-bold" style={{ color: service.color }}>
-                      {formatPrice(price)}
-                    </span>
-                    <span className="text-xs text-muted-foreground">تومان</span>
-                  </div>
-                  <div className="flex items-center gap-1 text-xs text-muted-foreground group-hover:text-primary transition-colors">
-                    <span>مشاهده</span>
-                    <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
-                  </div>
+                <div className="flex items-center justify-end gap-1 text-[11px] text-muted-foreground">
+                  {isActive && <Check className="w-3 h-3 text-primary" />}
+                  <span>{isActive ? "انتخاب‌شده" : "مشاهده پلن‌ها"}</span>
                 </div>
-              </Link>
+              </button>
             );
           })}
         </div>
 
-        {/* Additional Services Link */}
-        <div className="mt-8 text-center">
-          <div className="inline-flex gap-4 flex-wrap justify-center">
-            <Link
-              to="/services/cards"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-card/50 border border-border/50 rounded-full hover:border-primary/50 transition-all text-sm"
-            >
-              <span className="text-xl">💳</span>
-              <span>کارت‌های ارزی</span>
-              <ArrowLeft className="w-4 h-4" />
-            </Link>
-            <Link
-              to="/services/virtual-number"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-card/50 border border-border/50 rounded-full hover:border-primary/50 transition-all text-sm"
-            >
-              <span className="text-xl">📞</span>
-              <span>شماره‌های مجازی</span>
-              <ArrowLeft className="w-4 h-4" />
-            </Link>
+        <div className="rounded-3xl border border-border/60 bg-card/40 p-5 md:p-7 backdrop-blur-sm">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div className="flex items-center gap-3">
+              <div
+                className="w-12 h-12 rounded-2xl flex items-center justify-center"
+                style={{ backgroundColor: `${activeCategory.color}24` }}
+              >
+                {activeCategory.logo ? (
+                  <img
+                    src={activeCategory.logo}
+                    alt={activeCategory.title}
+                    className="w-8 h-8 object-contain"
+                    loading="lazy"
+                  />
+                ) : (
+                  <span className="text-2xl">{activeCategory.emoji}</span>
+                )}
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold">{activeCategory.title}</h3>
+                <p className="text-sm text-muted-foreground">
+                  {activeCategory.plans.length} پلن موجود در این دسته
+                </p>
+              </div>
+            </div>
+
+            {activeCategory.externalHref ? (
+              <a
+                href={activeCategory.externalHref}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-border/60 bg-background/40 hover:border-primary/40 transition-colors text-sm"
+              >
+                <span>ارتباط با پشتیبانی</span>
+                <ArrowLeft className="w-4 h-4" />
+              </a>
+            ) : (
+              activeCategory.href && (
+                <Link
+                  to={activeCategory.href}
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-border/60 bg-background/40 hover:border-primary/40 transition-colors text-sm"
+                >
+                  <span>صفحه کامل {activeCategory.title}</span>
+                  <ArrowLeft className="w-4 h-4" />
+                </Link>
+              )
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {paddedPlans.map((item) => {
+              if (item.kind === "placeholder") {
+                return <div key={item.key} className="hidden lg:block" aria-hidden />;
+              }
+
+              const { plan } = item;
+              const planPrice = plan.priceKey ? getPrice(plan.priceKey) : null;
+              const priceText = plan.staticPrice ?? formatPrice(planPrice ?? 0);
+              const isSubmitting = submittingPlanId === plan.id;
+
+              return (
+                <div
+                  key={plan.id}
+                  className="relative rounded-2xl border border-border/50 bg-background/50 p-4 hover:border-primary/40 transition-colors flex flex-col"
+                >
+                  {plan.badge && (
+                    <span className="absolute top-3 left-3 text-[10px] font-bold px-2 py-1 rounded-full bg-primary text-primary-foreground">
+                      {plan.badge}
+                    </span>
+                  )}
+
+                  <p className="font-bold text-sm mb-1 pr-1">{plan.title}</p>
+                  <p className="text-xs text-muted-foreground mb-4">{plan.subtitle}</p>
+
+                  <div className="pt-3 border-t border-border/40 flex items-center justify-between mb-4">
+                    <span className="text-base font-extrabold" style={{ color: activeCategory.color }}>
+                      {priceText}
+                    </span>
+                    <span className="text-xs text-muted-foreground">قیمت نهایی</span>
+                  </div>
+
+                  <Button
+                    type="button"
+                    className="w-full mt-auto"
+                    style={{ backgroundColor: activeCategory.color }}
+                    disabled={isSubmitting}
+                    onClick={() => handleOrder(plan)}
+                  >
+                    {isSubmitting ? (
+                      <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                    ) : (
+                      <MessageCircle className="w-4 h-4 ml-2" />
+                    )}
+                    {isSubmitting
+                      ? "در حال ثبت..."
+                      : plan.priceKey
+                        ? "ثبت سفارش"
+                        : "ارتباط با پشتیبانی"}
+                  </Button>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

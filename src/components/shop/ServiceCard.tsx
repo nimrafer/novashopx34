@@ -33,7 +33,6 @@ const serviceRoutes: Record<string, string> = {
   chatgpt: "/services/chatgpt",
   gemini: "/services/gemini",
   grok: "/services/grok",
-  claude: "/services/claude",
   perplexity: "/services/perplexity",
   spotify: "/services/spotify",
   cursor: "/services/cursor",

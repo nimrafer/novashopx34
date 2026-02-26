@@ -1,4 +1,4 @@
-import { MessageCircle, Clock, RefreshCw, Zap, Headphones, Image, Brain, Twitter } from "lucide-react";
+import { MessageCircle, RefreshCw, Zap, Headphones, Image, Brain, Twitter } from "lucide-react";
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
 import { usePricesContext } from "@/contexts/PricesContext";
@@ -9,21 +9,21 @@ const GrokPage = () => {
 
   const features = [
     "پاسخ به سوالات حساس بدون فیلتر و سانسور",
-    "دسترسی به مدل‌های Grok-3 و Grok-4 (Heavy)",
-    "تولید تصویر نامحدود با Aurora",
+    "دسترسی به مدل‌های Grok-4 و Grok-4 Heavy",
+    "تولید تصویر با Aurora",
     "حالت استدلال پیشرفته (Reasoning Mode)",
     "دسترسی لحظه‌ای به اطلاعات X (توییتر)",
     "تحلیل داده و آپلود فایل",
     "سرعت پردازش بالا در ساعات شلوغ",
     "اولویت‌بندی در صف پاسخ‌گویی",
     "مکالمه آزاد در هر موضوعی",
-    "الهام از جارویس و راهنمای کهکشان",
-    "یک ماه اشتراک رایگان با ChatGPT",
+    "DeepSearch برای جستجوی عمیق",
     "تضمین جایگزینی و پشتیبانی ۲۴ ساعته",
   ];
 
   const plans = [
     {
+      id: "grok_monthly",
       name: "Super Grok ماهانه",
       duration: "۱ ماهه - ۳۰ دلار",
       price: getPrice("grok_monthly"),
@@ -31,15 +31,15 @@ const GrokPage = () => {
       popular: true,
       features: [
         "تمام قابلیت‌های Super Grok",
-        "دسترسی به Grok-3 و Grok-4",
-        "تولید تصویر نامحدود با Aurora",
+        "دسترسی به Grok-4 و Grok-4 Heavy",
+        "تولید تصویر با Aurora",
         "دسترسی به اطلاعات لحظه‌ای X",
       ],
     },
   ];
 
   const comparison = [
-    { feature: "دسترسی به Grok-3/4", free: false, premium: true },
+    { feature: "دسترسی به Grok-4/4 Heavy", free: false, premium: true },
     { feature: "پاسخ بدون سانسور", free: "محدود", premium: "کامل" },
     { feature: "تولید تصویر با Aurora", free: "بسیار محدود", premium: "نامحدود" },
     { feature: "حالت استدلال پیشرفته", free: false, premium: true },
@@ -66,9 +66,9 @@ const GrokPage = () => {
         "Aurora سیستم تولید تصویر Grok است که می‌توانید با آن تصاویر متنوع بسازید، حتی تصاویری که سایر AIها مثل DALL-E یا Midjourney تولید نمی‌کنند. محدودیت‌های بسیار کمتری نسبت به رقبا دارد.",
     },
     {
-      question: "چرا یک ماه Grok رایگان با ChatGPT ارائه می‌شود؟",
+      question: "Grok-4 Heavy برای چه کسانی مناسب است؟",
       answer:
-        "این یک پیشنهاد ویژه است! با خرید هر پلن ChatGPT، یک ماه اشتراک رایگان Grok هم دریافت می‌کنید تا بتوانید هر دو را مقایسه کنید و ببینید کدام برای نیازهایتان بهتر است.",
+        "نسخه Heavy برای کاربرانی مناسب است که تحلیل‌های عمیق‌تر، پاسخ‌های طولانی‌تر و استدلال چندمرحله‌ای پیشرفته‌تر نیاز دارند.",
     },
     {
       question: "دسترسی به X یعنی چه؟",
@@ -210,19 +210,6 @@ const GrokPage = () => {
         </div>
       </section>
 
-      {/* Bonus Section */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <div className="glass rounded-3xl p-8 text-center max-w-3xl mx-auto" style={{ background: "linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%)" }}>
-            <h3 className="text-xl font-bold mb-4">🎁 پیشنهاد ویژه</h3>
-            <p className="text-muted-foreground">
-              همه پلن‌های ChatGPT همراه با یک ماه اشتراک رایگان Grok ارائه می‌شوند!
-              با خرید ChatGPT، Grok را هم رایگان تست کنید و ببینید کدام برای نیازهایتان بهتر است.
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* How to Buy Section */}
       <section className="py-12">
         <div className="container mx-auto px-4">
@@ -236,8 +223,8 @@ const GrokPage = () => {
               </div>
               <div className="text-center">
                 <div className="w-14 h-14 rounded-full bg-white text-background font-bold text-2xl flex items-center justify-center mx-auto mb-4">۲</div>
-                <h3 className="font-bold text-lg mb-2">پیام به پشتیبانی</h3>
-                <p className="text-muted-foreground text-sm">با کلیک روی ثبت سفارش به تلگرام متصل شوید</p>
+                <h3 className="font-bold text-lg mb-2">ثبت سفارش در سایت</h3>
+                <p className="text-muted-foreground text-sm">سفارش را داخل سایت ثبت کنید و وضعیت را از پنل کاربری ببینید.</p>
               </div>
               <div className="text-center">
                 <div className="w-14 h-14 rounded-full bg-white text-background font-bold text-2xl flex items-center justify-center mx-auto mb-4">۳</div>
@@ -252,7 +239,7 @@ const GrokPage = () => {
   );
 
   const lowestPrice = plans[0].price;
-  
+
   // Generate SEO schemas
   const faqSchema = createFAQSchema(faqs);
   const breadcrumbSchema = createBreadcrumbSchema([
@@ -261,10 +248,10 @@ const GrokPage = () => {
   ]);
   const productSchema = createProductSchema({
     name: "اشتراک Super Grok",
-    description: "خرید اشتراک Super Grok - هوش مصنوعی بدون سانسور xAI ایلان ماسک. تولید تصویر نامحدود با Aurora و دسترسی لحظه‌ای به X.",
+    description: "خرید اشتراک Super Grok - هوش مصنوعی xAI ایلان ماسک با Grok-4/4 Heavy، Aurora و دسترسی لحظه‌ای به X.",
     price: lowestPrice,
     url: "/services/grok",
-    image: "https://novateam.shop/logos/grok.png",
+    image: "https://nova-shop.co/logos/grok.svg",
     category: "اشتراک هوش مصنوعی",
     sku: "GROK-SUPER",
     ratingValue: 4.7,
@@ -277,18 +264,20 @@ const GrokPage = () => {
         <title>خرید اشتراک Super Grok | AI بدون سانسور ایلان ماسک - نوا شاپ</title>
         <meta
           name="description"
-          content="خرید اشتراک Super Grok - هوش مصنوعی بدون سانسور xAI و ایلان ماسک. پاسخ به سوالات حساس، تولید تصویر نامحدود با Aurora، دسترسی لحظه‌ای به X."
+          content="خرید اشتراک Super Grok - هوش مصنوعی xAI و ایلان ماسک. دسترسی به Grok-4/4 Heavy، تولید تصویر با Aurora و دسترسی لحظه‌ای به X."
         />
         <meta name="keywords" content="خرید Grok, Super Grok, xAI, ایلان ماسک, هوش مصنوعی بدون سانسور, Aurora, توییتر, خرید گروک ایران" />
-        <link rel="canonical" href="https://novateam.shop/services/grok" />
-        
+        <link rel="canonical" href="https://nova-shop.co/services/grok" />
+
         {/* Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify([productSchema, faqSchema, breadcrumbSchema])}
         </script>
       </Helmet>
       <ServicePageLayout
+        serviceId="grok"
         icon={MessageCircle}
+        logoSrc="/logos/grok.svg"
         title="Super Grok"
         subtitle="هوش مصنوعی بدون سانسور"
         description="گروک ساخته xAI و ایلان ماسک، یکی از بی‌پرده‌ترین هوش‌های مصنوعی دنیاست! برخلاف AIهای دیگه که پشت فیلترهای اخلاقی قایم می‌شن، گروک مستقیم میره سر اصل مطلب. الهام‌گرفته از جارویس و راهنمای کهکشان، گروک نه تنها باهوشه، بلکه شوخ‌طبع و صادق هم هست."

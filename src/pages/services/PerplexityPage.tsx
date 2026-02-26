@@ -10,29 +10,32 @@ const PerplexityPage = () => {
   const features = [
     "پاسخ‌های دقیق با ذکر منبع و لینک",
     "دسترسی به اطلاعات به‌روز از سراسر وب",
-    "دسترسی به GPT-4، Claude 3 و Gemini Pro",
-    "۳۰۰+ پرسش Pro در روز",
-    "آپلود نامحدود فایل",
+    "دسترسی به مدل‌های پیشرفته OpenAI، Anthropic و Google (بسته به دسترس‌پذیری Perplexity)",
+    "Quick Search نامحدود + سهمیه Pro Search روزانه",
+    "آپلود فایل و تحلیل اسناد",
     "تحلیل تصاویر و PDF",
     "حالت تمرکز (Focus Mode)",
-    "API دسترسی",
+    "Labs برای ساخت صفحات، گزارش و مینی‌اپ",
     "صرفه‌جویی در زمان تحقیق",
   ];
 
   const plans = [
     {
+      id: "perplexity_monthly",
       name: "پلن یک‌ماهه",
       duration: "۱ ماهه",
       price: getPrice("perplexity_monthly"),
       priceKey: "perplexity_monthly",
       popular: true,
       features: [
-        "۳۰۰+ پرسش Pro در روز",
+        "Quick Search نامحدود",
+        "سهمیه روزانه Pro Search",
         "دسترسی به مدل‌های پیشرفته",
-        "آپلود نامحدود فایل",
+        "آپلود و تحلیل فایل",
       ],
     },
     {
+      id: "perplexity_yearly",
       name: "پلن یکساله",
       duration: "۱ ساله - صرفه‌جویی ۷۰٪",
       price: getPrice("perplexity_yearly"),
@@ -46,13 +49,14 @@ const PerplexityPage = () => {
   ];
 
   const comparison = [
-    { feature: "پرسش‌های Pro", free: "۵ در روز", premium: "۳۰۰+ در روز" },
+    { feature: "Quick Search", free: "محدود", premium: "نامحدود" },
+    { feature: "Pro Search", free: "خیلی محدود", premium: "روزانه" },
     { feature: "ذکر منابع", free: true, premium: true },
     { feature: "مدل‌های پیشرفته", free: false, premium: true },
-    { feature: "آپلود فایل", free: "محدود", premium: "نامحدود" },
+    { feature: "آپلود فایل", free: "محدود", premium: "پیشرفته" },
     { feature: "تحلیل PDF", free: false, premium: true },
     { feature: "حالت تمرکز", free: false, premium: true },
-    { feature: "API دسترسی", free: false, premium: true },
+    { feature: "Perplexity Labs", free: false, premium: true },
   ];
 
   const faqs = [
@@ -69,12 +73,12 @@ const PerplexityPage = () => {
     {
       question: "آیا می‌توانم مدل دلخواه انتخاب کنم؟",
       answer:
-        "بله، در نسخه Pro می‌توانید بین GPT-4، Claude 3 و Gemini Pro انتخاب کنید.",
+        "بله، در نسخه Pro می‌توانید بین مدل‌های پیشرفته موجود در Perplexity جابه‌جا شوید. نام مدل‌ها ممکن است بر اساس به‌روزرسانی رسمی Perplexity تغییر کند.",
     },
   ];
 
   const lowestPrice = Math.min(...plans.map(p => p.price));
-  
+
   // Generate SEO schemas
   const faqSchema = createFAQSchema(faqs);
   const breadcrumbSchema = createBreadcrumbSchema([
@@ -83,10 +87,10 @@ const PerplexityPage = () => {
   ]);
   const productSchema = createProductSchema({
     name: "اشتراک Perplexity Pro",
-    description: "خرید اشتراک Perplexity Pro - موتور جستجوی هوشمند با منابع. پاسخ‌های دقیق با ذکر لینک، دسترسی به GPT-4 و Claude 3.",
+    description: "خرید اشتراک Perplexity Pro - موتور جستجوی هوشمند با منابع. دسترسی به مدل‌های پیشرفته برای تحقیق و پاسخ مستند.",
     price: lowestPrice,
     url: "/services/perplexity",
-    image: "https://novateam.shop/logos/perplexity.png",
+    image: "https://nova-shop.co/logos/perplexity.svg",
     category: "ابزار تحقیقاتی",
     sku: "PERP-PRO",
     ratingValue: 4.7,
@@ -99,18 +103,20 @@ const PerplexityPage = () => {
         <title>خرید اشتراک Perplexity Pro | موتور جستجوی AI - نوا شاپ</title>
         <meta
           name="description"
-          content="خرید اشتراک Perplexity Pro - موتور جستجوی هوشمند با منابع معتبر. پاسخ‌های دقیق با ذکر لینک، دسترسی به GPT-4 و Claude 3. تحقیقات حرفه‌ای."
+          content="خرید اشتراک Perplexity Pro - موتور جستجوی هوشمند با منابع معتبر. دسترسی به Pro Search، مدل‌های پیشرفته و قابلیت تحلیل فایل."
         />
         <meta name="keywords" content="خرید Perplexity, Perplexity Pro, موتور جستجوی AI, تحقیق هوشمند, GPT-4, Claude, خرید پرپلکسیتی ایران" />
-        <link rel="canonical" href="https://novateam.shop/services/perplexity" />
-        
+        <link rel="canonical" href="https://nova-shop.co/services/perplexity" />
+
         {/* Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify([productSchema, faqSchema, breadcrumbSchema])}
         </script>
       </Helmet>
       <ServicePageLayout
+        serviceId="perplexity"
         icon={Search}
+        logoSrc="/logos/perplexity.svg"
         title="Perplexity Pro"
         subtitle="موتور جستجوی هوشمند"
         description="پرپلکسیتی یک موتور جستجوی مبتنی بر هوش مصنوعی است که اطلاعات را از سراسر اینترنت جمع‌آوری کرده و پاسخ‌های دقیق و مستند با ذکر منبع ارائه می‌دهد."

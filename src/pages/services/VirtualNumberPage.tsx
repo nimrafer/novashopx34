@@ -20,6 +20,7 @@ const VirtualNumberPage = () => {
 
   const plans = [
     {
+      id: "vnum_ca",
       name: "شماره کانادا",
       duration: "دائمی (+1)",
       price: getPrice("vnum_ca"),
@@ -31,6 +32,7 @@ const VirtualNumberPage = () => {
       ],
     },
     {
+      id: "vnum_us",
       name: "شماره آمریکا",
       duration: "دائمی (+1)",
       price: getPrice("vnum_us"),
@@ -42,6 +44,7 @@ const VirtualNumberPage = () => {
       ],
     },
     {
+      id: "vnum_uk",
       name: "شماره انگلیس",
       duration: "دائمی (+44)",
       price: getPrice("vnum_uk"),
@@ -54,6 +57,7 @@ const VirtualNumberPage = () => {
       ],
     },
     {
+      id: "vnum_au",
       name: "شماره استرالیا",
       duration: "دائمی (+61)",
       price: getPrice("vnum_au"),
@@ -149,6 +153,7 @@ const VirtualNumberPage = () => {
         </script>
       </Helmet>
       <ServicePageLayout
+        serviceId="virtual_numbers"
         icon={Phone}
         title="شماره مجازی"
         subtitle="شماره خارجی دائمی"

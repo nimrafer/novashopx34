@@ -1,0 +1,94 @@
+{
+  "users": [
+    {
+      "id": "bb0b35ab-47ef-4be1-86d6-4c84c01c423d",
+      "email": "admin@nova-shop.co",
+      "fullName": "Admin Nova",
+      "createdAt": "2026-02-24T21:14:45.945Z",
+      "lastLoginAt": "2026-02-24T21:14:45.945Z"
+    },
+    {
+      "id": "e29d6f50-cbfd-4a94-be9f-ea1a734014df",
+      "email": "ntotsexk@hi2.in",
+      "fullName": "ارمان علی",
+      "createdAt": "2026-02-24T21:19:45.944Z",
+      "lastLoginAt": "2026-02-24T21:19:45.944Z"
+    }
+  ],
+  "otps": [],
+  "sessions": [],
+  "orders": [
+    {
+      "id": "ORD-28FBA5F4",
+      "userId": "e29d6f50-cbfd-4a94-be9f-ea1a734014df",
+      "userEmail": "ntotsexk@hi2.in",
+      "userFullName": "ارمان علی",
+      "serviceId": "cursor",
+      "serviceName": "Cursor",
+      "planId": "cursor_weekly",
+      "planName": "پلن ۷ روزه (آفر)",
+      "planDuration": "Cursor Pro",
+      "price": 397000,
+      "currency": "IRR",
+      "status": "pending",
+      "createdAt": "2026-02-24T23:11:22.858Z",
+      "updatedAt": "2026-02-24T23:11:22.858Z",
+      "notes": null,
+      "source": "website"
+    },
+    {
+      "id": "ORD-05374DE3",
+      "userId": "e29d6f50-cbfd-4a94-be9f-ea1a734014df",
+      "userEmail": "ntotsexk@hi2.in",
+      "userFullName": "ارمان علی",
+      "serviceId": "chatgpt",
+      "serviceName": "ChatGPT",
+      "planId": "cgpt_pro_37day",
+      "planName": "Pro ۳۷ روزه شخصی",
+      "planDuration": "اختصاصی",
+      "price": 599000,
+      "currency": "IRR",
+      "status": "pending",
+      "createdAt": "2026-02-24T23:11:37.106Z",
+      "updatedAt": "2026-02-24T23:11:37.106Z",
+      "notes": null,
+      "source": "website"
+    },
+    {
+      "id": "ORD-24D0C21D",
+      "userId": "e29d6f50-cbfd-4a94-be9f-ea1a734014df",
+      "userEmail": "ntotsexk@hi2.in",
+      "userFullName": "ارمان علی",
+      "serviceId": "gemini",
+      "serviceName": "Gemini",
+      "planId": "gem_3month",
+      "planName": "پلن سه‌ماهه",
+      "planDuration": "Gemini Pro",
+      "price": 1549000,
+      "currency": "IRR",
+      "status": "pending",
+      "createdAt": "2026-02-24T23:19:26.152Z",
+      "updatedAt": "2026-02-24T23:19:26.152Z",
+      "notes": null,
+      "source": "website"
+    },
+    {
+      "id": "ORD-05EFAB13",
+      "userId": "e29d6f50-cbfd-4a94-be9f-ea1a734014df",
+      "userEmail": "ntotsexk@hi2.in",
+      "userFullName": "ارمان علی",
+      "serviceId": "grok",
+      "serviceName": "Super Grok",
+      "planId": "grok_monthly",
+      "planName": "Super Grok ماهانه",
+      "planDuration": "۱ ماهه - ۳۰ دلار",
+      "price": 1679000,
+      "currency": "IRR",
+      "status": "pending",
+      "createdAt": "2026-02-24T23:23:43.665Z",
+      "updatedAt": "2026-02-24T23:23:43.665Z",
+      "notes": null,
+      "source": "website"
+    }
+  ]
+}

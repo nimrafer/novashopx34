@@ -1,55 +1,39 @@
 {
   "cgpt_pro_30day": {
-    "name": "اکانت اختصاصی ChatGPT Pro",
-    "price": 497000
+    "name": "ChatGPT Pro 30 روزه",
+    "price": 499000
   },
   "cgpt_pro_37day": {
     "name": "ChatGPT Pro 37 روزه",
-    "price": 547000
+    "price": 599000
   },
   "cgpt_plus_team": {
-    "name": "ChatGPT Plus تیمی",
+    "name": "ChatGPT Plus ۵ نفره",
     "price": 1249000
+  },
+  "cgpt_team": {
+    "name": "ChatGPT Team (بیزنسی)",
+    "price": 2750000
   },
   "cgpt_go_yearly": {
     "name": "ChatGPT GO یکساله",
-    "price": 1849000
+    "price": 0
   },
   "cgpt_pro_shared": {
     "name": "ChatGPT Pro اشتراکی",
-    "price": 297000
-  },
-  "cgpt_pro_200": {
-    "name": "ChatGPT Pro ۲۰۰ دلاری",
-    "price": 12500000
-  },
-  "cgpt_pro_monthly": {
-    "name": "ChatGPT Pro ماهانه",
-    "price": 500000
-  },
-  "claude_pro": {
-    "name": "Claude Pro ماهانه",
-    "price": 2797000
-  },
-  "claude_pro_shared": {
-    "name": "Claude Pro اشتراکی",
-    "price": 450000
-  },
-  "gemini_ultra": {
-    "name": "Gemini Ultra ماهانه",
-    "price": 29500000
+    "price": 427000
   },
   "gem_month": {
     "name": "Gemini ماهانه",
-    "price": 645000
+    "price": 649000
   },
   "gem_3month": {
     "name": "Gemini سه‌ماهه",
-    "price": 1249000
+    "price": 1549000
   },
   "gem_6month": {
     "name": "Gemini شش‌ماهه",
-    "price": 1749000
+    "price": 1949000
   },
   "gem_year_personal": {
     "name": "Gemini یکساله (جیمیل شخصی)",
@@ -57,23 +41,7 @@
   },
   "gem_year_ready": {
     "name": "Gemini یکساله (جیمیل آماده)",
-    "price": 2597000
-  },
-  "gem_exclusive_1month": {
-    "name": "اکانت اختصاصی Gemini Pro یک‌ماهه",
-    "price": 749000
-  },
-  "gem_exclusive_3month": {
-    "name": "اکانت اختصاصی Gemini Pro سه‌ماهه",
-    "price": 1949000
-  },
-  "gem_exclusive_6month": {
-    "name": "اکانت اختصاصی Gemini Pro شش‌ماهه",
-    "price": 3499000
-  },
-  "gem_exclusive_9month": {
-    "name": "اکانت اختصاصی Gemini Pro نه‌ماهه",
-    "price": 4999000
+    "price": 2497000
   },
   "gem_student_month": {
     "name": "تخفیف دانشجویی Gemini ماهانه",
@@ -109,27 +77,27 @@
   },
   "perplexity_monthly": {
     "name": "Perplexity ماهانه",
-    "price": 629000
+    "price": 429000
   },
   "perplexity_yearly": {
     "name": "Perplexity یکساله",
-    "price": 1847000
+    "price": 0
   },
   "grok_monthly": {
     "name": "Super Grok ماهانه",
-    "price": 1699000
+    "price": 1679000
   },
   "tgpremium_3month": {
     "name": "Telegram Premium 3 ماهه",
-    "price": 1979000
+    "price": 2450000
   },
   "tgpremium_6month": {
     "name": "Telegram Premium 6 ماهه",
-    "price": 2899000
+    "price": 3275000
   },
   "tgpremium_12month": {
     "name": "Telegram Premium یکساله",
-    "price": 4579000
+    "price": 5775000
   },
   "visa_card": {
     "name": "ویزا کارت",
@@ -178,5 +146,59 @@
   "vnum_wa_ca": {
     "name": "واتساپ کانادا",
     "price": 350000
+  },
+  "offers": {
+    "gemini_gift2026googlx": {
+      "code": "GIFT2026GOOGLX",
+      "product": "gemini",
+      "discount_type": "percent",
+      "discount_value": 20,
+      "plan_prices": {
+        "month": 519200,
+        "3month": 1000000,
+        "6month": 1304000,
+        "year_personal": 2232000,
+        "year_ready": 2072000
+      }
+    },
+    "gemini_gift2026google": {
+      "code": "GIFT2026GOOGLE",
+      "product": "gemini",
+      "discount_type": "percent",
+      "discount_value": 20,
+      "plan_prices": {
+        "month": 519200,
+        "3month": 1000000,
+        "6month": 1304000,
+        "year_personal": 2232000,
+        "year_ready": 2072000
+      }
+    },
+    "gemini_ghooz": {
+      "code": "GHOOZ",
+      "product": "gemini",
+      "discount_type": "percent",
+      "discount_value": 20,
+      "plan_prices": {
+        "month": 519200,
+        "3month": 1000000,
+        "6month": 1304000,
+        "year_personal": 2232000,
+        "year_ready": 2072000
+      }
+    },
+    "gemini_ghooz2": {
+      "code": "GHOOZ2",
+      "product": "gemini",
+      "discount_type": "percent",
+      "discount_value": 24,
+      "plan_prices": {
+        "month": 493240,
+        "3month": 950000,
+        "6month": 1238800,
+        "year_personal": 2120400,
+        "year_ready": 1968400
+      }
+    }
   }
 }

@@ -8,10 +8,12 @@ const GeminiPage = () => {
   const { getPrice } = usePricesContext();
 
   const features = [
-    "دسترسی به Gemini 2.5 Pro و Deep Research",
+    "دسترسی به Gemini 3 Pro برای تحلیل‌های سنگین",
+    "دسترسی به Deep Research برای تحقیقات عمیق",
     "یکپارچه با اکوسیستم گوگل (Gmail, Docs, Drive, Photos)",
     "۲ ترابایت فضای ابری Google One",
-    "ساخت ویدیو با Veo 3 و 3.1",
+    "دسترسی به Veo 3 در Gemini و Flow",
+    "پشتیبانی از Veo 3.1 در اکوسیستم توسعه‌دهنده گوگل",
     "NotebookLM با سقف بالاتر برای تحقیقات",
     "Gemini Code Assist برای برنامه‌نویسان",
     "دسترسی به Google AI Studio",
@@ -24,10 +26,11 @@ const GeminiPage = () => {
 
   const plans = [
     {
-      name: "اکانت اختصاصی یک‌ماهه",
+      id: "gem_month",
+      name: "پلن یک‌ماهه",
       duration: "۱ ماهه",
-      price: getPrice("gem_exclusive_1month"),
-      priceKey: "gem_exclusive_1month",
+      price: getPrice("gem_month"),
+      priceKey: "gem_month",
       features: [
         "اکانت کاملاً اختصاصی",
         "تمام امکانات Gemini Pro",
@@ -35,10 +38,11 @@ const GeminiPage = () => {
       ],
     },
     {
-      name: "اکانت اختصاصی سه‌ماهه",
+      id: "gem_3month",
+      name: "پلن سه‌ماهه",
       duration: "۳ ماهه",
-      price: getPrice("gem_exclusive_3month"),
-      priceKey: "gem_exclusive_3month",
+      price: getPrice("gem_3month"),
+      priceKey: "gem_3month",
       popular: true,
       features: [
         "اکانت کاملاً اختصاصی",
@@ -47,10 +51,11 @@ const GeminiPage = () => {
       ],
     },
     {
-      name: "اکانت اختصاصی شش‌ماهه",
+      id: "gem_6month",
+      name: "پلن شش‌ماهه",
       duration: "۶ ماهه",
-      price: getPrice("gem_exclusive_6month"),
-      priceKey: "gem_exclusive_6month",
+      price: getPrice("gem_6month"),
+      priceKey: "gem_6month",
       features: [
         "اکانت کاملاً اختصاصی",
         "بهترین ارزش برای پول",
@@ -58,23 +63,36 @@ const GeminiPage = () => {
       ],
     },
     {
-      name: "اکانت اختصاصی نه‌ماهه",
-      duration: "۹ ماهه",
-      price: getPrice("gem_exclusive_9month"),
-      priceKey: "gem_exclusive_9month",
+      id: "gem_year_personal",
+      name: "پلن یکساله (جیمیل شخصی)",
+      duration: "۱۲ ماهه",
+      price: getPrice("gem_year_personal"),
+      priceKey: "gem_year_personal",
       features: [
         "اکانت کاملاً اختصاصی",
-        "طولانی‌ترین دوره",
-        "بیشترین صرفه‌جویی",
+        "فعالسازی مستقیم روی Gmail شخصی",
+        "مناسب استفاده حرفه‌ای بلندمدت",
+      ],
+    },
+    {
+      id: "gem_year_ready",
+      name: "پلن یکساله (جیمیل آماده)",
+      duration: "۱۲ ماهه",
+      price: getPrice("gem_year_ready"),
+      priceKey: "gem_year_ready",
+      features: [
+        "تحویل سریع با اکانت آماده",
+        "تمام امکانات Gemini Pro",
+        "مناسب راه‌اندازی فوری",
       ],
     },
   ];
 
   const comparison = [
-    { feature: "دسترسی به Gemini 2.5 Pro", free: false, premium: true },
+    { feature: "دسترسی به Gemini 3 Pro", free: "محدود", premium: "کامل" },
     { feature: "Deep Research", free: false, premium: true },
     { feature: "فضای Google One", free: "۱۵ گیگ", premium: "۲ ترابایت" },
-    { feature: "ساخت ویدیو با Veo", free: false, premium: true },
+    { feature: "ساخت ویدیو با Veo", free: "محدود", premium: "سطح Pro" },
     { feature: "NotebookLM", free: "محدود", premium: "نامحدود" },
     { feature: "Google AI Studio", free: "محدود", premium: "کامل" },
     { feature: "Code Assist", free: false, premium: true },
@@ -175,7 +193,7 @@ const GeminiPage = () => {
               هوش مصنوعی جمینی، جدیدترین مدل زبان بزرگ و چندوجهی گوگل است که توسط تیم دیپ‌مایند توسعه یافته و می‌تواند متن، کد، تصویر، صدا و ویدیو را به طور یکپارچه درک کند.
             </p>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              این مدل در سه نسخه اولترا (برای کارهای بسیار پیچیده)، پرو (برای کاربردهای عمومی) و نانو (برای اجرا روی موبایل) عرضه شده است.
+              خانواده Gemini در نسخه‌های مختلف برای استفاده روزمره تا سناریوهای حرفه‌ای ارائه می‌شود و در اکوسیستم گوگل به‌صورت عمیق یکپارچه است.
             </p>
             <p className="text-muted-foreground leading-relaxed">
               جمینی با قابلیت‌های استدلال پیشرفته و کدنویسی، در حال ادغام در تمام محصولات گوگل از جمله جستجو، اندروید و ورکرسپیس است تا تجربه‌ای هوشمندتر و یکپارچه‌تر فراهم کند.
@@ -286,8 +304,8 @@ const GeminiPage = () => {
               </div>
               <div className="text-center">
                 <div className="w-14 h-14 rounded-full bg-blue-500 text-background font-bold text-2xl flex items-center justify-center mx-auto mb-4">۲</div>
-                <h3 className="font-bold text-lg mb-2">پیام به پشتیبانی</h3>
-                <p className="text-muted-foreground text-sm">با کلیک روی ثبت سفارش به تلگرام متصل شوید</p>
+                <h3 className="font-bold text-lg mb-2">ثبت سفارش در سایت</h3>
+                <p className="text-muted-foreground text-sm">پلن را در سایت ثبت کنید و وضعیت را از پنل کاربری ببینید</p>
               </div>
               <div className="text-center">
                 <div className="w-14 h-14 rounded-full bg-blue-500 text-background font-bold text-2xl flex items-center justify-center mx-auto mb-4">۳</div>
@@ -302,7 +320,7 @@ const GeminiPage = () => {
   );
 
   const lowestPrice = Math.min(...plans.map(p => p.price));
-  
+
   // Generate SEO schemas
   const faqSchema = createFAQSchema(faqs);
   const breadcrumbSchema = createBreadcrumbSchema([
@@ -311,10 +329,10 @@ const GeminiPage = () => {
   ]);
   const productSchema = createProductSchema({
     name: "اشتراک Gemini Pro گوگل",
-    description: "خرید اشتراک Gemini Pro گوگل با ۲ ترابایت فضای ابری Google One، Deep Research و یکپارچگی کامل با Gmail, Drive و Docs.",
+    description: "خرید اشتراک Gemini Pro گوگل با ۲ ترابایت فضای ابری Google One، Deep Research، Veo 3 و یکپارچگی کامل با Gmail, Drive و Docs.",
     price: lowestPrice,
     url: "/services/gemini",
-    image: "https://novateam.shop/logos/gemini.png",
+    image: "https://nova-shop.co/logos/gemini.svg",
     category: "اشتراک هوش مصنوعی",
     sku: "GEM-PRO",
     ratingValue: 4.8,
@@ -327,21 +345,23 @@ const GeminiPage = () => {
         <title>خرید اشتراک Gemini Pro | ۲ ترابایت فضا + Deep Research - نوا شاپ</title>
         <meta
           name="description"
-          content="خرید اشتراک Gemini Pro گوگل با ۲ ترابایت فضای ابری. یکپارچه با Gmail, Drive و Docs. ساخت ویدیو با Veo، Deep Research و پشتیبانی ۲۴ ساعته."
+          content="خرید اشتراک Gemini Pro گوگل با ۲ ترابایت فضای ابری. یکپارچه با Gmail, Drive و Docs. دسترسی به Veo 3/3.1، Deep Research و پشتیبانی ۲۴ ساعته."
         />
         <meta name="keywords" content="خرید Gemini, اشتراک Gemini Pro, هوش مصنوعی گوگل, Google One, Deep Research, Veo, خرید جمینی ایران" />
-        <link rel="canonical" href="https://novateam.shop/services/gemini" />
-        
+        <link rel="canonical" href="https://nova-shop.co/services/gemini" />
+
         {/* Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify([productSchema, faqSchema, breadcrumbSchema])}
         </script>
       </Helmet>
       <ServicePageLayout
+        serviceId="gemini"
         icon={Sparkles}
+        logoSrc="/logos/gemini.svg"
         title="Gemini Pro"
         subtitle="هوش مصنوعی گوگل"
-        description="هوش مصنوعی جمینی، جدیدترین مدل زبان بزرگ و چندوجهی گوگل است که توسط تیم دیپ‌مایند توسعه یافته و می‌تواند متن، کد، تصویر، صدا و ویدیو را به طور یکپارچه درک کند. این مدل در حال ادغام در تمام محصولات گوگل است تا تجربه‌ای هوشمندتر و یکپارچه‌تر فراهم کند."
+        description="Gemini Pro سرویس پریمیوم هوش مصنوعی گوگل است که با Gemini 3 Pro، Deep Research، Veo و یکپارچگی کامل با Workspace برای کار حرفه‌ای، تحقیق و تولید محتوا طراحی شده است."
         color="#3B82F6"
         features={features}
         plans={plans}

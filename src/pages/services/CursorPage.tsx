@@ -9,7 +9,7 @@ const CursorPage = () => {
 
   const features = [
     "تکمیل خودکار کد با مدل‌های قدرتمند AI",
-    "دسترسی به Claude 3.5 Sonnet، GPT-4 و Gemini",
+    "دسترسی به مدل‌های Frontier از OpenAI، Anthropic و Google",
     "درک کامل کانتکست کل پروژه",
     "Tab Completion پیشرفته برای کدنویسی سریع‌تر",
     "پیشنهاد رفع باگ و بهینه‌سازی کد",
@@ -24,6 +24,7 @@ const CursorPage = () => {
 
   const plans = [
     {
+      id: "cursor_weekly",
       name: "پلن Pro هفتگی",
       duration: "۱ هفته",
       price: getPrice("cursor_weekly"),
@@ -35,6 +36,7 @@ const CursorPage = () => {
       ],
     },
     {
+      id: "cursor_monthly",
       name: "پلن Pro ماهانه",
       duration: "۱ ماهه - ۲۰ دلار",
       price: getPrice("cursor_monthly"),
@@ -42,17 +44,17 @@ const CursorPage = () => {
       popular: true,
       features: [
         "دسترسی کامل به همه امکانات",
-        "۵۰۰ درخواست سریع در ماه",
-        "درخواست‌های کند نامحدود",
+        "سهمیه بالا برای درخواست‌های سریع",
+        "درخواست‌های کند بیشتر/نامحدود",
         "فعال‌سازی روی اکانت شخصی",
-        "دسترسی به Claude، GPT-4، Gemini",
+        "دسترسی به مدل‌های پیشرفته",
       ],
     },
   ];
 
   const comparison = [
     { feature: "تکمیل خودکار کد", free: "محدود", premium: "نامحدود" },
-    { feature: "مدل‌های پیشرفته (Claude, GPT-4)", free: false, premium: true },
+    { feature: "مدل‌های پیشرفته", free: false, premium: true },
     { feature: "درک کانتکست کل پروژه", free: "محدود", premium: "کامل" },
     { feature: "چت با AI", free: "محدود", premium: "نامحدود" },
     { feature: "Refactoring هوشمند", free: false, premium: true },
@@ -70,7 +72,7 @@ const CursorPage = () => {
     {
       question: "تفاوت درخواست سریع و کند چیست؟",
       answer:
-        "درخواست‌های سریع از مدل‌های قوی‌تر مثل Claude 3.5 Sonnet و GPT-4 استفاده می‌کنند و اولویت پاسخ‌گویی دارند. درخواست‌های کند از مدل‌های سبک‌تر استفاده می‌کنند اما همچنان قدرتمند هستند و نامحدود هستند.",
+        "درخواست‌های سریع برای پاسخ فوری و کارهای حساس استفاده می‌شوند و سهمیه مشخص دارند. درخواست‌های کند با اولویت پایین‌تر اما ظرفیت بیشتر ارائه می‌شوند و برای کارهای طولانی مناسب هستند.",
     },
     {
       question: "آیا Extensions های VS Code کار می‌کنند؟",
@@ -127,7 +129,7 @@ const CursorPage = () => {
               برخلاف GitHub Copilot که فقط یک افزونه است، Cursor کل پروژه شما را درک می‌کند و می‌تواند تغییرات هماهنگ در چند فایل همزمان انجام دهد.
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              با دسترسی به Claude 3.5 Sonnet، GPT-4 و Gemini، بهترین مدل‌های AI دنیا را برای کدنویسی در اختیار دارید.
+              با دسترسی به مدل‌های پیشرفته از OpenAI، Anthropic و Google، بهترین مدل‌های AI دنیا را برای کدنویسی در اختیار دارید.
             </p>
           </div>
         </div>
@@ -157,7 +159,7 @@ const CursorPage = () => {
                 <h3 className="font-bold text-lg">مدل‌های متنوع</h3>
               </div>
               <p className="text-muted-foreground text-sm">
-                دسترسی به Claude 3.5 Sonnet (بهترین در کدنویسی)، GPT-4 و Gemini. هر مدل را برای کار مناسب استفاده کنید.
+                دسترسی به مدل‌های پیشرفته OpenAI، Claude و Gemini. هر مدل را برای کار مناسب استفاده کنید.
               </p>
             </div>
             <div className="glass rounded-2xl p-6">
@@ -268,8 +270,8 @@ const CursorPage = () => {
               </div>
               <div className="text-center">
                 <div className="w-14 h-14 rounded-full bg-purple-500 text-background font-bold text-2xl flex items-center justify-center mx-auto mb-4">۲</div>
-                <h3 className="font-bold text-lg mb-2">پیام به پشتیبانی</h3>
-                <p className="text-muted-foreground text-sm">با کلیک روی ثبت سفارش به تلگرام متصل شوید</p>
+                <h3 className="font-bold text-lg mb-2">ثبت سفارش در سایت</h3>
+                <p className="text-muted-foreground text-sm">سفارش را داخل سایت ثبت کنید و وضعیت را از پنل کاربری ببینید.</p>
               </div>
               <div className="text-center">
                 <div className="w-14 h-14 rounded-full bg-purple-500 text-background font-bold text-2xl flex items-center justify-center mx-auto mb-4">۳</div>
@@ -284,7 +286,7 @@ const CursorPage = () => {
   );
 
   const lowestPrice = Math.min(...plans.map(p => p.price));
-  
+
   // Generate SEO schemas
   const faqSchema = createFAQSchema(faqs);
   const breadcrumbSchema = createBreadcrumbSchema([
@@ -293,10 +295,10 @@ const CursorPage = () => {
   ]);
   const productSchema = createProductSchema({
     name: "اشتراک Cursor Pro",
-    description: "خرید اشتراک Cursor Pro - ادیتور کدنویسی هوشمند با AI. دسترسی به Claude 3.5 Sonnet و GPT-4. سرعت کدنویسی ۲ برابر.",
+    description: "خرید اشتراک Cursor Pro - ادیتور کدنویسی هوشمند با AI. دسترسی به مدل‌های پیشرفته OpenAI، Claude و Gemini.",
     price: lowestPrice,
     url: "/services/cursor",
-    image: "https://novateam.shop/logos/cursor.png",
+    image: "https://nova-shop.co/logos/cursor.svg",
     category: "ابزار برنامه‌نویسی",
     sku: "CURSOR-PRO",
     ratingValue: 4.9,
@@ -309,18 +311,20 @@ const CursorPage = () => {
         <title>خرید اشتراک Cursor Pro | ادیتور کدنویسی AI - نوا شاپ</title>
         <meta
           name="description"
-          content="خرید اشتراک Cursor Pro - ادیتور کدنویسی هوشمند با AI. دسترسی به Claude 3.5 Sonnet و GPT-4. سرعت کدنویسی ۲ برابر. بهتر از GitHub Copilot."
+          content="خرید اشتراک Cursor Pro - ادیتور کدنویسی هوشمند با AI. دسترسی به مدل‌های پیشرفته، Tab Completion و Composer چندفایلی."
         />
         <meta name="keywords" content="خرید Cursor, Cursor Pro, ادیتور کد AI, کدنویسی هوشمند, GitHub Copilot, Claude, GPT-4, خرید کرسور ایران" />
-        <link rel="canonical" href="https://novateam.shop/services/cursor" />
-        
+        <link rel="canonical" href="https://nova-shop.co/services/cursor" />
+
         {/* Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify([productSchema, faqSchema, breadcrumbSchema])}
         </script>
       </Helmet>
       <ServicePageLayout
+        serviceId="cursor"
         icon={Code}
+        logoSrc="/logos/cursor.svg"
         title="Cursor Pro"
         subtitle="ادیتور کدنویسی هوشمند"
         description="Cursor یک ادیتور کدنویسی نسل جدید است که از ابتدا برای کار با هوش مصنوعی طراحی شده. با دسترسی به Claude 3.5 Sonnet، GPT-4 و Gemini، سرعت کدنویسی‌تان ۲ برابر می‌شود. درک کامل کل پروژه، تغییرات چند فایلی با Composer و Tab Completion پیشرفته."

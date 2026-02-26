@@ -21,6 +21,7 @@ const TelegramPremiumPage = () => {
 
   const plans = [
     {
+      id: "tgpremium_3month",
       name: "پلن ۳ ماهه",
       duration: "۳ ماهه",
       price: getPrice("tgpremium_3month"),
@@ -32,6 +33,7 @@ const TelegramPremiumPage = () => {
       ],
     },
     {
+      id: "tgpremium_6month",
       name: "پلن ۶ ماهه",
       duration: "۶ ماهه",
       price: getPrice("tgpremium_6month"),
@@ -44,6 +46,7 @@ const TelegramPremiumPage = () => {
       ],
     },
     {
+      id: "tgpremium_12month",
       name: "پلن یکساله",
       duration: "۱ ساله - بهترین قیمت",
       price: getPrice("tgpremium_12month"),
@@ -119,7 +122,9 @@ const TelegramPremiumPage = () => {
         </script>
       </Helmet>
       <ServicePageLayout
+        serviceId="telegram_premium"
         icon={Star}
+        logoSrc="/logos/telegram.svg"
         title="تلگرام پرمیوم"
         subtitle="ارتقای حساب کاربری"
         description="تلگرام پرمیوم مجموعه‌ای از امکانات ویژه و انحصاری است که تجربه استفاده از تلگرام را برای شما متحول می‌کند!"

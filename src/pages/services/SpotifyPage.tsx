@@ -20,6 +20,7 @@ const SpotifyPage = () => {
 
   const plans = [
     {
+      id: "spotify_monthly",
       name: "پلن یک‌ماهه",
       duration: "۱ ماهه",
       price: getPrice("spotify_monthly"),
@@ -32,6 +33,7 @@ const SpotifyPage = () => {
       ],
     },
     {
+      id: "spotify_4month",
       name: "پلن ۴ ماهه",
       duration: "۴ ماهه - اقتصادی",
       price: getPrice("spotify_4month"),
@@ -105,7 +107,9 @@ const SpotifyPage = () => {
         </script>
       </Helmet>
       <ServicePageLayout
+        serviceId="spotify"
         icon={Music}
+        logoSrc="/logos/spotify.svg"
         title="Spotify Premium"
         subtitle="موسیقی بدون محدودیت"
         description="اسپاتیفای بزرگ‌ترین پلتفرم موسیقی در جهان است؛ بدون تبلیغ، با کیفیت بالا و قابلیت دانلود آفلاین."

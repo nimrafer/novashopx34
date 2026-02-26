@@ -20,6 +20,7 @@ const CardsPage = () => {
 
   const plans = [
     {
+      id: "master_card",
       name: "مستر کارت",
       duration: "بین‌المللی - بانک سوییس",
       price: getPrice("master_card"),
@@ -31,6 +32,7 @@ const CardsPage = () => {
       ],
     },
     {
+      id: "visa_card",
       name: "ویزا کارت",
       duration: "بین‌المللی - بانک سوییس",
       price: getPrice("visa_card"),
@@ -101,7 +103,9 @@ const CardsPage = () => {
         </script>
       </Helmet>
       <ServicePageLayout
+        serviceId="cards"
         icon={CreditCard}
+        logoSrc="/logos/mastercard.svg"
         title="ویزا و مستر کارت"
         subtitle="کارت اعتباری مجازی"
         description="کارت اعتباری مجازی بین‌المللی صادر شده از بانک‌های اروپایی و سوییس. مناسب برای تمام خریدهای بین‌المللی و رفع تحریم."

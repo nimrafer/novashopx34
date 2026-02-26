@@ -1,0 +1,23 @@
+# Nova AI Shop
+
+> Lightweight crawler-oriented hints for LLM/AI agents.
+
+Base URL: https://nova-shop.co
+
+Primary crawl targets:
+- https://nova-shop.co/about
+- https://nova-shop.co/sitemap.xml
+- https://nova-shop.co/services/chatgpt
+- https://nova-shop.co/services/gemini
+- https://nova-shop.co/services/grok
+- https://nova-shop.co/services/perplexity
+- https://nova-shop.co/services/spotify
+- https://nova-shop.co/services/cursor
+- https://nova-shop.co/services/telegram-premium
+- https://nova-shop.co/services/cards
+- https://nova-shop.co/services/virtual-number
+
+Guidance:
+- Public marketing pages are crawlable.
+- Auth and dashboard areas are private and not intended for crawling.
+- For structured URL discovery, use sitemap.xml.

@@ -1,35 +1,53 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from 'lucide-react';
+import { Mail, User, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import novaLogo from '@/assets/nova-logo.png';
+import novaLogo from '@/assets/nova-logo.jpeg';
+
+type AuthStep = 'request' | 'verify';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [step, setStep] = useState<AuthStep>('request');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [otpCode, setOtpCode] = useState('');
   const [fullName, setFullName] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  const { user, loading, signIn, signUp } = useAuth();
+
+  const { user, loading, requestEmailOtp, verifyEmailOtp } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
 
-  // Redirect if already logged in
+  const nextPathRaw = new URLSearchParams(location.search).get('next') || '/dashboard';
+  const nextPath =
+    nextPathRaw.startsWith('/') && !nextPathRaw.startsWith('//') && nextPathRaw !== '/auth'
+      ? nextPathRaw
+      : '/dashboard';
+
   useEffect(() => {
     if (!loading && user) {
-      navigate('/');
+      navigate(nextPath);
     }
-  }, [user, loading, navigate]);
+  }, [user, loading, navigate, nextPath]);
 
-  const validateForm = () => {
-    if (!email || !email.includes('@')) {
+  const resetFlow = () => {
+    setStep('request');
+    setOtpCode('');
+  };
+
+  const isValidEmail = (value: string) => {
+    const emailValue = value.trim();
+    return emailValue.includes('@') && emailValue.includes('.');
+  };
+
+  const validateRequestForm = () => {
+    if (!isValidEmail(email)) {
       toast({
         title: 'خطا',
         description: 'لطفاً ایمیل معتبر وارد کنید',
@@ -37,14 +55,7 @@ const Auth = () => {
       });
       return false;
     }
-    if (password.length < 6) {
-      toast({
-        title: 'خطا',
-        description: 'رمز عبور باید حداقل ۶ کاراکتر باشد',
-        variant: 'destructive',
-      });
-      return false;
-    }
+
     if (!isLogin && !fullName.trim()) {
       toast({
         title: 'خطا',
@@ -53,61 +64,46 @@ const Auth = () => {
       });
       return false;
     }
+
     return true;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validateForm()) return;
-    
+  const handleRequestOtp = async () => {
+    if (!validateRequestForm()) return;
+
     setIsSubmitting(true);
 
     try {
-      if (isLogin) {
-        const { error } = await signIn(email, password);
-        if (error) {
-          let message = 'خطا در ورود';
-          if (error.message.includes('Invalid login credentials')) {
-            message = 'ایمیل یا رمز عبور اشتباه است';
-          } else if (error.message.includes('Email not confirmed')) {
-            message = 'لطفاً ابتدا ایمیل خود را تأیید کنید';
-          }
-          toast({
-            title: 'خطا',
-            description: message,
-            variant: 'destructive',
-          });
-        } else {
-          toast({
-            title: 'خوش آمدید!',
-            description: 'با موفقیت وارد شدید',
-          });
-          navigate('/');
+      const { error } = await requestEmailOtp(email.trim(), {
+        shouldCreateUser: !isLogin,
+        fullName: !isLogin ? fullName.trim() : undefined,
+      });
+
+      if (error) {
+        const rawMessage = error.message.toLowerCase();
+        let message = error.message || 'ارسال کد با خطا مواجه شد. لطفاً دوباره تلاش کنید';
+
+        if (!isLogin && rawMessage.includes('already registered')) {
+          message = 'این ایمیل قبلاً ثبت شده است. از بخش ورود استفاده کنید.';
+        } else if (isLogin && (rawMessage.includes('signups not allowed') || rawMessage.includes('user not found'))) {
+          message = 'برای این ایمیل حسابی پیدا نشد. ابتدا ثبت‌نام کنید.';
+        } else if (rawMessage.includes('security purposes') || rawMessage.includes('rate limit')) {
+          message = 'درخواست‌ها زیاد بوده. لطفاً یک دقیقه بعد دوباره تلاش کنید.';
         }
+
+        toast({
+          title: 'خطا',
+          description: message,
+          variant: 'destructive',
+        });
       } else {
-        const { error } = await signUp(email, password, fullName);
-        if (error) {
-          let message = 'خطا در ثبت‌نام';
-          if (error.message.includes('User already registered')) {
-            message = 'این ایمیل قبلاً ثبت شده است';
-          } else if (error.message.includes('Password')) {
-            message = 'رمز عبور باید قوی‌تر باشد';
-          }
-          toast({
-            title: 'خطا',
-            description: message,
-            variant: 'destructive',
-          });
-        } else {
-          toast({
-            title: 'ثبت‌نام موفق!',
-            description: 'حساب کاربری شما ایجاد شد',
-          });
-          navigate('/');
-        }
+        setStep('verify');
+        toast({
+          title: 'کد ارسال شد',
+          description: 'کد یک بار مصرف به ایمیل شما ارسال شد. لطفاً Inbox و پوشه Spam/Junk را بررسی کنید.',
+        });
       }
-    } catch (error) {
+    } catch {
       toast({
         title: 'خطا',
         description: 'مشکلی پیش آمد. لطفاً دوباره تلاش کنید',
@@ -116,6 +112,76 @@ const Auth = () => {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleVerifyOtp = async () => {
+    const token = otpCode.trim();
+
+    if (!isValidEmail(email)) {
+      toast({
+        title: 'خطا',
+        description: 'لطفاً ایمیل معتبر وارد کنید',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    if (token.length < 6) {
+      toast({
+        title: 'خطا',
+        description: 'کد یک بار مصرف باید حداقل ۶ رقم باشد',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await verifyEmailOtp(email.trim(), token);
+
+      if (error) {
+        const rawMessage = error.message.toLowerCase();
+        let message = error.message || 'کد وارد شده معتبر نیست';
+
+        if (rawMessage.includes('expired')) {
+          message = 'کد منقضی شده است. لطفاً کد جدید دریافت کنید.';
+        } else if (rawMessage.includes('invalid') || rawMessage.includes('token')) {
+          message = 'کد وارد شده اشتباه است. لطفاً دوباره بررسی کنید.';
+        }
+
+        toast({
+          title: 'خطا',
+          description: message,
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: isLogin ? 'ورود موفق' : 'ثبت‌نام موفق',
+          description: 'احراز هویت ایمیلی با موفقیت انجام شد.',
+        });
+        navigate(nextPath);
+      }
+    } catch {
+      toast({
+        title: 'خطا',
+        description: 'مشکلی در تأیید کد رخ داد. لطفاً دوباره تلاش کنید.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (step === 'request') {
+      await handleRequestOtp();
+      return;
+    }
+
+    await handleVerifyOtp();
   };
 
   if (loading) {
@@ -128,10 +194,9 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
       <header className="p-4 md:p-6">
-        <Link 
-          to="/" 
+        <Link
+          to="/"
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -139,32 +204,35 @@ const Auth = () => {
         </Link>
       </header>
 
-      {/* Main content */}
       <main className="flex-1 flex items-center justify-center p-4 md:p-6">
         <div className="w-full max-w-md">
-          {/* Logo */}
           <div className="text-center mb-8">
             <Link to="/">
-              <img 
-                src={novaLogo} 
-                alt="Nova AI Shop" 
+              <img
+                src={novaLogo}
+                alt="Nova AI Shop"
                 className="w-16 h-16 mx-auto mb-4 rounded-xl object-cover"
               />
             </Link>
             <h1 className="text-2xl font-bold text-foreground mb-2">
-              {isLogin ? 'ورود به حساب' : 'ایجاد حساب جدید'}
+              {step === 'verify'
+                ? 'تأیید کد ایمیل'
+                : isLogin
+                  ? 'ورود با کد یک بار مصرف'
+                  : 'ثبت‌نام با کد یک بار مصرف'}
             </h1>
             <p className="text-muted-foreground text-sm">
-              {isLogin 
-                ? 'برای دسترسی به پنل کاربری وارد شوید' 
-                : 'حساب خود را بسازید و از خدمات ما استفاده کنید'}
+              {step === 'verify'
+                ? 'کد ارسال‌شده به ایمیل را وارد کنید تا احراز هویت تکمیل شود.'
+                : isLogin
+                  ? 'برای ورود، کد یک‌بارمصرف به ایمیلتان ارسال می‌شود.'
+                  : 'برای ثبت‌نام، کد یک‌بارمصرف به ایمیلتان ارسال می‌شود.'}
             </p>
           </div>
 
-          {/* Form Card */}
           <div className="glass rounded-2xl p-6 md:p-8">
             <form onSubmit={handleSubmit} className="space-y-5">
-              {!isLogin && (
+              {!isLogin && step === 'request' && (
                 <div className="space-y-2">
                   <Label htmlFor="fullName" className="text-foreground">
                     نام کامل
@@ -195,36 +263,33 @@ const Auth = () => {
                     placeholder="example@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pr-10 bg-secondary/50 border-border text-foreground placeholder:text-muted-foreground"
+                    disabled={step === 'verify'}
+                    className="pr-10 bg-secondary/50 border-border text-foreground placeholder:text-muted-foreground disabled:opacity-70"
                     dir="ltr"
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-foreground">
-                  رمز عبور
-                </Label>
-                <div className="relative">
-                  <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              {step === 'verify' && (
+                <div className="space-y-2">
+                  <Label htmlFor="otp" className="text-foreground">
+                    کد یک بار مصرف
+                  </Label>
                   <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="حداقل ۶ کاراکتر"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="pr-10 pl-10 bg-secondary/50 border-border text-foreground placeholder:text-muted-foreground"
+                    id="otp"
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="کد ۶ رقمی"
+                    value={otpCode}
+                    onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, '').slice(0, 8))}
+                    className="bg-secondary/50 border-border text-foreground placeholder:text-muted-foreground text-center tracking-[0.3em]"
                     dir="ltr"
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
+                  <p className="text-xs text-muted-foreground leading-6">
+                    اگر ایمیل را دریافت نکردید، حتماً پوشه <span className="font-semibold">Spam/Junk</span> را هم بررسی کنید.
+                  </p>
                 </div>
-              </div>
+              )}
 
               <Button
                 type="submit"
@@ -233,36 +298,62 @@ const Auth = () => {
               >
                 {isSubmitting ? (
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                ) : isLogin ? (
-                  'ورود'
+                ) : step === 'request' ? (
+                  'ارسال کد تایید به ایمیل'
                 ) : (
-                  'ثبت‌نام'
+                  'تأیید کد و ورود'
                 )}
               </Button>
+
+              {step === 'verify' && (
+                <div className="flex items-center justify-between gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="flex-1"
+                    onClick={handleRequestOtp}
+                    disabled={isSubmitting}
+                  >
+                    ارسال مجدد کد
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="flex-1"
+                    onClick={resetFlow}
+                    disabled={isSubmitting}
+                  >
+                    تغییر ایمیل
+                  </Button>
+                </div>
+              )}
             </form>
 
-            {/* Toggle */}
-            <div className="mt-6 text-center">
-              <p className="text-muted-foreground text-sm">
-                {isLogin ? 'حساب کاربری ندارید؟' : 'قبلاً ثبت‌نام کرده‌اید؟'}
-                <button
-                  type="button"
-                  onClick={() => setIsLogin(!isLogin)}
-                  className="text-primary hover:underline mr-1 font-medium"
-                >
-                  {isLogin ? 'ثبت‌نام کنید' : 'وارد شوید'}
-                </button>
-              </p>
-            </div>
+            {step === 'request' && (
+              <div className="mt-6 text-center">
+                <p className="text-muted-foreground text-sm">
+                  {isLogin ? 'حساب کاربری ندارید؟' : 'قبلاً ثبت‌نام کرده‌اید؟'}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsLogin(!isLogin);
+                      resetFlow();
+                    }}
+                    className="text-primary hover:underline mr-1 font-medium"
+                  >
+                    {isLogin ? 'ثبت‌نام کنید' : 'وارد شوید'}
+                  </button>
+                </p>
+              </div>
+            )}
           </div>
 
-          {/* Footer note */}
-          <p className="text-center text-muted-foreground text-xs mt-6">
+          <p className="text-center text-muted-foreground text-xs mt-6 leading-6">
             با ورود یا ثبت‌نام، شما{' '}
             <Link to="/terms" className="text-primary hover:underline">
               قوانین و مقررات
             </Link>{' '}
-            ما را می‌پذیرید.
+            ما را می‌پذیرید. اگر ایمیل تأیید را ندیدید، پوشه Spam/Junk را بررسی کنید.
           </p>
         </div>
       </main>

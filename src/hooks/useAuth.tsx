@@ -1,75 +1,136 @@
 import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
-import { User, Session } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
+
+export interface AuthUser {
+  id: string;
+  email: string;
+  fullName: string | null;
+  createdAt: string;
+}
+
+interface RequestOtpOptions {
+  fullName?: string;
+  shouldCreateUser?: boolean;
+}
 
 interface AuthContextType {
-  user: User | null;
-  session: Session | null;
+  user: AuthUser | null;
   loading: boolean;
-  signUp: (email: string, password: string, fullName?: string) => Promise<{ error: Error | null }>;
-  signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
+  requestEmailOtp: (email: string, options?: RequestOtpOptions) => Promise<{ error: Error | null }>;
+  verifyEmailOtp: (email: string, token: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+interface ApiSuccess<T> {
+  ok: true;
+  data: T;
+}
+
+interface ApiFailure {
+  ok: false;
+  error: string;
+}
+
+async function apiRequest<T>(path: string, body?: Record<string, unknown>): Promise<ApiSuccess<T> | ApiFailure> {
+  try {
+    const response = await fetch(path, {
+      method: body ? 'POST' : 'GET',
+      headers: body
+        ? {
+            'Content-Type': 'application/json',
+          }
+        : undefined,
+      credentials: 'include',
+      body: body ? JSON.stringify(body) : undefined,
+    });
+
+    const payload = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      return {
+        ok: false,
+        error: payload?.error || 'درخواست ناموفق بود',
+      };
+    }
+
+    return {
+      ok: true,
+      data: payload as T,
+    };
+  } catch (_error) {
+    return {
+      ok: false,
+      error: 'خطای شبکه رخ داد',
+    };
+  }
+}
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setLoading(false);
+    let mounted = true;
+
+    const loadSession = async () => {
+      const result = await apiRequest<{ user: AuthUser | null }>('/api/auth/session');
+
+      if (!mounted) return;
+
+      if (result.ok) {
+        setUser(result.data.user ?? null);
+      } else {
+        setUser(null);
       }
-    );
 
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
       setLoading(false);
-    });
+    };
 
-    return () => subscription.unsubscribe();
+    loadSession();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
-  const signUp = async (email: string, password: string, fullName?: string) => {
-    const redirectUrl = `${window.location.origin}/`;
-    
-    const { error } = await supabase.auth.signUp({
+  const requestEmailOtp = async (email: string, options?: RequestOtpOptions) => {
+    const mode = options?.shouldCreateUser ? 'signup' : 'login';
+
+    const result = await apiRequest<{ message: string }>('/api/auth/request-otp', {
       email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl,
-        data: {
-          full_name: fullName,
-        }
-      }
+      mode,
+      fullName: options?.fullName,
     });
-    
-    return { error: error as Error | null };
+
+    if ("error" in result) {
+      return { error: new Error(result.error) };
+    }
+
+    return { error: null };
   };
 
-  const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
+  const verifyEmailOtp = async (email: string, token: string) => {
+    const result = await apiRequest<{ user: AuthUser }>('/api/auth/verify-otp', {
       email,
-      password,
+      token,
     });
-    
-    return { error: error as Error | null };
+
+    if ("error" in result) {
+      return { error: new Error(result.error) };
+    }
+
+    setUser(result.data.user);
+    return { error: null };
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    await apiRequest<{ message: string }>('/api/auth/logout', {});
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, signUp, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, loading, requestEmailOtp, verifyEmailOtp, signOut }}>
       {children}
     </AuthContext.Provider>
   );

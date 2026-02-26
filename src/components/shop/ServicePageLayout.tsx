@@ -1,14 +1,18 @@
-import { ReactNode } from "react";
-import { Link } from "react-router-dom";
-import { LucideIcon, MessageCircle, ArrowRight, Check, X } from "lucide-react";
+import { ReactNode, useMemo, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { LucideIcon, MessageCircle, ArrowRight, Check, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { createOrder } from "@/lib/orders";
 import ShopHeader from "./ShopHeader";
 import ShopFooter from "./ShopFooter";
 
 const SUPPORT_USERNAME = "Nova_AI_Support";
 
 interface Plan {
+  id?: string;
   name: string;
   duration: string;
   price: number;
@@ -29,7 +33,9 @@ interface CompareItem {
 }
 
 interface ServicePageLayoutProps {
+  serviceId?: string;
   icon: LucideIcon;
+  logoSrc?: string;
   title: string;
   subtitle: string;
   description: string;
@@ -48,7 +54,9 @@ const formatPrice = (price: number) => {
 };
 
 const ServicePageLayout = ({
+  serviceId,
   icon: Icon,
+  logoSrc,
   title,
   subtitle,
   description,
@@ -59,9 +67,69 @@ const ServicePageLayout = ({
   comparison,
   extraContent,
 }: ServicePageLayoutProps) => {
-  const handleOrder = (planName: string) => {
-    const message = encodeURIComponent(`سلام! میخوام ${title} - ${planName} رو سفارش بدم.`);
-    window.open(`https://t.me/${SUPPORT_USERNAME}?text=${message}`, "_blank");
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [submittingPlan, setSubmittingPlan] = useState<string | null>(null);
+
+  const paddedPlans = useMemo(() => {
+    const rows = plans.map((plan, idx) => ({
+      kind: "plan" as const,
+      key: plan.id ? `${plan.id}-${idx}` : `${plan.name}-${idx}`,
+      plan,
+    }));
+
+    const remainder = rows.length % 4;
+    if (remainder === 0) {
+      return rows;
+    }
+
+    const placeholderCount = 4 - remainder;
+    const placeholders = Array.from({ length: placeholderCount }, (_, idx) => ({
+      kind: "placeholder" as const,
+      key: `placeholder-${idx}`,
+    }));
+
+    return [...rows, ...placeholders];
+  }, [plans]);
+
+  const handleOrder = async (plan: Plan) => {
+    if (!user) {
+      toast({
+        title: "ابتدا وارد حساب شوید",
+        description: "برای ثبت سفارش، ابتدا با ایمیل وارد شوید.",
+        variant: "destructive",
+      });
+      navigate(`/auth?next=${encodeURIComponent(location.pathname)}`);
+      return;
+    }
+
+    setSubmittingPlan(plan.name);
+    const result = await createOrder({
+      serviceId: serviceId || location.pathname.replace("/services/", "") || "service",
+      serviceName: title,
+      planId: plan.id,
+      planName: plan.name,
+      planDuration: plan.duration,
+      price: plan.price,
+    });
+    setSubmittingPlan(null);
+
+    if ("error" in result) {
+      toast({
+        title: "ثبت سفارش ناموفق بود",
+        description: result.error,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "سفارش ثبت شد",
+      description: `شناسه سفارش: ${result.data.order.id}`,
+    });
+    navigate("/dashboard");
   };
 
   return (
@@ -92,7 +160,11 @@ const ServicePageLayout = ({
                 className="w-20 h-20 rounded-3xl flex items-center justify-center shrink-0"
                 style={{ backgroundColor: `${color}20` }}
               >
-                <Icon className="w-10 h-10" style={{ color }} />
+                {logoSrc ? (
+                  <img src={logoSrc} alt={title} className="w-12 h-12 object-contain" loading="lazy" />
+                ) : (
+                  <Icon className="w-10 h-10" style={{ color }} />
+                )}
               </div>
 
               <div className="flex-1">
@@ -203,65 +275,79 @@ const ServicePageLayout = ({
         <section className="py-12">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold mb-8">🛍 پلن‌های خرید</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {plans.map((plan, idx) => (
-                <div
-                  key={idx}
-                  className={`glass rounded-3xl p-6 relative ${
-                    plan.popular ? "border-2" : ""
-                  }`}
-                  style={plan.popular ? { borderColor: color } : {}}
-                >
-                  {plan.popular && (
-                    <div className="absolute -top-3 right-6">
-                      <Badge style={{ backgroundColor: color }}>پرفروش</Badge>
-                    </div>
-                  )}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {paddedPlans.map((item) => {
+                if (item.kind === "placeholder") {
+                  return <div key={item.key} className="hidden lg:block" aria-hidden />;
+                }
 
-                  <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {plan.duration}
-                  </p>
+                const { plan } = item;
+                const isSubmitting = submittingPlan === plan.name;
 
-                  <div className="text-3xl font-bold mb-6" style={{ color }}>
-                    {formatPrice(plan.price)}
-                  </div>
-
-                  {plan.features && (
-                    <ul className="space-y-3 mb-6">
-                      {plan.features.map((f, i) => (
-                        <li key={i} className="flex items-center gap-2 text-sm">
-                          <Check className="w-4 h-4" style={{ color }} />
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-
-                  {plan.notIncluded && (
-                    <ul className="space-y-2 mb-6 pt-4 border-t border-border/50">
-                      {plan.notIncluded.map((f, i) => (
-                        <li
-                          key={i}
-                          className="flex items-center gap-2 text-sm text-muted-foreground"
-                        >
-                          <X className="w-4 h-4" />
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-
-                  <Button
-                    className="w-full"
-                    style={{ backgroundColor: color }}
-                    onClick={() => handleOrder(plan.name)}
+                return (
+                  <div
+                    key={item.key}
+                    className={`glass rounded-3xl p-6 relative ${
+                      plan.popular ? "border-2" : ""
+                    }`}
+                    style={plan.popular ? { borderColor: color } : {}}
                   >
-                    <MessageCircle className="w-4 h-4 ml-2" />
-                    ثبت سفارش
-                  </Button>
-                </div>
-              ))}
+                    {plan.popular && (
+                      <div className="absolute -top-3 right-6">
+                        <Badge style={{ backgroundColor: color }}>پرفروش</Badge>
+                      </div>
+                    )}
+
+                    <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {plan.duration}
+                    </p>
+
+                    <div className="text-3xl font-bold mb-6" style={{ color }}>
+                      {formatPrice(plan.price)}
+                    </div>
+
+                    {plan.features && (
+                      <ul className="space-y-3 mb-6">
+                        {plan.features.map((f, i) => (
+                          <li key={i} className="flex items-center gap-2 text-sm">
+                            <Check className="w-4 h-4" style={{ color }} />
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                    {plan.notIncluded && (
+                      <ul className="space-y-2 mb-6 pt-4 border-t border-border/50">
+                        {plan.notIncluded.map((f, i) => (
+                          <li
+                            key={i}
+                            className="flex items-center gap-2 text-sm text-muted-foreground"
+                          >
+                            <X className="w-4 h-4" />
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                    <Button
+                      className="w-full"
+                      style={{ backgroundColor: color }}
+                      disabled={isSubmitting}
+                      onClick={() => handleOrder(plan)}
+                    >
+                      {isSubmitting ? (
+                        <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                      ) : (
+                        <MessageCircle className="w-4 h-4 ml-2" />
+                      )}
+                      {isSubmitting ? "در حال ثبت..." : "ثبت سفارش"}
+                    </Button>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -325,7 +411,7 @@ const ServicePageLayout = ({
                   در عصری که <strong className="text-foreground">هوش مصنوعی</strong> مرزهای توانمندی انسان را جابه‌جا کرده، دسترسی بدون محدودیت به برترین ابزارها دیگر یک انتخاب نیست، بلکه <strong className="text-foreground">یک ضرورت</strong> است. <strong className="text-foreground">نوا شاپ</strong> به عنوان <strong className="text-foreground">بزرگترین فروشگاه اکانت هوش مصنوعی</strong> در ایران، با هدف حذف تحریم‌ها و موانع پرداخت ارزی، بستری امن و مطمئن برای <strong className="text-foreground">خرید اکانت AI</strong> فراهم کرده است.
                 </p>
                 <p>
-                  برخلاف مجموعه‌های تک‌محصولی، ما در نوا شاپ <strong className="text-foreground">پکیج کاملی از قدرت</strong> را به شما ارائه می‌دهیم: از <Link to="/services/chatgpt" className="text-primary hover:underline font-semibold">خرید اکانت ChatGPT Plus</Link> با دسترسی کامل به مدل‌های <strong className="text-foreground">o1، o3 و GPT-4o</strong> برای عموم کاربران، تا <Link to="/services/grok" className="text-primary hover:underline font-semibold">خرید اشتراک Grok AI</Link> برای طرفداران ایلان ماسک و توییتر. همچنین <Link to="/services/claude" className="text-primary hover:underline font-semibold">اشتراک Claude Pro</Link> برای تحلیل‌های پیچیده و <Link to="/services/perplexity" className="text-primary hover:underline font-semibold">Perplexity Pro</Link> برای جستجوی هوشمند در دسترس شماست.
+                  برخلاف مجموعه‌های تک‌محصولی، ما در نوا شاپ <strong className="text-foreground">پکیج کاملی از قدرت</strong> را به شما ارائه می‌دهیم: از <Link to="/services/chatgpt" className="text-primary hover:underline font-semibold">خرید اکانت ChatGPT Plus/Pro</Link> با دسترسی به مدل‌های پیشرفته OpenAI، تا <Link to="/services/grok" className="text-primary hover:underline font-semibold">خرید اشتراک Grok AI</Link> برای تجربه xAI. همچنین <Link to="/services/perplexity" className="text-primary hover:underline font-semibold">Perplexity Pro</Link> برای جستجوی هوشمند و <Link to="/services/cursor" className="text-primary hover:underline font-semibold">Cursor Pro</Link> برای برنامه‌نویسی حرفه‌ای در دسترس شماست.
                 </p>
                 <p>
                   متخصصان و برنامه‌نویسان نیز می‌توانند با <Link to="/services/cursor" className="text-primary hover:underline font-semibold">خرید اکانت Cursor Pro</Link>، کدنویسی خود را به سطح جدیدی ببرند یا با <Link to="/services/gemini" className="text-primary hover:underline font-semibold">خرید Gemini Advanced</Link> از اکوسیستم قدرتمند گوگل و <strong className="text-foreground">فضای ابری ۲ ترابایتی</strong> بهره‌مند شوند. برای سرگرمی و موسیقی هم <Link to="/services/spotify" className="text-primary hover:underline font-semibold">اشتراک Spotify Premium</Link> و <Link to="/services/telegram-premium" className="text-primary hover:underline font-semibold">تلگرام پریمیوم</Link> داریم!

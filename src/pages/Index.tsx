@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import SEOHead from "@/components/seo/SEOHead";
-import { 
-  organizationSchema, 
-  websiteSchema, 
-  localBusinessSchema, 
+import {
+  organizationSchema,
+  websiteSchema,
+  localBusinessSchema,
   createItemListSchema,
   createHowToSchema,
   createFAQSchema
@@ -11,6 +11,7 @@ import {
 import ShopHeader from "@/components/shop/ShopHeader";
 import HeroSection from "@/components/shop/HeroSection";
 import ServicesSection from "@/components/shop/ServicesSection";
+import OrderingSteps from "@/components/shop/OrderingSteps";
 import ShopFooter from "@/components/shop/ShopFooter";
 
 const Index = () => {
@@ -19,9 +20,9 @@ const Index = () => {
     { name: "اکانت ChatGPT Plus", url: "/services/chatgpt", position: 1 },
     { name: "اکانت Gemini Pro", url: "/services/gemini", position: 2 },
     { name: "اکانت Grok", url: "/services/grok", position: 3 },
-    { name: "اکانت Claude Pro", url: "/services/claude", position: 4 },
-    { name: "اکانت Cursor Pro", url: "/services/cursor", position: 5 },
-    { name: "اکانت Perplexity Pro", url: "/services/perplexity", position: 6 },
+    { name: "اکانت Cursor Pro", url: "/services/cursor", position: 4 },
+    { name: "اکانت Perplexity Pro", url: "/services/perplexity", position: 5 },
+    { name: "تلگرام پریمیوم", url: "/services/telegram-premium", position: 6 },
   ]);
 
   // How to buy guide for SEO
@@ -31,8 +32,8 @@ const Index = () => {
     steps: [
       { name: "انتخاب سرویس", text: "از لیست محصولات، سرویس مورد نظر خود را انتخاب کنید" },
       { name: "انتخاب پلن", text: "پلن مناسب با نیاز و بودجه خود را انتخاب کنید" },
-      { name: "تماس با پشتیبانی", text: "با کلیک روی دکمه ثبت سفارش، به تلگرام پشتیبانی متصل شوید" },
-      { name: "پرداخت و تحویل", text: "پس از پرداخت، اکانت در کمتر از ۱ ساعت تحویل داده می‌شود" },
+      { name: "ثبت سفارش در سایت", text: "سفارش را مستقیم در سایت ثبت کنید و کد سفارش بگیرید" },
+      { name: "پرداخت و فعال‌سازی", text: "پس از تایید سفارش، سرویس شما در سریع‌ترین زمان فعال می‌شود" },
     ],
     totalTime: "PT30M"
   });
@@ -41,7 +42,7 @@ const Index = () => {
   const homeFAQ = createFAQSchema([
     {
       question: "چگونه می‌توانم اکانت ChatGPT بخرم؟",
-      answer: "برای خرید اکانت ChatGPT، وارد صفحه ChatGPT شوید، پلن مورد نظر را انتخاب کنید و با پشتیبانی تلگرام ما در ارتباط باشید. تحویل فوری و با گارانتی تعویض."
+      answer: "برای خرید اکانت ChatGPT وارد صفحه سرویس شوید، پلن موردنظر را انتخاب کنید و سفارش را داخل سایت ثبت کنید. سپس وضعیت سفارش از پنل کاربری قابل پیگیری است."
     },
     {
       question: "آیا اکانت‌های شما قانونی هستند؟",
@@ -70,8 +71,8 @@ const Index = () => {
     <>
       <SEOHead
         title="نوا شاپ | خرید اکانت ChatGPT، Gemini، Grok با تحویل فوری"
-        description="خرید اشتراک ChatGPT Plus، Gemini Pro، Grok، Claude و Cursor با تحویل فوری، گارانتی تعویض و پشتیبانی ۲۴ ساعته. اکانت ۱۰۰٪ اصلی با قیمت مناسب."
-        keywords="خرید ChatGPT, اشتراک ChatGPT Plus, خرید Gemini Pro, خرید Grok, خرید Claude, خرید Cursor, اکانت هوش مصنوعی, خرید اکانت AI ایران, نوا شاپ"
+        description="خرید اشتراک ChatGPT Plus/Pro، Gemini Pro، Grok، Cursor، Perplexity، تلگرام پریمیوم و سرویس‌های مکمل با تحویل فوری، گارانتی تعویض و پشتیبانی ۲۴ ساعته."
+        keywords="خرید ChatGPT, اشتراک ChatGPT Pro, خرید Gemini Pro, خرید Grok, خرید Cursor, خرید Perplexity, تلگرام پریمیوم, اکانت هوش مصنوعی, خرید اکانت AI ایران, نوا شاپ"
         canonicalUrl="/"
         ogType="website"
         jsonLd={jsonLdSchemas}
@@ -79,11 +80,12 @@ const Index = () => {
 
       <div className="min-h-screen bg-background">
         <ShopHeader />
-        
+
         <main>
           <HeroSection />
           <ServicesSection />
-          
+          <OrderingSteps />
+
           {/* SEO Content Section */}
           <section className="py-16 bg-muted/30">
             <div className="container mx-auto px-4">
@@ -97,7 +99,7 @@ const Index = () => {
                   </p>
 
                   <p>
-                    برخلاف مجموعه‌های تک‌محصولی، ما یک فروشگاه <strong className="text-foreground">چندمحصولی</strong> هستیم و <strong className="text-foreground">موجودی دائمی و کامل</strong> از سرویس‌های محبوب را یکجا ارائه می‌دهیم: از <Link to="/services/chatgpt" className="text-primary hover:underline font-semibold">خرید اکانت ChatGPT Plus</Link> برای دسترسی به مدل‌های پیشرفته OpenAI، تا <Link to="/services/grok" className="text-primary hover:underline font-semibold">خرید اشتراک Grok AI</Link> برای تجربه هوش مصنوعی X. علاوه بر این، <Link to="/services/claude" className="text-primary hover:underline font-semibold">Claude Pro</Link> و <Link to="/services/perplexity" className="text-primary hover:underline font-semibold">Perplexity Pro</Link> برای کارهای تحقیقاتی، و همچنین <Link to="/services/telegram-premium" className="text-primary hover:underline font-semibold">تلگرام پریمیوم</Link> و <Link to="/services/spotify" className="text-primary hover:underline font-semibold">Spotify Premium</Link> برای استفاده روزمره همیشه در دسترس هستند.
+                    برخلاف مجموعه‌های تک‌محصولی، ما یک فروشگاه <strong className="text-foreground">چندمحصولی</strong> هستیم و <strong className="text-foreground">موجودی دائمی و کامل</strong> از سرویس‌های محبوب را یکجا ارائه می‌دهیم: از <Link to="/services/chatgpt" className="text-primary hover:underline font-semibold">خرید اکانت ChatGPT Plus/Pro</Link> برای دسترسی به مدل‌های پیشرفته OpenAI، تا <Link to="/services/grok" className="text-primary hover:underline font-semibold">خرید اشتراک Grok AI</Link> برای تجربه هوش مصنوعی X. علاوه بر این، <Link to="/services/perplexity" className="text-primary hover:underline font-semibold">Perplexity Pro</Link> برای کارهای تحقیقاتی، <Link to="/services/cursor" className="text-primary hover:underline font-semibold">Cursor Pro</Link> برای برنامه‌نویسی حرفه‌ای، و همچنین <Link to="/services/telegram-premium" className="text-primary hover:underline font-semibold">تلگرام پریمیوم</Link> و <Link to="/services/spotify" className="text-primary hover:underline font-semibold">Spotify Premium</Link> برای استفاده روزمره همیشه در دسترس هستند.
                   </p>
 
                   <p>
@@ -108,7 +110,7 @@ const Index = () => {
                     تمامی اشتراک‌ها <strong className="text-foreground">قانونی</strong>، <strong className="text-foreground">اختصاصی</strong> و با <strong className="text-foreground">تحویل آنی</strong> ارائه می‌شوند. اولویت ما <strong className="text-foreground">پایداری ۱۰۰٪</strong>، <strong className="text-foreground">پشتیبانی دائمی</strong> و <strong className="text-foreground">کیفیت تضمین‌شده</strong> است؛ تا هیچ مانعی میان شما و آینده وجود نداشته باشد.
                   </p>
                 </div>
-                
+
                 {/* Additional SEO Keywords Section */}
                 <div className="mt-8 pt-8 border-t border-border">
                   <h3 className="text-xl font-semibold mb-4 text-center">
@@ -137,7 +139,7 @@ const Index = () => {
             </div>
           </section>
         </main>
-        
+
         <ShopFooter />
       </div>
     </>

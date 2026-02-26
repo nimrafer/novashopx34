@@ -1,35 +1,37 @@
-import { Bot, Clock, RefreshCw, Zap, Shield, Wifi, Headphones } from "lucide-react";
+import { Bot, RefreshCw, Database, Headphones } from "lucide-react";
 import ServicePageLayout from "@/components/shop/ServicePageLayout";
 import { Helmet } from "react-helmet";
 import { usePricesContext } from "@/contexts/PricesContext";
 import { createFAQSchema, createBreadcrumbSchema, createProductSchema } from "@/components/seo/schemas";
 
 const ChatGPTPage = () => {
-  const { getPrice, loading } = usePricesContext();
+  const { getPrice } = usePricesContext();
 
   const features = [
-    "مبتنی بر مدل GPT-4o (Omni) با قابلیت‌های چندوجهی: متن، تصویر، صدا",
-    "دسترسی به DALL-E 3 برای ساخت و ویرایش تصویر",
+    "دسترسی به مدل‌های GPT-5 و GPT-5 thinking",
+    "دسترسی به مدل‌های استدلالی O3 و O3 Pro (در پلن‌های سطح بالا)",
+    "دسترسی به GPT-4o و قابلیت‌های چندوجهی: متن، تصویر و صدا",
+    "دسترسی به ساخت و ویرایش تصویر",
     "وب‌گردی و دسترسی به اطلاعات به‌روز اینترنت",
     "تحلیل فایل‌ها (PDF, Word, Excel, تصویر و...)",
-    "سرعت بسیار بالا بدون پیام ChatGPT is at capacity",
+    "Deep Research برای تحقیق عمیق چندمرحله‌ای",
     "ساخت GPT سفارشی برای نیازهای خاص شما",
-    "مکالمه صوتی پیشرفته با هوش مصنوعی",
+    "مکالمه صوتی پیشرفته و حالت video/screen sharing در اپ",
     "تحلیل داده‌های پیچیده و فایل‌های بزرگ",
     "اولویت دسترسی در ساعات پرترافیک",
-    "اتصال بدون VPN با افزونه اختصاصی",
     "گارانتی تعویض در صورت مسدودی",
     "پشتیبانی ۲۴ ساعته واقعی (نه ربات)",
   ];
 
   const plans = [
     {
-      name: "اکانت اشتراکی Plus",
+      id: "cgpt_pro_shared",
+      name: "Pro اشتراکی",
       duration: "۱ ماهه - اقتصادی",
       price: getPrice("cgpt_pro_shared"),
       priceKey: "cgpt_pro_shared",
       features: [
-        "دسترسی به GPT-4o",
+        "دسترسی به مدل‌های اصلی ChatGPT",
         "اشتراکی با ۱-۲ نفر دیگر",
         "مناسب تکالیف و کدنویسی ساده",
       ],
@@ -39,7 +41,8 @@ const ChatGPTPage = () => {
       ],
     },
     {
-      name: "اکانت Plus اختصاصی ۳۰ روزه",
+      id: "cgpt_pro_30day",
+      name: "Pro اختصاصی ۳۰ روزه",
       duration: "۱ ماهه - ۲۰ دلار",
       price: getPrice("cgpt_pro_30day"),
       priceKey: "cgpt_pro_30day",
@@ -53,7 +56,8 @@ const ChatGPTPage = () => {
       ],
     },
     {
-      name: "اکانت Plus اختصاصی ۳۷ روزه",
+      id: "cgpt_pro_37day",
+      name: "Pro اختصاصی ۳۷ روزه",
       duration: "۳۷ روزه - ویژه",
       price: getPrice("cgpt_pro_37day"),
       priceKey: "cgpt_pro_37day",
@@ -65,7 +69,8 @@ const ChatGPTPage = () => {
       ],
     },
     {
-      name: "اکانت Plus تیمی",
+      id: "cgpt_plus_team",
+      name: "Plus تیمی ۵ نفره",
       duration: "۱ ماهه - تیمی",
       price: getPrice("cgpt_plus_team"),
       priceKey: "cgpt_plus_team",
@@ -76,30 +81,43 @@ const ChatGPTPage = () => {
       ],
     },
     {
+      id: "cgpt_team",
+      name: "Team تیمی (۳۷ روزه)",
+      duration: "۳۷ روزه - بیزنسی",
+      price: getPrice("cgpt_team"),
+      priceKey: "cgpt_team",
+      features: [
+        "مناسب تیم‌های حرفه‌ای و کسب‌وکار",
+        "ورک‌اسپیس تیمی با مدیریت مرکزی",
+        "پایداری بیشتر برای تیم‌های چندنفره",
+      ],
+    },
+    {
+      id: "cgpt_go_yearly",
       name: "ChatGPT GO یکساله",
       duration: "۱ ساله - صرفه‌جویی",
       price: getPrice("cgpt_go_yearly"),
       priceKey: "cgpt_go_yearly",
       features: [
-        "یک سال کامل",
-        "صرفه‌جویی قابل توجه",
-        "بهترین ارزش برای پول",
+        "یک سال کامل با هزینه اقتصادی",
+        "سطح دسترسی بالاتر از نسخه رایگان",
+        "مناسب استفاده روزمره و کاری",
       ],
     },
   ];
 
   const comparison = [
-    { feature: "دسترسی به GPT-4o", free: false, premium: true },
-    { feature: "دسترسی به GPT-5 و O3 Pro", free: false, premium: "فقط Pro" },
-    { feature: "محدودیت پیام روزانه", free: "۱۰-۲۰ پیام", premium: "نامحدود" },
-    { feature: "سرعت پاسخ‌گویی", free: "بسیار پایین در اوج مصرف", premium: "همیشه سریع" },
-    { feature: "پیام ChatGPT is at capacity", free: "مکرر", premium: "هرگز" },
+    { feature: "دسترسی به GPT-4o", free: "محدود", premium: "کامل" },
+    { feature: "دسترسی به GPT-5", free: false, premium: "کامل" },
+    { feature: "دسترسی به O3 / O3 Pro", free: false, premium: "پلن‌های بالاتر" },
+    { feature: "محدودیت پیام روزانه", free: "زیاد", premium: "خیلی کمتر" },
+    { feature: "سرعت پاسخ‌گویی", free: "عادی", premium: "اولویت‌دار" },
     { feature: "کار با فایل‌ها", free: false, premium: true },
-    { feature: "ساخت تصویر با DALL-E 3", free: false, premium: true },
+    { feature: "ساخت تصویر", free: "محدود", premium: "کامل" },
     { feature: "وب‌گردی و اطلاعات روز", free: false, premium: true },
     { feature: "ساخت GPT سفارشی", free: false, premium: true },
     { feature: "مکالمه صوتی پیشرفته", free: "محدود", premium: "کامل" },
-    { feature: "تحلیل داده پیشرفته", free: false, premium: true },
+    { feature: "Deep Research", free: false, premium: true },
   ];
 
   const faqs = [
@@ -111,12 +129,12 @@ const ChatGPTPage = () => {
     {
       question: "چرا نسخه رایگان کافی نیست؟",
       answer:
-        "نسخه رایگان سرعت بسیار پایین در ساعات اوج مصرف دارد، پیام‌های مکرر ChatGPT is at capacity می‌دهد، دسترسی به مدل‌های جدید مثل GPT-4o ندارد و امکاناتی مثل آپلود فایل، وب‌گردی و ساخت GPT سفارشی وجود ندارد. برای هر کار حرفه‌ای—از تولید محتوا تا کدنویسی—نسخه پرمیوم ضروری است.",
+        "نسخه رایگان برای شروع مناسب است، اما در کار حرفه‌ای محدودیت بیشتری در مدل‌ها، سرعت و ابزارها دارد. در پلن‌های پولی، دسترسی کامل‌تری به GPT-5، ابزارهای پیشرفته و ظرفیت استفاده بالاتر دارید.",
     },
     {
       question: "تفاوت ChatGPT Plus با Pro چیست؟",
       answer:
-        "ChatGPT Plus با قیمت ۲۰ دلار ماهانه، دسترسی به GPT-4o و امکانات پایه (DALL-E 3، وب‌گردی، تحلیل فایل) را فراهم می‌کند. ChatGPT Pro با قیمت ۲۰۰ دلار، دسترسی به O3 Pro و GPT-5 با قدرت استدلال بسیار بالا، بدون محدودیت مصرف و مناسب محققان و شرکت‌های بزرگ است.",
+        "Plus برای اکثر کاربران حرفه‌ای کافی است و دسترسی به مدل‌ها و ابزارهای اصلی را فراهم می‌کند. Pro برای کاربران سنگین‌تر طراحی شده و سقف مصرف بالاتر و دسترسی گسترده‌تری به مدل‌های استدلالی و قابلیت‌های پیشرفته می‌دهد.",
     },
     {
       question: "زمان تحویل چقدر است؟",
@@ -128,9 +146,9 @@ const ChatGPTPage = () => {
         "بله! اگر اکانت شما به هر دلیلی مسدود شود، فوراً یک اکانت جدید دریافت می‌کنید. ما ضمانت کامل تعویض داریم.",
     },
     {
-      question: "آیا به VPN نیاز دارم؟",
+      question: "تفاوت پلن Team با Plus چیست؟",
       answer:
-        "خیر! با افزونه اختصاصی ما، بدون VPN و بدون دغدغه مسدود شدن، همیشه به ChatGPT متصل می‌شوید. اولین و تنها سرویس ایرانی با این قابلیت.",
+        "پلن Team برای کار گروهی و ورک‌اسپیس مشترک طراحی شده و برای تیم‌ها، شرکت‌ها و پروژه‌های چندنفره گزینه مناسب‌تری نسبت به Plus است.",
     },
   ];
 
@@ -205,14 +223,14 @@ const ChatGPTPage = () => {
               </ul>
             </div>
             <div className="glass rounded-2xl p-6 border-t-4 border-blue-400">
-              <h3 className="text-xl font-bold mb-3 text-blue-400">🔵 ChatGPT 4.5</h3>
-              <p className="text-sm text-muted-foreground mb-4">انتخاب میانی برای حرفه‌ای‌ها</p>
+              <h3 className="text-xl font-bold mb-3 text-blue-400">🔵 ChatGPT Team</h3>
+              <p className="text-sm text-muted-foreground mb-4">گزینه مناسب برای تیم‌ها و شرکت‌ها</p>
               <ul className="space-y-2 text-sm">
-                <li>• نسخه تقویت‌شده و سریع‌تر از GPT-4o</li>
-                <li>• مناسب برنامه‌نویسان و تحلیل‌گران</li>
-                <li>• تحلیل داده‌های پیچیده و فایل‌های بزرگ</li>
-                <li>• محدودیت‌های استفاده بسیار بالاتر</li>
-                <li>• ایده‌آل برای افرادی که بهره‌وری مهم است</li>
+                <li>• ورک‌اسپیس اختصاصی و مدیریت کاربر</li>
+                <li>• مناسب تیم‌های چندنفره</li>
+                <li>• دسترسی پایدار برای استفاده سازمانی</li>
+                <li>• امنیت و کنترل بهتر برای کار گروهی</li>
+                <li>• مناسب پروژه‌های حرفه‌ای و مداوم</li>
               </ul>
             </div>
             <div className="glass rounded-2xl p-6 border-t-4 border-purple-500">
@@ -255,11 +273,11 @@ const ChatGPTPage = () => {
             </div>
             <div className="glass rounded-2xl p-6 text-center">
               <div className="w-16 h-16 rounded-full bg-chatgpt/20 flex items-center justify-center mx-auto mb-4">
-                <Wifi className="w-8 h-8 text-chatgpt" />
+                <Database className="w-8 h-8 text-chatgpt" />
               </div>
-              <h3 className="font-bold text-lg mb-2">اتصال بدون VPN</h3>
+              <h3 className="font-bold text-lg mb-2">تحویل سریع و پایدار</h3>
               <p className="text-muted-foreground text-sm">
-                اولین و تنها سرویس ایرانی با افزونه اختصاصی برای اتصال مستقیم بدون نیاز به VPN.
+                سفارش‌ها سریع ثبت می‌شوند و تمام مراحل از طریق پنل کاربری و پشتیبانی قابل پیگیری است.
               </p>
             </div>
           </div>
@@ -279,13 +297,13 @@ const ChatGPTPage = () => {
               </div>
               <div className="text-center">
                 <div className="w-14 h-14 rounded-full bg-chatgpt text-background font-bold text-2xl flex items-center justify-center mx-auto mb-4">۲</div>
-                <h3 className="font-bold text-lg mb-2">پیام به پشتیبانی</h3>
-                <p className="text-muted-foreground text-sm">با کلیک روی دکمه ثبت سفارش، به تلگرام پشتیبانی متصل شوید.</p>
+                <h3 className="font-bold text-lg mb-2">ثبت سفارش در سایت</h3>
+                <p className="text-muted-foreground text-sm">سفارش را داخل سایت ثبت کنید و وضعیت را از پنل کاربری ببینید.</p>
               </div>
               <div className="text-center">
                 <div className="w-14 h-14 rounded-full bg-chatgpt text-background font-bold text-2xl flex items-center justify-center mx-auto mb-4">۳</div>
                 <h3 className="font-bold text-lg mb-2">دسترسی فوری</h3>
-                <p className="text-muted-foreground text-sm">پس از پرداخت، اطلاعات اکانت همان لحظه ارسال می‌شود.</p>
+                <p className="text-muted-foreground text-sm">پس از ثبت و تایید، سفارش شما همان لحظه وارد صف فعال‌سازی می‌شود.</p>
               </div>
             </div>
             <p className="text-center text-muted-foreground mt-8">
@@ -312,7 +330,7 @@ const ChatGPTPage = () => {
 
   // Get the lowest price for schema
   const lowestPrice = Math.min(...plans.map(p => p.price));
-  
+
   // Generate SEO schemas
   const faqSchema = createFAQSchema(faqs);
   const breadcrumbSchema = createBreadcrumbSchema([
@@ -321,10 +339,10 @@ const ChatGPTPage = () => {
   ]);
   const productSchema = createProductSchema({
     name: "اکانت ChatGPT Plus و Pro",
-    description: "خرید اکانت ChatGPT Plus و Pro با تحویل فوری، اتصال بدون VPN و ضمانت تعویض. دسترسی به GPT-4o، GPT-5 و O3 Pro.",
+    description: "خرید اکانت ChatGPT Plus و Pro با تحویل فوری و ضمانت تعویض. دسترسی به GPT-5، GPT-4o، O3 و ابزارهای پیشرفته.",
     price: lowestPrice,
     url: "/services/chatgpt",
-    image: "https://novateam.shop/logos/chatgpt.png",
+    image: "https://nova-shop.co/logos/chatgpt.svg",
     category: "اشتراک هوش مصنوعی",
     sku: "CGPT-PLUS",
     ratingValue: 4.9,
@@ -337,21 +355,23 @@ const ChatGPTPage = () => {
         <title>خرید اکانت ChatGPT Plus و Pro | تحویل فوری - نوا شاپ</title>
         <meta
           name="description"
-          content="خرید اکانت ChatGPT Plus و Pro با قیمت مناسب. اکانت اورجینال با تحویل فوری، پشتیبانی ۲۴ ساعته، ضمانت تعویض و اتصال بدون VPN. GPT-4o و GPT-5"
+          content="خرید اکانت ChatGPT Plus و Pro با قیمت مناسب. اکانت اورجینال با تحویل فوری، پشتیبانی ۲۴ ساعته و ضمانت تعویض. دسترسی به GPT-5 و GPT-4o."
         />
         <meta name="keywords" content="خرید ChatGPT, اکانت ChatGPT Plus, اشتراک ChatGPT Pro, خرید GPT-4, خرید GPT-5, هوش مصنوعی, O3 Pro, خرید اکانت ChatGPT ایران" />
-        <link rel="canonical" href="https://novateam.shop/services/chatgpt" />
-        
+        <link rel="canonical" href="https://nova-shop.co/services/chatgpt" />
+
         {/* Structured Data */}
         <script type="application/ld+json">
           {JSON.stringify([productSchema, faqSchema, breadcrumbSchema])}
         </script>
       </Helmet>
       <ServicePageLayout
+        serviceId="chatgpt"
         icon={Bot}
+        logoSrc="/logos/chatgpt.svg"
         title="ChatGPT Plus / Pro"
         subtitle="هوش مصنوعی OpenAI"
-        description="ChatGPT پیشرفته‌ترین هوش مصنوعی OpenAI است که با مدل‌های GPT-4o، GPT-5 و O3 Pro می‌تواند متن بنویسد، کد تولید کند، تصویر بسازد و به سوالات پیچیده پاسخ دهد. با نسخه Plus و Pro، سرعت بالا، بدون محدودیت و با تمام قابلیت‌ها."
+        description="ChatGPT سرویس پرچمدار OpenAI برای تولید متن، کدنویسی، تحلیل فایل و کارهای چندوجهی است. در پلن‌های Plus/Pro به مدل‌های جدید GPT-5، GPT-4o، ابزارهای پیشرفته و سقف استفاده بالاتر دسترسی دارید."
         color="#10A37F"
         features={features}
         plans={plans}
