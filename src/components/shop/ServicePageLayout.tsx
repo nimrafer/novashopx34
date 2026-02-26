@@ -5,7 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
-import { createOrder } from "@/lib/orders";
+import { createOrder, quoteOrder } from "@/lib/orders";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import ShopHeader from "./ShopHeader";
 import ShopFooter from "./ShopFooter";
 
@@ -14,9 +17,13 @@ interface Plan {
   name: string;
   duration: string;
   price: number;
+  priceKey?: string;
   features?: string[];
   popular?: boolean;
   notIncluded?: string[];
+  requiresActivationEmail?: boolean;
+  activationEmailLabel?: string;
+  badge?: string;
 }
 
 interface FAQ {
@@ -71,7 +78,25 @@ const ServicePageLayout = ({
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const [submittingPlan, setSubmittingPlan] = useState<string | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
+  const [showOrderDialog, setShowOrderDialog] = useState(false);
+  const [quoteLoading, setQuoteLoading] = useState(false);
+  const [orderForm, setOrderForm] = useState({
+    activationEmail: "",
+    customerTelegram: "",
+    couponCode: "",
+    notes: "",
+  });
+  const [pricePreview, setPricePreview] = useState<{
+    basePrice: number;
+    finalPrice: number;
+    offerAmount: number;
+    couponAmount: number;
+    offerTitle: string | null;
+    couponCode: string | null;
+  } | null>(null);
   const highlightedPlanId = (searchParams.get("plan") || "").trim();
+  const resolvedServiceId = serviceId || location.pathname.replace("/services/", "");
 
   const paddedPlans = useMemo(() => {
     const rows = plans.map((plan, idx) => ({
@@ -94,6 +119,59 @@ const ServicePageLayout = ({
     return [...rows, ...placeholders];
   }, [plans]);
 
+  const requiresActivationEmail = (plan: Plan) => {
+    if (typeof plan.requiresActivationEmail === "boolean") {
+      return plan.requiresActivationEmail;
+    }
+    return resolvedServiceId === "chatgpt" || resolvedServiceId === "gemini";
+  };
+
+  const activationEmailLabel = (plan: Plan) => {
+    if (plan.activationEmailLabel) return plan.activationEmailLabel;
+    if (resolvedServiceId === "chatgpt") return "ایمیل اکانت رایگان ChatGPT";
+    if (resolvedServiceId === "gemini") return "جیمیل برای فعالسازی Gemini";
+    return "ایمیل فعالسازی";
+  };
+
+  const refreshQuote = async (plan: Plan, couponCode: string) => {
+    setQuoteLoading(true);
+    const result = await quoteOrder({
+      serviceId: resolvedServiceId,
+      planId: plan.id,
+      price: plan.price,
+      couponCode: couponCode.trim() || undefined,
+    });
+    setQuoteLoading(false);
+
+    if ("error" in result) {
+      setPricePreview({
+        basePrice: plan.price,
+        finalPrice: plan.price,
+        offerAmount: 0,
+        couponAmount: 0,
+        offerTitle: null,
+        couponCode: null,
+      });
+      if (couponCode.trim()) {
+        toast({
+          title: "کد تخفیف معتبر نیست",
+          description: result.error,
+          variant: "destructive",
+        });
+      }
+      return;
+    }
+
+    setPricePreview({
+      basePrice: result.data.basePrice,
+      finalPrice: result.data.finalPrice,
+      offerAmount: result.data.offerAmount,
+      couponAmount: result.data.couponAmount,
+      offerTitle: result.data.offerTitle,
+      couponCode: result.data.couponCode,
+    });
+  };
+
   const handleOrder = async (plan: Plan) => {
     if (!user) {
       toast({
@@ -105,14 +183,49 @@ const ServicePageLayout = ({
       return;
     }
 
-    setSubmittingPlan(plan.name);
+    setSelectedPlan(plan);
+    setOrderForm({
+      activationEmail: "",
+      customerTelegram: "",
+      couponCode: "",
+      notes: "",
+    });
+    setPricePreview({
+      basePrice: plan.price,
+      finalPrice: plan.price,
+      offerAmount: 0,
+      couponAmount: 0,
+      offerTitle: null,
+      couponCode: null,
+    });
+    setShowOrderDialog(true);
+    await refreshQuote(plan, "");
+  };
+
+  const submitOrderFromDialog = async () => {
+    if (!selectedPlan) return;
+
+    if (requiresActivationEmail(selectedPlan) && !orderForm.activationEmail.trim()) {
+      toast({
+        title: "ایمیل فعالسازی لازم است",
+        description: `${activationEmailLabel(selectedPlan)} را وارد کنید.`,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSubmittingPlan(selectedPlan.name);
     const result = await createOrder({
-      serviceId: serviceId || location.pathname.replace("/services/", "") || "service",
+      serviceId: resolvedServiceId || "service",
       serviceName: title,
-      planId: plan.id,
-      planName: plan.name,
-      planDuration: plan.duration,
-      price: plan.price,
+      planId: selectedPlan.id,
+      planName: selectedPlan.name,
+      planDuration: selectedPlan.duration,
+      price: pricePreview?.finalPrice ?? selectedPlan.price,
+      notes: orderForm.notes.trim() || undefined,
+      activationEmail: orderForm.activationEmail.trim() || undefined,
+      customerTelegram: orderForm.customerTelegram.trim() || undefined,
+      couponCode: orderForm.couponCode.trim() || undefined,
     });
     setSubmittingPlan(null);
 
@@ -125,6 +238,7 @@ const ServicePageLayout = ({
       return;
     }
 
+    setShowOrderDialog(false);
     toast({
       title: "سفارش ثبت شد",
       description: `شناسه سفارش: ${result.data.order.id}`,
@@ -137,6 +251,131 @@ const ServicePageLayout = ({
       <ShopHeader />
 
       <main className="pt-24 pb-12">
+        <Dialog open={showOrderDialog} onOpenChange={setShowOrderDialog}>
+          <DialogContent className="max-w-2xl" dir="rtl">
+            <DialogHeader>
+              <DialogTitle>ثبت سفارش {selectedPlan?.name}</DialogTitle>
+              <DialogDescription>
+                اطلاعات سفارش را تکمیل کنید تا سفارش شما برای ادمین ارسال شود.
+              </DialogDescription>
+            </DialogHeader>
+
+            {selectedPlan ? (
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="rounded-xl border border-border/60 bg-muted/20 p-3">
+                    <p className="text-xs text-muted-foreground">سرویس</p>
+                    <p className="font-bold">{title}</p>
+                  </div>
+                  <div className="rounded-xl border border-border/60 bg-muted/20 p-3">
+                    <p className="text-xs text-muted-foreground">پلن انتخابی</p>
+                    <p className="font-bold">{selectedPlan.name}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{selectedPlan.duration}</p>
+                  </div>
+                </div>
+
+                {requiresActivationEmail(selectedPlan) ? (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">{activationEmailLabel(selectedPlan)}</label>
+                    <Input
+                      dir="ltr"
+                      type="email"
+                      value={orderForm.activationEmail}
+                      onChange={(e) => setOrderForm((prev) => ({ ...prev, activationEmail: e.target.value }))}
+                      placeholder="example@gmail.com"
+                    />
+                  </div>
+                ) : null}
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">آیدی تلگرام (اختیاری)</label>
+                  <Input
+                    dir="ltr"
+                    value={orderForm.customerTelegram}
+                    onChange={(e) => setOrderForm((prev) => ({ ...prev, customerTelegram: e.target.value }))}
+                    placeholder="@username"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">کد تخفیف</label>
+                  <div className="flex gap-2">
+                    <Input
+                      dir="ltr"
+                      value={orderForm.couponCode}
+                      onChange={(e) => setOrderForm((prev) => ({ ...prev, couponCode: e.target.value.toUpperCase() }))}
+                      placeholder="CODE2026"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => refreshQuote(selectedPlan, orderForm.couponCode)}
+                      disabled={quoteLoading}
+                    >
+                      {quoteLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "اعمال"}
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">توضیحات سفارش (اختیاری)</label>
+                  <Textarea
+                    value={orderForm.notes}
+                    onChange={(e) => setOrderForm((prev) => ({ ...prev, notes: e.target.value }))}
+                    placeholder="اگر توضیح خاصی دارید بنویسید"
+                    className="min-h-[88px]"
+                  />
+                </div>
+
+                <div className="rounded-xl border border-border/60 bg-card/40 p-4 space-y-2">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">مبلغ پایه</span>
+                    <span>{formatPrice(pricePreview?.basePrice ?? selectedPlan.price)}</span>
+                  </div>
+                  {(pricePreview?.offerAmount ?? 0) > 0 ? (
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">
+                        آفر فعال {pricePreview?.offerTitle ? `(${pricePreview.offerTitle})` : ""}
+                      </span>
+                      <span className="text-emerald-600">- {formatPrice(pricePreview?.offerAmount ?? 0)}</span>
+                    </div>
+                  ) : null}
+                  {(pricePreview?.couponAmount ?? 0) > 0 ? (
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">
+                        کد تخفیف {pricePreview?.couponCode ? `(${pricePreview.couponCode})` : ""}
+                      </span>
+                      <span className="text-emerald-600">- {formatPrice(pricePreview?.couponAmount ?? 0)}</span>
+                    </div>
+                  ) : null}
+                  <div className="h-px bg-border/60" />
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium">مبلغ نهایی</span>
+                    <span className="text-xl font-black" style={{ color }}>
+                      {formatPrice(pricePreview?.finalPrice ?? selectedPlan.price)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
+            <DialogFooter className="gap-2 sm:justify-start">
+              <Button
+                type="button"
+                style={{ backgroundColor: color }}
+                onClick={submitOrderFromDialog}
+                disabled={!!submittingPlan}
+              >
+                {submittingPlan ? <Loader2 className="w-4 h-4 animate-spin ml-2" /> : <MessageCircle className="w-4 h-4 ml-2" />}
+                {submittingPlan ? "در حال ثبت..." : "ثبت نهایی سفارش"}
+              </Button>
+              <Button type="button" variant="outline" onClick={() => setShowOrderDialog(false)}>
+                انصراف
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
         {/* Hero Section */}
         <section className="relative py-16 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-glow opacity-30" />

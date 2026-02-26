@@ -5,6 +5,7 @@ export interface AuthUser {
   email: string;
   fullName: string | null;
   createdAt: string;
+  isAdmin?: boolean;
 }
 
 interface RequestOtpOptions {
