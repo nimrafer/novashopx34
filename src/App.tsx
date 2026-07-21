@@ -3,28 +3,27 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Suspense, lazy } from "react";
 import { AuthProvider } from "./hooks/useAuth";
 import { PricesProvider } from "./contexts/PricesContext";
 import ScrollToTop from "./components/ScrollToTop";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
-import Auth from "./pages/Auth";
-import Dashboard from "./pages/Dashboard";
-import AdminOrders from "./pages/AdminOrders";
-import ChatGPTPage from "./pages/services/ChatGPTPage";
-import GeminiPage from "./pages/services/GeminiPage";
-import GrokPage from "./pages/services/GrokPage";
-import PerplexityPage from "./pages/services/PerplexityPage";
-import SpotifyPage from "./pages/services/SpotifyPage";
-import CursorPage from "./pages/services/CursorPage";
-import TelegramPremiumPage from "./pages/services/TelegramPremiumPage";
-import CardsPage from "./pages/services/CardsPage";
-import VirtualNumberPage from "./pages/services/VirtualNumberPage";
-import Blog from "./pages/Blog";
-import BlogPost from "./pages/BlogPost";
-import SupportPage from "./pages/SupportPage";
-import ContactPage from "./pages/ContactPage";
-import AboutPage from "./pages/AboutPage";
+
+const Index = lazy(() => import("./pages/Index"));
+const StoreServicePage = lazy(() => import("./pages/services/StoreServicePage"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Auth = lazy(() => import("./pages/Auth"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const AdminOrders = lazy(() => import("./pages/AdminOrders"));
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
+const SupportPage = lazy(() => import("./pages/SupportPage"));
+const ContactPage = lazy(() => import("./pages/ContactPage"));
+const AboutPage = lazy(() => import("./pages/AboutPage"));
+const EnglishHome = lazy(() => import("./pages/EnglishHome"));
+const TextAICategoryPage = lazy(() => import("./pages/categories/TextAICategoryPage"));
+const MediaAICategoryPage = lazy(() => import("./pages/categories/MediaAICategoryPage"));
+const DevAICategoryPage = lazy(() => import("./pages/categories/DevAICategoryPage"));
+const GeminiOfferTermsPage = lazy(() => import("./pages/GeminiOfferTermsPage"));
 
 const queryClient = new QueryClient();
 
@@ -37,27 +36,42 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <ScrollToTop />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/admin/orders" element={<AdminOrders />} />
-              <Route path="/services/chatgpt" element={<ChatGPTPage />} />
-              <Route path="/services/gemini" element={<GeminiPage />} />
-              <Route path="/services/grok" element={<GrokPage />} />
-              <Route path="/services/perplexity" element={<PerplexityPage />} />
-              <Route path="/services/spotify" element={<SpotifyPage />} />
-              <Route path="/services/cursor" element={<CursorPage />} />
-              <Route path="/services/telegram-premium" element={<TelegramPremiumPage />} />
-              <Route path="/services/cards" element={<CardsPage />} />
-              <Route path="/services/virtual-number" element={<VirtualNumberPage />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="/support" element={<SupportPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <Suspense
+              fallback={
+                <div className="min-h-screen flex items-center justify-center bg-background">
+                  <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary/30 border-t-primary" />
+                </div>
+              }
+            >
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/en" element={<EnglishHome />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/admin/orders" element={<AdminOrders />} />
+                <Route path="/services/chatgpt" element={<StoreServicePage slug="chatgpt" />} />
+                <Route path="/services/gemini" element={<StoreServicePage slug="gemini" />} />
+                <Route path="/services/grok" element={<StoreServicePage slug="grok" />} />
+                <Route path="/services/perplexity" element={<StoreServicePage slug="perplexity" />} />
+                <Route path="/services/spotify" element={<StoreServicePage slug="spotify" />} />
+                <Route path="/services/cursor" element={<StoreServicePage slug="cursor" />} />
+                <Route path="/services/claude" element={<StoreServicePage slug="claude" />} />
+                <Route path="/services/telegram-premium" element={<StoreServicePage slug="telegram-premium" />} />
+                <Route path="/services/cards" element={<StoreServicePage slug="cards" />} />
+                <Route path="/services/virtual-number" element={<StoreServicePage slug="virtual-number" />} />
+                <Route path="/services/:serviceSlug" element={<StoreServicePage />} />
+                <Route path="/categories/text-ai" element={<TextAICategoryPage />} />
+                <Route path="/categories/media-ai" element={<MediaAICategoryPage />} />
+                <Route path="/categories/dev-ai" element={<DevAICategoryPage />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:slug" element={<BlogPost />} />
+                <Route path="/support" element={<SupportPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/gemini-offer-terms" element={<GeminiOfferTermsPage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
           </BrowserRouter>
         </TooltipProvider>
       </PricesProvider>

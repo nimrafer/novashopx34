@@ -1,617 +1,194 @@
 import { useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Check, MessageCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { usePricesContext } from "@/contexts/PricesContext";
+import { Link } from "react-router-dom";
+import { ArrowLeft, Search, Star } from "lucide-react";
+import {
+  StoreProduct,
+  formatToman,
+  normalizeText,
+  storeMinPrice,
+  storeProductRoute,
+  useStoreCatalog,
+} from "@/hooks/useStoreCatalog";
 
-const SUPPORT_ROUTE = "/support";
+/** Local brand logos as fallback when the store product has no https image. */
+const LOCAL_LOGOS: [RegExp, string][] = [
+  [/chatgpt|چت جی پی تی/, "/logos/chatgpt.svg"],
+  [/gemini|جمینای/, "/logos/gemini.svg"],
+  [/claude|کلود/, "/logos/claude.webp"],
+  [/grok|گروک|گراک/, "/logos/grok.svg"],
+  [/perplexity|پرپلکسیتی/, "/logos/perplexity.svg"],
+  [/spotify|اسپاتیفای/, "/logos/spotify.svg"],
+  [/cursor|کرسور/, "/logos/cursor.svg"],
+  [/telegram|تلگرام/, "/logos/telegram.svg"],
+  [/visa|master|کارت/, "/logos/mastercard.svg"],
+];
 
-const logos = {
-  chatgpt: "/logos/chatgpt.png",
-  gemini: "/logos/gemini.png",
-  grok: "/logos/grok.png",
-  perplexity: "/logos/perplexity.png",
-  spotify: "/logos/spotify.png",
-  cursor: "/logos/cursor.png",
-  telegram: "/logos/telegram.png",
-  cards: "/logos/mastercard.svg",
-};
-
-interface PlanItem {
-  id: string;
-  title: string;
-  subtitle: string;
-  priceKey?: string;
-  staticPrice?: string;
-  badge?: string;
-}
-
-interface CategoryItem {
-  id: string;
-  title: string;
-  subtitle: string;
-  color: string;
-  logo?: string;
-  emoji?: string;
-  href?: string;
-  externalHref?: string;
-  plans: PlanItem[];
-}
-
-const formatPrice = (price: number): string => {
-  if (price <= 0) return "تماس بگیرید";
-  return `${new Intl.NumberFormat("fa-IR").format(price)} تومان`;
+const productLogo = (product: StoreProduct): string | null => {
+  if (product.image_url && /^https?:\/\//.test(product.image_url)) return product.image_url;
+  const hay = normalizeText(
+    `${product.slug} ${product.name} ${(product.search_aliases || []).join(" ")}`
+  );
+  const match = LOCAL_LOGOS.find(([pattern]) => pattern.test(hay));
+  return match ? match[1] : null;
 };
 
 const ServicesSection = () => {
-  const { getPrice } = usePricesContext();
-  const navigate = useNavigate();
+  const { catalog, loading, error } = useStoreCatalog();
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [query, setQuery] = useState("");
 
-  const categories: CategoryItem[] = useMemo(
-    () => [
-      {
-        id: "chatgpt",
-        title: "چت جی پی تی (ChatGPT)",
-        subtitle: "۶ پلن فعال",
-        color: "#10B981",
-        logo: logos.chatgpt,
-        href: "/services/chatgpt",
-        plans: [
-          {
-            id: "cgpt_pro_30day",
-            title: "Pro-Business اختصاصی ۳۰ روزه",
-            subtitle: "چت جی پی تی (ChatGPT)",
-            priceKey: "cgpt_pro_30day",
-            badge: "پرفروش",
-          },
-          {
-            id: "cgpt_pro_37day",
-            title: "Pro-Business اختصاصی ۳۷ روزه",
-            subtitle: "چت جی پی تی (ChatGPT)",
-            priceKey: "cgpt_pro_37day",
-          },
-          {
-            id: "cgpt_pro_shared",
-            title: "Pro-Business اشتراکی",
-            subtitle: "اقتصادی",
-            priceKey: "cgpt_pro_shared",
-          },
-          {
-            id: "cgpt_plus_team",
-            title: "Plus تیمی ۵ نفره",
-            subtitle: "تیمی",
-            priceKey: "cgpt_plus_team",
-          },
-          {
-            id: "cgpt_team",
-            title: "Team تیمی (۳۷ روزه)",
-            subtitle: "بیزنسی",
-            priceKey: "cgpt_team",
-          },
-          {
-            id: "cgpt_go_yearly",
-            title: "GO یکساله",
-            subtitle: "سالانه",
-            priceKey: "cgpt_go_yearly",
-          },
-        ],
-      },
-      {
-        id: "gemini",
-        title: "جمینای (Gemini)",
-        subtitle: "۵ پلن فعال",
-        color: "#3B82F6",
-        logo: logos.gemini,
-        href: "/services/gemini",
-        plans: [
-          {
-            id: "gem_month",
-            title: "پلن یک‌ماهه",
-            subtitle: "Gemini Pro / Ultra",
-            priceKey: "gem_month",
-          },
-          {
-            id: "gem_3month",
-            title: "پلن سه‌ماهه",
-            subtitle: "Gemini Pro / Ultra",
-            priceKey: "gem_3month",
-            badge: "محبوب",
-          },
-          {
-            id: "gem_6month",
-            title: "پلن شش‌ماهه",
-            subtitle: "Gemini Pro / Ultra",
-            priceKey: "gem_6month",
-          },
-          {
-            id: "gem_year_personal",
-            title: "یکساله جیمیل شخصی",
-            subtitle: "Gemini Pro / Ultra",
-            priceKey: "gem_year_personal",
-          },
-          {
-            id: "gem_year_ready",
-            title: "یکساله جیمیل آماده",
-            subtitle: "Gemini Pro / Ultra",
-            priceKey: "gem_year_ready",
-          },
-        ],
-      },
-      {
-        id: "grok",
-        title: "گراک (Grok)",
-        subtitle: "۱ پلن فعال",
-        color: "#0F172A",
-        logo: logos.grok,
-        href: "/services/grok",
-        plans: [
-          {
-            id: "grok_monthly",
-            title: "پلن ماهانه",
-            subtitle: "Super Grok",
-            priceKey: "grok_monthly",
-          },
-        ],
-      },
-      {
-        id: "perplexity",
-        title: "پرپلکسیتی (Perplexity)",
-        subtitle: "۲ پلن فعال",
-        color: "#14B8A6",
-        logo: logos.perplexity,
-        href: "/services/perplexity",
-        plans: [
-          {
-            id: "perplexity_monthly",
-            title: "پلن یک‌ماهه",
-            subtitle: "Perplexity Pro",
-            priceKey: "perplexity_monthly",
-          },
-          {
-            id: "perplexity_yearly",
-            title: "پلن یکساله",
-            subtitle: "Perplexity Pro",
-            priceKey: "perplexity_yearly",
-          },
-        ],
-      },
-      {
-        id: "spotify",
-        title: "اسپاتیفای (Spotify)",
-        subtitle: "۲ پلن فعال",
-        color: "#1DB954",
-        logo: logos.spotify,
-        href: "/services/spotify",
-        plans: [
-          {
-            id: "spotify_monthly",
-            title: "پلن ۱ ماهه",
-            subtitle: "Spotify Premium",
-            priceKey: "spotify_monthly",
-          },
-          {
-            id: "spotify_4month",
-            title: "پلن ۴ ماهه",
-            subtitle: "Spotify Premium",
-            priceKey: "spotify_4month",
-          },
-        ],
-      },
-      {
-        id: "cursor",
-        title: "کرسور (Cursor)",
-        subtitle: "۲ پلن فعال",
-        color: "#6366F1",
-        logo: logos.cursor,
-        href: "/services/cursor",
-        plans: [
-          {
-            id: "cursor_monthly",
-            title: "پلن یک‌ماهه",
-            subtitle: "Cursor Pro",
-            priceKey: "cursor_monthly",
-          },
-          {
-            id: "cursor_weekly",
-            title: "پلن ۷ روزه (آفر)",
-            subtitle: "Cursor Pro",
-            priceKey: "cursor_weekly",
-            badge: "آفر",
-          },
-        ],
-      },
-      {
-        id: "telegram_premium",
-        title: "تلگرام پریمیوم (Telegram Premium)",
-        subtitle: "۳ پلن فعال",
-        color: "#0284C7",
-        logo: logos.telegram,
-        href: "/services/telegram-premium",
-        plans: [
-          {
-            id: "tgpremium_3month",
-            title: "پلن ۳ ماهه",
-            subtitle: "Telegram Premium",
-            priceKey: "tgpremium_3month",
-          },
-          {
-            id: "tgpremium_6month",
-            title: "پلن ۶ ماهه",
-            subtitle: "Telegram Premium",
-            priceKey: "tgpremium_6month",
-          },
-          {
-            id: "tgpremium_12month",
-            title: "پلن یکساله",
-            subtitle: "Telegram Premium",
-            priceKey: "tgpremium_12month",
-            badge: "بهترین قیمت",
-          },
-        ],
-      },
-      {
-        id: "cards",
-        title: "ویزا و مستر کارت",
-        subtitle: "۲ پلن فعال",
-        color: "#EAB308",
-        logo: logos.cards,
-        href: "/services/cards",
-        plans: [
-          {
-            id: "visa_card",
-            title: "ویزا کارت",
-            subtitle: "مجازی بین‌المللی",
-            priceKey: "visa_card",
-          },
-          {
-            id: "master_card",
-            title: "مستر کارت",
-            subtitle: "مجازی بین‌المللی",
-            priceKey: "master_card",
-          },
-        ],
-      },
-      {
-        id: "virtual_numbers",
-        title: "شماره مجازی",
-        subtitle: "۱۰ پلن فعال",
-        color: "#A855F7",
-        emoji: "📞",
-        href: "/services/virtual-number",
-        plans: [
-          {
-            id: "vnum_uk",
-            title: "شماره انگلیس (+44)",
-            subtitle: "شماره دائمی",
-            priceKey: "vnum_uk",
-          },
-          {
-            id: "vnum_us",
-            title: "شماره آمریکا (+1)",
-            subtitle: "شماره دائمی",
-            priceKey: "vnum_us",
-          },
-          {
-            id: "vnum_au",
-            title: "شماره استرالیا (+61)",
-            subtitle: "شماره دائمی",
-            priceKey: "vnum_au",
-          },
-          {
-            id: "vnum_ca",
-            title: "شماره کانادا (+1)",
-            subtitle: "شماره دائمی",
-            priceKey: "vnum_ca",
-          },
-          {
-            id: "vnum_tg_uk",
-            title: "تلگرام انگلیس",
-            subtitle: "حساب آماده",
-            priceKey: "vnum_tg_uk",
-          },
-          {
-            id: "vnum_tg_au",
-            title: "تلگرام استرالیا",
-            subtitle: "حساب آماده",
-            priceKey: "vnum_tg_au",
-          },
-          {
-            id: "vnum_tg_us",
-            title: "تلگرام آمریکا",
-            subtitle: "حساب آماده",
-            priceKey: "vnum_tg_us",
-          },
-          {
-            id: "vnum_tg_ca",
-            title: "تلگرام کانادا",
-            subtitle: "حساب آماده",
-            priceKey: "vnum_tg_ca",
-          },
-          {
-            id: "vnum_wa_uk",
-            title: "واتساپ انگلیس",
-            subtitle: "حساب آماده",
-            priceKey: "vnum_wa_uk",
-          },
-          {
-            id: "vnum_wa_ca",
-            title: "واتساپ کانادا",
-            subtitle: "حساب آماده",
-            priceKey: "vnum_wa_ca",
-          },
-        ],
-      },
-      {
-        id: "nano_banana",
-        title: "Nano Banana Pro",
-        subtitle: "ساخت تصویر AI",
-        color: "#F59E0B",
-        emoji: "🍌",
-        externalHref: SUPPORT_ROUTE,
-        plans: [
-          {
-            id: "imggen_text",
-            title: "متن به عکس",
-            subtitle: "Gemini Image",
-            staticPrice: "هر تصویر ۳ ستاره",
-          },
-          {
-            id: "imggen_edit",
-            title: "ادیت تصویر",
-            subtitle: "با پرامپت دلخواه",
-            staticPrice: "هر تصویر ۳ ستاره",
-          },
-          {
-            id: "imggen_initial_credits",
-            title: "اعتبار شروع",
-            subtitle: "برای کاربر جدید",
-            staticPrice: "۲۰ ستاره",
-          },
-        ],
-      },
-    ],
-    []
-  );
-
-  const [activeCategoryId, setActiveCategoryId] = useState<string>(categories[0].id);
-
-  const activeCategory =
-    categories.find((category) => category.id === activeCategoryId) ?? categories[0];
-
-  const paddedCategories = useMemo(() => {
-    const entries = categories.map((category) => ({
-      kind: "category" as const,
-      key: category.id,
-      category,
-    }));
-
-    const remainder = entries.length % 4;
-    if (remainder === 0) {
-      return entries;
+  const products = useMemo(() => {
+    if (!catalog) return [];
+    let list = catalog.products;
+    if (activeCategory !== "all") {
+      list = list.filter((p) => (p.category_ids || []).includes(activeCategory));
     }
-
-    const placeholders = Array.from({ length: 4 - remainder }, (_, idx) => ({
-      kind: "placeholder" as const,
-      key: `category-placeholder-${idx}`,
-    }));
-
-    return [...entries, ...placeholders];
-  }, [categories]);
-
-  const paddedPlans = useMemo(() => {
-    const entries = activeCategory.plans.map((plan) => ({
-      kind: "plan" as const,
-      key: plan.id,
-      plan,
-    }));
-
-    const remainder = entries.length % 4;
-    if (remainder === 0) {
-      return entries;
+    const q = normalizeText(query);
+    if (q) {
+      const tokens = q.split(" ").filter(Boolean);
+      list = list.filter((p) => {
+        const hay = normalizeText(
+          `${p.name} ${p.slug} ${p.eyebrow} ${p.short_description} ${(p.search_aliases || []).join(" ")} ${p.plans
+            .map((plan) => plan.name)
+            .join(" ")}`
+        );
+        return tokens.every((token) => hay.includes(token));
+      });
     }
+    return list;
+  }, [catalog, activeCategory, query]);
 
-    const placeholders = Array.from({ length: 4 - remainder }, (_, idx) => ({
-      kind: "placeholder" as const,
-      key: `plan-placeholder-${idx}`,
-    }));
-
-    return [...entries, ...placeholders];
-  }, [activeCategory]);
-
-  const handleOrder = (plan: PlanItem) => {
-    if (plan.priceKey && activeCategory.href) {
-      navigate(`${activeCategory.href}?plan=${encodeURIComponent(plan.id)}`);
-      return;
-    }
-
-    if (activeCategory.externalHref?.startsWith("/")) {
-      navigate(activeCategory.externalHref);
-      return;
-    }
-
-    navigate(SUPPORT_ROUTE);
-  };
+  const categories = useMemo(() => {
+    if (!catalog) return [];
+    const used = new Set(catalog.products.flatMap((p) => p.category_ids || []));
+    return catalog.categories.filter((c) => c.slug === "all" || used.has(c.id));
+  }, [catalog]);
 
   return (
-    <section id="services" className="py-20 relative">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-
+    <section id="services" className="py-16">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">اشتراک‌های موجود</h2>
-          <p className="text-muted-foreground max-w-3xl mx-auto">
-            دسته موردنظر را انتخاب کنید تا همه پلن‌های همان بخش را با قیمت دقیق ببینید.
+          <h2 className="text-3xl md:text-4xl font-bold mb-3">سرویس‌های نوا شاپ</h2>
+          <p className="text-muted-foreground">
+            قیمت‌ها و پلن‌ها لحظه‌ای از فروشگاه نوا به‌روز می‌شوند — همان کاتالوگ ربات و مینی‌اپ تلگرام.
           </p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
-          {paddedCategories.map((item) => {
-            if (item.kind === "placeholder") {
-              return (
-                <div
-                  key={item.key}
-                  className="hidden lg:block rounded-2xl border border-dashed border-border/50 bg-card/20"
-                  aria-hidden
-                />
-              );
-            }
+        <div className="max-w-2xl mx-auto mb-6">
+          <div className="glass rounded-2xl flex items-center gap-3 px-4 py-3">
+            <Search className="w-5 h-5 text-muted-foreground shrink-0" />
+            <input
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="جست‌وجوی سرویس؛ فارسی یا انگلیسی (مثلاً ChatGPT یا جمینای)"
+              className="bg-transparent outline-none w-full text-sm"
+              aria-label="جست‌وجوی سرویس"
+            />
+          </div>
+        </div>
 
-            const { category } = item;
-            const isActive = category.id === activeCategory.id;
-
-            return (
+        {categories.length > 1 && (
+          <div className="flex flex-wrap justify-center gap-2 mb-10">
+            {categories.map((category) => (
               <button
                 key={category.id}
-                type="button"
-                onClick={() => setActiveCategoryId(category.id)}
-                className={`group rounded-2xl border p-3 text-right transition-all duration-300 ${
-                  isActive
-                    ? "border-primary bg-primary/10 shadow-md shadow-primary/10"
-                    : "border-border/50 bg-card/40 hover:border-primary/40"
+                onClick={() => setActiveCategory(category.slug === "all" ? "all" : category.id)}
+                className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors border ${
+                  (category.slug === "all" && activeCategory === "all") ||
+                  activeCategory === category.id
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "glass border-border/50 text-muted-foreground hover:border-primary/40"
                 }`}
               >
-                <div className="flex items-center gap-2 mb-2">
-                  <div
-                    className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ backgroundColor: `${category.color}1f` }}
-                  >
-                    {category.logo ? (
-                      <img
-                        src={category.logo}
-                        alt={category.title}
-                        className="w-6 h-6 object-contain"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <span className="text-base">{category.emoji}</span>
-                    )}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="font-semibold text-sm truncate">{category.title}</p>
-                    <p className="text-[11px] text-muted-foreground truncate">{category.subtitle}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-end gap-1 text-[11px] text-muted-foreground">
-                  {isActive && <Check className="w-3 h-3 text-primary" />}
-                  <span>{isActive ? "انتخاب‌شده" : "مشاهده پلن‌ها"}</span>
-                </div>
+                {category.name}
               </button>
-            );
-          })}
-        </div>
-
-        <div className="rounded-3xl border border-border/60 bg-card/40 p-5 md:p-7 backdrop-blur-sm">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-            <div className="flex items-center gap-3">
-              <div
-                className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                style={{ backgroundColor: `${activeCategory.color}24` }}
-              >
-                {activeCategory.logo ? (
-                  <img
-                    src={activeCategory.logo}
-                    alt={activeCategory.title}
-                    className="w-8 h-8 object-contain"
-                    loading="lazy"
-                  />
-                ) : (
-                  <span className="text-2xl">{activeCategory.emoji}</span>
-                )}
-              </div>
-
-              <div>
-                <h3 className="text-xl font-bold">{activeCategory.title}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {activeCategory.plans.length} پلن موجود در این دسته
-                </p>
-              </div>
-            </div>
-
-            {activeCategory.externalHref ? (
-              activeCategory.externalHref.startsWith("/") ? (
-                <Link
-                  to={activeCategory.externalHref}
-                  className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-border/60 bg-background/40 hover:border-primary/40 transition-colors text-sm"
-                >
-                  <span>ارتباط با پشتیبانی</span>
-                  <ArrowLeft className="w-4 h-4" />
-                </Link>
-              ) : (
-                <a
-                  href={activeCategory.externalHref}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-border/60 bg-background/40 hover:border-primary/40 transition-colors text-sm"
-                >
-                  <span>ارتباط با پشتیبانی</span>
-                  <ArrowLeft className="w-4 h-4" />
-                </a>
-              )
-            ) : (
-              activeCategory.href && (
-                <Link
-                  to={activeCategory.href}
-                  className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-border/60 bg-background/40 hover:border-primary/40 transition-colors text-sm"
-                >
-                  <span>صفحه کامل {activeCategory.title}</span>
-                  <ArrowLeft className="w-4 h-4" />
-                </Link>
-              )
-            )}
+            ))}
           </div>
+        )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {paddedPlans.map((item) => {
-              if (item.kind === "placeholder") {
+        {loading && !catalog ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {Array.from({ length: 8 }).map((_, index) => (
+              <div key={index} className="glass rounded-3xl p-6 animate-pulse h-48" />
+            ))}
+          </div>
+        ) : error && !catalog ? (
+          <div className="text-center text-muted-foreground py-12">
+            کاتالوگ موقتاً در دسترس نیست؛ لطفاً صفحه را دوباره بارگیری کنید یا از{" "}
+            <Link to="/support" className="text-primary hover:underline">
+              پشتیبانی
+            </Link>{" "}
+            کمک بگیرید.
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {products.map((product) => {
+                const logo = productLogo(product);
+                const minPrice = storeMinPrice(product);
                 return (
-                  <div
-                    key={item.key}
-                    className="hidden lg:block rounded-2xl border border-dashed border-border/50 bg-card/20"
-                    aria-hidden
-                  />
-                );
-              }
-
-              const { plan } = item;
-              const planPrice = plan.priceKey ? getPrice(plan.priceKey) : null;
-              const priceText = plan.staticPrice ?? formatPrice(planPrice ?? 0);
-
-              return (
-                <div
-                  key={plan.id}
-                  className="relative rounded-2xl border border-border/50 bg-background/50 p-4 hover:border-primary/40 transition-colors flex flex-col"
-                >
-                  {plan.badge && (
-                    <span className="absolute top-3 left-3 text-[10px] font-bold px-2 py-1 rounded-full bg-primary text-primary-foreground">
-                      {plan.badge}
-                    </span>
-                  )}
-
-                  <p className="font-bold text-sm mb-1 pr-1">{plan.title}</p>
-                  <p className="text-xs text-muted-foreground mb-4">{plan.subtitle}</p>
-
-                  <div className="pt-3 border-t border-border/40 flex items-center justify-between mb-4">
-                    <span className="text-base font-extrabold" style={{ color: activeCategory.color }}>
-                      {priceText}
-                    </span>
-                    <span className="text-xs text-muted-foreground">قیمت نهایی</span>
-                  </div>
-
-                  <Button
-                    type="button"
-                    className="w-full mt-auto"
-                    style={{ backgroundColor: activeCategory.color }}
-                    onClick={() => handleOrder(plan)}
+                  <Link
+                    key={product.id}
+                    to={storeProductRoute(product)}
+                    className="glass rounded-3xl p-5 glass-hover border border-border/50 hover:border-primary/40 transition-all flex flex-col group"
                   >
-                    <MessageCircle className="w-4 h-4 ml-2" />
-                    {plan.priceKey ? "مشاهده و ثبت سفارش" : "ارتباط با پشتیبانی"}
-                  </Button>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+                    <div className="flex items-start justify-between mb-4">
+                      <div
+                        className="w-14 h-14 rounded-2xl flex items-center justify-center overflow-hidden"
+                        style={{ backgroundColor: `${product.accent_color}18` }}
+                      >
+                        {logo ? (
+                          <img
+                            src={logo}
+                            alt={product.name}
+                            className="w-9 h-9 object-contain"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <span
+                            className="text-xl font-black"
+                            style={{ color: product.accent_color }}
+                          >
+                            {product.name.slice(0, 1)}
+                          </span>
+                        )}
+                      </div>
+                      {product.featured && (
+                        <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                      )}
+                    </div>
+
+                    <h3 className="font-bold mb-1 group-hover:text-primary transition-colors">
+                      {product.name}
+                    </h3>
+                    <p className="text-xs text-muted-foreground leading-6 mb-4 line-clamp-2">
+                      {product.eyebrow || product.short_description}
+                    </p>
+
+                    <div className="mt-auto flex items-center justify-between text-xs">
+                      <span className="text-muted-foreground">
+                        {product.plans.length.toLocaleString("fa-IR")} پلن فعال
+                      </span>
+                      <span className="font-bold" style={{ color: product.accent_color }}>
+                        {minPrice > 0 ? `از ${formatToman(minPrice)}` : "استعلام"}
+                      </span>
+                    </div>
+
+                    <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-primary">
+                      مشاهده پلن‌ها
+                      <ArrowLeft className="w-3.5 h-3.5" />
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+            {products.length === 0 && (
+              <div className="text-center text-muted-foreground py-12">
+                نتیجه‌ای برای جست‌وجوی شما پیدا نشد.
+              </div>
+            )}
+          </>
+        )}
       </div>
     </section>
   );

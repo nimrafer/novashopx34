@@ -5,12 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
-import { createOrder, quoteOrder } from "@/lib/orders";
+import { createOrder, quoteOrder, startOrderZarinpalPayment } from "@/lib/orders";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import ShopHeader from "./ShopHeader";
 import ShopFooter from "./ShopFooter";
+import { usePricesContext } from "@/contexts/PricesContext";
 
 interface Plan {
   id?: string;
@@ -24,6 +25,17 @@ interface Plan {
   requiresActivationEmail?: boolean;
   activationEmailLabel?: string;
   badge?: string;
+  subtitle?: string;
+  description?: string;
+  image?: string;
+  groupId?: string;
+  badges?: { label: string; text_color?: string; background_color?: string }[];
+}
+
+interface PlanGroup {
+  id: string;
+  title: string;
+  description?: string;
 }
 
 interface FAQ {
@@ -47,6 +59,7 @@ interface ServicePageLayoutProps {
   color: string;
   features: string[];
   plans: Plan[];
+  planGroups?: PlanGroup[];
   faqs?: FAQ[];
   comparison?: CompareItem[];
   extraContent?: ReactNode;
@@ -68,11 +81,13 @@ const ServicePageLayout = ({
   color,
   features,
   plans,
+  planGroups,
   faqs,
   comparison,
   extraContent,
 }: ServicePageLayoutProps) => {
   const { user } = useAuth();
+  const { catalog } = usePricesContext();
   const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
@@ -97,27 +112,48 @@ const ServicePageLayout = ({
   } | null>(null);
   const highlightedPlanId = (searchParams.get("plan") || "").trim();
   const resolvedServiceId = serviceId || location.pathname.replace("/services/", "");
+  const catalogService = useMemo(
+    () => catalog.find((service) => service.id === resolvedServiceId || service.slug === resolvedServiceId),
+    [catalog, resolvedServiceId],
+  );
+  const effectivePlans = useMemo(() => {
+    if (!catalogService) return plans;
+    return catalogService.plans.map((catalogPlan) => {
+      const fallback = plans.find((plan) => plan.id === catalogPlan.id || plan.priceKey === catalogPlan.priceKey);
+      return {
+        ...fallback,
+        id: catalogPlan.id,
+        name: catalogPlan.name,
+        subtitle: catalogPlan.subtitle,
+        duration: catalogPlan.duration || fallback?.duration || "",
+        price: catalogPlan.price,
+        priceKey: catalogPlan.priceKey || catalogPlan.id,
+        badge: catalogPlan.badge,
+        popular: fallback?.popular || Boolean(catalogPlan.badge),
+        description: catalogPlan.description || fallback?.description,
+        image: catalogPlan.image || fallback?.image,
+        requiresActivationEmail: catalogPlan.requiresActivationEmail,
+        activationEmailLabel: catalogPlan.activationEmailLabel,
+      };
+    });
+  }, [catalogService, plans]);
+  const displayTitle = catalogService?.name || title;
+  const displayDescription = catalogService?.description || description;
+  const displayLogo = catalogService?.logo || logoSrc;
 
   const paddedPlans = useMemo(() => {
-    const rows = plans.map((plan, idx) => ({
-      kind: "plan" as const,
+    return effectivePlans.map((plan, idx) => ({
       key: plan.id ? `${plan.id}-${idx}` : `${plan.name}-${idx}`,
       plan,
     }));
-
-    const remainder = rows.length % 4;
-    if (remainder === 0) {
-      return rows;
-    }
-
-    const placeholderCount = 4 - remainder;
-    const placeholders = Array.from({ length: placeholderCount }, (_, idx) => ({
-      kind: "placeholder" as const,
-      key: `placeholder-${idx}`,
-    }));
-
-    return [...rows, ...placeholders];
-  }, [plans]);
+  }, [effectivePlans]);
+  const planGridClass = effectivePlans.length === 1
+    ? "grid-cols-1 max-w-xl mx-auto"
+    : effectivePlans.length === 2
+      ? "grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto"
+      : effectivePlans.length === 3
+        ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto"
+        : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4";
 
   const requiresActivationEmail = (plan: Plan) => {
     if (typeof plan.requiresActivationEmail === "boolean") {
@@ -205,6 +241,15 @@ const ServicePageLayout = ({
   const submitOrderFromDialog = async () => {
     if (!selectedPlan) return;
 
+    if (!orderForm.customerTelegram.trim()) {
+      toast({
+        title: "آیدی تلگرام لازم است",
+        description: "برای پیگیری سفارش، آیدی تلگرام خود را وارد کنید.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (requiresActivationEmail(selectedPlan) && !orderForm.activationEmail.trim()) {
       toast({
         title: "ایمیل فعالسازی لازم است",
@@ -217,7 +262,7 @@ const ServicePageLayout = ({
     setSubmittingPlan(selectedPlan.name);
     const result = await createOrder({
       serviceId: resolvedServiceId || "service",
-      serviceName: title,
+      serviceName: displayTitle,
       planId: selectedPlan.id,
       planName: selectedPlan.name,
       planDuration: selectedPlan.duration,
@@ -239,11 +284,33 @@ const ServicePageLayout = ({
     }
 
     setShowOrderDialog(false);
+    const order = result.data.order;
+
+    if ((order.price || 0) <= 0) {
+      toast({
+        title: "سفارش ثبت شد",
+        description: `شناسه سفارش: ${order.id}`,
+      });
+      navigate("/dashboard");
+      return;
+    }
+
+    const paymentResult = await startOrderZarinpalPayment(order.id);
+    if ("error" in paymentResult) {
+      toast({
+        title: "سفارش ثبت شد اما اتصال به درگاه انجام نشد",
+        description: `${paymentResult.error} — می‌توانید از پنل مشتری پرداخت را ادامه دهید.`,
+        variant: "destructive",
+      });
+      navigate("/dashboard");
+      return;
+    }
+
     toast({
-      title: "سفارش ثبت شد",
-      description: `شناسه سفارش: ${result.data.order.id}`,
+      title: "در حال انتقال به زرین‌پال",
+      description: "لطفا تا باز شدن درگاه صبر کنید.",
     });
-    navigate("/dashboard");
+    window.location.href = paymentResult.data.payment.paymentUrl;
   };
 
   return (
@@ -265,7 +332,7 @@ const ServicePageLayout = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="rounded-xl border border-border/60 bg-muted/20 p-3">
                     <p className="text-xs text-muted-foreground">سرویس</p>
-                    <p className="font-bold">{title}</p>
+                    <p className="font-bold">{displayTitle}</p>
                   </div>
                   <div className="rounded-xl border border-border/60 bg-muted/20 p-3">
                     <p className="text-xs text-muted-foreground">پلن انتخابی</p>
@@ -288,7 +355,7 @@ const ServicePageLayout = ({
                 ) : null}
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">آیدی تلگرام (اختیاری)</label>
+                  <label className="text-sm font-medium">آیدی تلگرام (الزامی)</label>
                   <Input
                     dir="ltr"
                     value={orderForm.customerTelegram}
@@ -391,7 +458,7 @@ const ServicePageLayout = ({
                 صفحه اصلی
               </Link>
               <ArrowRight className="w-4 h-4 rotate-180" />
-              <span className="text-foreground">{title}</span>
+              <span className="text-foreground">{displayTitle}</span>
             </div>
 
             <div className="flex flex-col md:flex-row items-start gap-8">
@@ -399,8 +466,16 @@ const ServicePageLayout = ({
                 className="w-20 h-20 rounded-3xl flex items-center justify-center shrink-0"
                 style={{ backgroundColor: `${color}20` }}
               >
-                {logoSrc ? (
-                  <img src={logoSrc} alt={title} className="w-12 h-12 object-contain" loading="lazy" />
+                {displayLogo ? (
+                  <img
+                    src={displayLogo}
+                    alt={displayTitle}
+                    width={48}
+                    height={48}
+                    className="w-12 h-12 object-contain"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 ) : (
                   <Icon className="w-10 h-10" style={{ color }} />
                 )}
@@ -413,9 +488,9 @@ const ServicePageLayout = ({
                 >
                   {subtitle}
                 </Badge>
-                <h1 className="text-3xl md:text-5xl font-bold mb-4">{title}</h1>
+                <h1 className="text-3xl md:text-5xl font-bold mb-4">{displayTitle}</h1>
                 <p className="text-lg text-muted-foreground max-w-2xl">
-                  {description}
+                  {displayDescription}
                 </p>
               </div>
             </div>
@@ -522,18 +597,8 @@ const ServicePageLayout = ({
                 <Link to="/dashboard">مشاهده پنل کاربری</Link>
               </Button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {paddedPlans.map((item) => {
-                if (item.kind === "placeholder") {
-                  return (
-                    <div
-                      key={item.key}
-                      className="hidden lg:block rounded-3xl border border-dashed border-border/50 bg-card/20"
-                      aria-hidden
-                    />
-                  );
-                }
-
+            {(() => {
+              const renderPlanCard = (item: { key: string; plan: Plan }) => {
                 const { plan } = item;
                 const isSubmitting = submittingPlan === plan.name;
                 const isHighlighted =
@@ -548,6 +613,14 @@ const ServicePageLayout = ({
                     }`}
                     style={plan.popular || isHighlighted ? { borderColor: color } : {}}
                   >
+                    {plan.image && (
+                      <img
+                        src={plan.image}
+                        alt={plan.name}
+                        className="w-full aspect-[16/9] object-cover rounded-2xl mb-5 border border-border/50"
+                        loading="lazy"
+                      />
+                    )}
                     {(plan.popular || isHighlighted) && (
                       <div className="absolute -top-3 right-6 flex gap-2">
                         {plan.popular ? <Badge style={{ backgroundColor: color }}>پرفروش</Badge> : null}
@@ -557,8 +630,31 @@ const ServicePageLayout = ({
 
                     <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
                     <p className="text-sm text-muted-foreground mb-4">
-                      {plan.duration}
+                      {plan.duration || plan.subtitle}
                     </p>
+
+                    {plan.badges && plan.badges.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {plan.badges.map((chip, chipIdx) => (
+                          <span
+                            key={chipIdx}
+                            className="text-xs font-bold rounded-lg px-2.5 py-1"
+                            style={{
+                              color: chip.text_color || undefined,
+                              backgroundColor: chip.background_color || `${color}20`,
+                            }}
+                          >
+                            {chip.label}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {plan.description && (
+                      <p className="text-sm text-muted-foreground leading-7 mb-5 whitespace-pre-line line-clamp-6">
+                        {plan.description}
+                      </p>
+                    )}
 
                     <div className="text-3xl font-bold mb-6" style={{ color }}>
                       {formatPrice(plan.price)}
@@ -604,8 +700,66 @@ const ServicePageLayout = ({
                     </Button>
                   </div>
                 );
-              })}
-            </div>
+              };
+
+              if (planGroups && planGroups.length > 0) {
+                const grouped = planGroups
+                  .map((group) => ({
+                    group,
+                    items: paddedPlans.filter(
+                      (item) => (item.plan.groupId || "other") === group.id
+                    ),
+                  }))
+                  .filter((entry) => entry.items.length > 0);
+                const groupedKeys = new Set(
+                  grouped.flatMap((entry) => entry.items.map((item) => item.key))
+                );
+                const leftovers = paddedPlans.filter((item) => !groupedKeys.has(item.key));
+                return (
+                  <div className="space-y-12">
+                    {grouped.map(({ group, items }) => (
+                      <div key={group.id}>
+                        <div className="flex items-center gap-4 mb-3">
+                          <h3 className="text-xl font-bold whitespace-nowrap">{group.title}</h3>
+                          <div className="h-px flex-1 bg-border/60" />
+                        </div>
+                        {group.description && (
+                          <p className="text-sm text-muted-foreground mb-6">{group.description}</p>
+                        )}
+                        <div
+                          className={`grid gap-6 ${
+                            items.length === 1
+                              ? "grid-cols-1 max-w-xl"
+                              : items.length === 2
+                                ? "grid-cols-1 sm:grid-cols-2 max-w-4xl"
+                                : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+                          }`}
+                        >
+                          {items.map(renderPlanCard)}
+                        </div>
+                      </div>
+                    ))}
+                    {leftovers.length > 0 && (
+                      <div>
+                        <div className="flex items-center gap-4 mb-6">
+                          <h3 className="text-xl font-bold whitespace-nowrap">سایر پلن‌ها</h3>
+                          <div className="h-px flex-1 bg-border/60" />
+                        </div>
+                        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                          {leftovers.map(renderPlanCard)}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
+              return (
+                <div className={`grid gap-6 ${planGridClass}`}>
+                  {paddedPlans.map(renderPlanCard)}
+                </div>
+              );
+            })()}
           </div>
         </section>
 
