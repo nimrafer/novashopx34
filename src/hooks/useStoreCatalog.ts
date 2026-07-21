@@ -83,6 +83,7 @@ export interface StoreCategory {
 export interface StoreCatalog {
   products: StoreProduct[];
   categories: StoreCategory[];
+  design?: Record<string, unknown>;
 }
 
 const CACHE_DURATION = 60 * 1000;
@@ -183,6 +184,7 @@ export const useStoreCatalog = () => {
         categories: (data.categories || []).filter(
           (c: StoreCategory) => (c.status || "active") === "active"
         ),
+        design: data.design || {},
       };
       cacheTimestamp = Date.now();
       setCatalog(catalogCache);

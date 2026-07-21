@@ -9,7 +9,7 @@ import {
   createFAQSchema
 } from "@/components/seo/schemas";
 import ShopHeader from "@/components/shop/ShopHeader";
-import HeroSection from "@/components/shop/HeroSection";
+import NvHero from "@/components/shop/NvHero";
 import ServicesSection from "@/components/shop/ServicesSection";
 import OrderingSteps from "@/components/shop/OrderingSteps";
 import ShopFooter from "@/components/shop/ShopFooter";
@@ -78,11 +78,11 @@ const Index = () => {
         jsonLd={jsonLdSchemas}
       />
 
-      <div className="min-h-screen bg-background">
+      <div className="nv-scope min-h-screen">
         <ShopHeader />
 
-        <main>
-          <HeroSection />
+        <main className="pt-20">
+          <NvHero />
           <ServicesSection />
           <OrderingSteps />
 
@@ -133,6 +133,24 @@ const Index = () => {
                       <span className="text-primary">✓</span>
                       <span><strong className="text-foreground">اکانت ۱۰۰٪ اصلی:</strong> تمام اشتراک‌ها قانونی و مستقیم از سرویس‌دهنده</span>
                     </div>
+                  </div>
+                </div>
+
+                <div className="mt-10 pt-8 border-t border-border">
+                  <h3 className="text-xl font-semibold mb-4 text-center">دسته‌بندی ابزارها بر اساس کاربرد</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Link to="/categories/text-ai" className="glass rounded-2xl p-5 hover:border-primary/40">
+                      <h4 className="font-bold mb-2">چت‌بات‌ها و تولید متن</h4>
+                      <p className="text-sm text-muted-foreground">مناسب تولید محتوا، تحقیق و پاسخ‌گویی هوشمند</p>
+                    </Link>
+                    <Link to="/categories/media-ai" className="glass rounded-2xl p-5 hover:border-primary/40">
+                      <h4 className="font-bold mb-2">تولید تصویر / صدا / ویدیو</h4>
+                      <p className="text-sm text-muted-foreground">برای محتوای چندرسانه‌ای با Gemini Veo 3.1 و Nano Banana Pro</p>
+                    </Link>
+                    <Link to="/categories/dev-ai" className="glass rounded-2xl p-5 hover:border-primary/40">
+                      <h4 className="font-bold mb-2">برنامه‌نویسی و API</h4>
+                      <p className="text-sm text-muted-foreground">ابزارهای توسعه با Cursor، ChatGPT، Gemini (Jules) و Claude</p>
+                    </Link>
                   </div>
                 </div>
               </div>

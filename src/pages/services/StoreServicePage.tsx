@@ -39,11 +39,11 @@ const parseFaqItems = (blocks: StoreBlock[]) =>
   );
 
 const toneClass: Record<string, string> = {
-  brand: "border-primary/30 bg-primary/5",
-  info: "border-sky-500/30 bg-sky-500/5",
-  success: "border-emerald-500/30 bg-emerald-500/5",
-  warning: "border-amber-500/30 bg-amber-500/10",
-  neutral: "border-border/50 bg-muted/20",
+  brand: "nv-note--brand",
+  info: "nv-note--info",
+  success: "nv-note--ok",
+  warning: "nv-note--warn",
+  neutral: "",
 };
 
 const ContentBlocks = ({ product }: { product: StoreProduct }) => {
@@ -56,19 +56,12 @@ const ContentBlocks = ({ product }: { product: StoreProduct }) => {
   );
   if (!blocks.length) return null;
   return (
-    <section className="py-6">
-      <div className="container mx-auto px-4 space-y-6 max-w-4xl">
+    <section className="py-2">
+      <div className="container mx-auto px-4 space-y-4 max-w-4xl">
         {blocks.map((block, index) => (
-          <div
-            key={block.id || index}
-            className={`glass rounded-3xl p-6 border ${toneClass[block.tone || "neutral"] || toneClass.neutral}`}
-          >
-            {block.title && <h2 className="text-xl font-bold mb-3">{block.title}</h2>}
-            {block.body && (
-              <p className="leading-8 text-muted-foreground whitespace-pre-line text-justify">
-                {block.body}
-              </p>
-            )}
+          <div key={block.id || index} className={`nv-note ${toneClass[block.tone || "neutral"] || ""}`}>
+            {block.title && <h2>{block.title}</h2>}
+            {block.body && <p className="whitespace-pre-line text-justify">{block.body}</p>}
             {(block.items || []).length > 0 && (
               <ul className="mt-4 space-y-2">
                 {(block.items || []).map((item, itemIndex) => (

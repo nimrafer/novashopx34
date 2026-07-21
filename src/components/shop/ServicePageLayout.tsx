@@ -110,6 +110,7 @@ const ServicePageLayout = ({
     offerTitle: string | null;
     couponCode: string | null;
   } | null>(null);
+  const [detailPlan, setDetailPlan] = useState<Plan | null>(null);
   const highlightedPlanId = (searchParams.get("plan") || "").trim();
   const resolvedServiceId = serviceId || location.pathname.replace("/services/", "");
   const catalogService = useMemo(
@@ -314,7 +315,7 @@ const ServicePageLayout = ({
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="nv-scope min-h-screen">
       <ShopHeader />
 
       <main className="pt-24 pb-12">
@@ -443,77 +444,41 @@ const ServicePageLayout = ({
           </DialogContent>
         </Dialog>
 
-        {/* Hero Section */}
-        <section className="relative py-16 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-glow opacity-30" />
-          <div
-            className="absolute top-1/2 right-1/4 w-96 h-96 rounded-full blur-3xl opacity-20"
-            style={{ backgroundColor: color }}
-          />
-
-          <div className="container mx-auto px-4 relative z-10">
-            {/* Breadcrumb */}
-            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
-              <Link to="/" className="hover:text-foreground transition-colors">
-                صفحه اصلی
-              </Link>
+        {/* Product header — mini app style */}
+        <section className="pt-6 pb-2">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <div className="flex items-center gap-2 text-sm mb-5" style={{ color: "var(--nv-muted)" }}>
+              <Link to="/" className="hover:underline">صفحه اصلی</Link>
               <ArrowRight className="w-4 h-4 rotate-180" />
-              <span className="text-foreground">{displayTitle}</span>
+              <span style={{ color: "var(--nv-ink)" }}>{displayTitle}</span>
             </div>
-
-            <div className="flex flex-col md:flex-row items-start gap-8">
-              <div
-                className="w-20 h-20 rounded-3xl flex items-center justify-center shrink-0"
-                style={{ backgroundColor: `${color}20` }}
-              >
+            <div className="nv-phead">
+              <div className="nv-phead__logo" style={{ ["--nv-tile" as string]: `${color}18` }}>
                 {displayLogo ? (
-                  <img
-                    src={displayLogo}
-                    alt={displayTitle}
-                    width={48}
-                    height={48}
-                    className="w-12 h-12 object-contain"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  <img src={displayLogo} alt={displayTitle} />
                 ) : (
-                  <Icon className="w-10 h-10" style={{ color }} />
+                  <Icon className="w-8 h-8" style={{ color }} />
                 )}
               </div>
-
-              <div className="flex-1">
-                <Badge
-                  className="mb-4"
-                  style={{ backgroundColor: `${color}20`, color }}
-                >
-                  {subtitle}
-                </Badge>
-                <h1 className="text-3xl md:text-5xl font-bold mb-4">{displayTitle}</h1>
-                <p className="text-lg text-muted-foreground max-w-2xl">
-                  {displayDescription}
-                </p>
+              <div>
+                <h1 className="nv-phead__name">{displayTitle}</h1>
+                <p className="nv-phead__eyebrow">{subtitle}</p>
               </div>
             </div>
+            {displayDescription && (
+              <div className="nv-note mt-4 whitespace-pre-line text-justify">{displayDescription}</div>
+            )}
           </div>
         </section>
 
-        {/* Features Section */}
-        <section className="py-12">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold mb-8">✨ قابلیت‌ها و مزایا</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {features.map((feature, idx) => (
-                <div
-                  key={idx}
-                  className="glass rounded-2xl p-5 glass-hover flex items-start gap-3"
-                >
-                  <div
-                    className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                    style={{ backgroundColor: `${color}20` }}
-                  >
-                    <Check className="w-4 h-4" style={{ color }} />
-                  </div>
-                  <span>{feature}</span>
+        {/* Features — mini app perk chips */}
+        <section className="py-4">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {features.slice(0, 6).map((feature, idx) => (
+                <div key={idx} className="nv-note flex items-start gap-2 !py-3">
+                  <Check className="w-4 h-4 mt-1 shrink-0" style={{ color: "#0e9f6e" }} />
+                  <span className="text-[13px] leading-7">{feature}</span>
                 </div>
               ))}
             </div>
@@ -586,119 +551,61 @@ const ServicePageLayout = ({
         {extraContent}
 
         {/* Plans Section */}
-        <section className="py-12">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold mb-8">🛍 پلن‌های خرید</h2>
-            <div className="glass rounded-2xl p-4 mb-6 flex items-center justify-between gap-3">
-              <p className="text-sm text-muted-foreground">
-                بعد از ثبت سفارش، وضعیت سفارش از داخل پنل کاربری قابل پیگیری است.
-              </p>
-              <Button variant="outline" asChild>
-                <Link to="/dashboard">مشاهده پنل کاربری</Link>
-              </Button>
-            </div>
+        <section className="py-8">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <h2 className="nv-section-title mb-2">🛍 پلن‌های خرید <small>روی هر پلن بزنید</small></h2>
+            <p className="text-sm mb-6" style={{ color: "var(--nv-muted)" }}>
+              بعد از ثبت سفارش، وضعیت آن از <Link to="/dashboard" className="underline">پنل کاربری</Link> قابل پیگیری است.
+            </p>
             {(() => {
               const renderPlanCard = (item: { key: string; plan: Plan }) => {
                 const { plan } = item;
-                const isSubmitting = submittingPlan === plan.name;
                 const isHighlighted =
                   highlightedPlanId.length > 0 &&
                   (plan.id === highlightedPlanId || `${plan.id}`.toLowerCase() === highlightedPlanId.toLowerCase());
-
                 return (
-                  <div
+                  <button
                     key={item.key}
-                    className={`glass rounded-3xl p-6 relative transition-all duration-300 ${
-                      plan.popular || isHighlighted ? "border-2 shadow-lg" : "border border-border/50"
-                    }`}
-                    style={plan.popular || isHighlighted ? { borderColor: color } : {}}
+                    type="button"
+                    className={`nv-plan ${plan.popular || isHighlighted ? "nv-plan--popular" : ""}`}
+                    onClick={() => setDetailPlan(plan)}
                   >
-                    {plan.image && (
-                      <img
-                        src={plan.image}
-                        alt={plan.name}
-                        className="w-full aspect-[16/9] object-cover rounded-2xl mb-5 border border-border/50"
-                        loading="lazy"
-                      />
-                    )}
-                    {(plan.popular || isHighlighted) && (
-                      <div className="absolute -top-3 right-6 flex gap-2">
-                        {plan.popular ? <Badge style={{ backgroundColor: color }}>پرفروش</Badge> : null}
-                        {isHighlighted ? <Badge variant="secondary">پلن انتخاب‌شده</Badge> : null}
-                      </div>
-                    )}
-
-                    <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      {plan.duration || plan.subtitle}
-                    </p>
-
-                    {plan.badges && plan.badges.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {plan.badges.map((chip, chipIdx) => (
-                          <span
-                            key={chipIdx}
-                            className="text-xs font-bold rounded-lg px-2.5 py-1"
-                            style={{
-                              color: chip.text_color || undefined,
-                              backgroundColor: chip.background_color || `${color}20`,
-                            }}
-                          >
-                            {chip.label}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    {plan.description && (
-                      <p className="text-sm text-muted-foreground leading-7 mb-5 whitespace-pre-line line-clamp-6">
-                        {plan.description}
-                      </p>
-                    )}
-
-                    <div className="text-3xl font-bold mb-6" style={{ color }}>
-                      {formatPrice(plan.price)}
-                    </div>
-
-                    {plan.features && (
-                      <ul className="space-y-3 mb-6">
-                        {plan.features.map((f, i) => (
-                          <li key={i} className="flex items-center gap-2 text-sm">
-                            <Check className="w-4 h-4" style={{ color }} />
-                            {f}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-
-                    {plan.notIncluded && (
-                      <ul className="space-y-2 mb-6 pt-4 border-t border-border/50">
-                        {plan.notIncluded.map((f, i) => (
-                          <li
-                            key={i}
-                            className="flex items-center gap-2 text-sm text-muted-foreground"
-                          >
-                            <X className="w-4 h-4" />
-                            {f}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-
-                    <Button
-                      className="w-full"
-                      style={{ backgroundColor: color }}
-                      disabled={isSubmitting}
-                      onClick={() => handleOrder(plan)}
-                    >
-                      {isSubmitting ? (
-                        <Loader2 className="w-4 h-4 ml-2 animate-spin" />
-                      ) : (
-                        <MessageCircle className="w-4 h-4 ml-2" />
+                    {plan.popular && <span className="nv-plan__pop">پرفروش</span>}
+                    <span className="nv-plan__main">
+                      <span className="nv-plan__name block">{plan.name}</span>
+                      {(plan.duration || plan.subtitle) && (
+                        <span className="nv-plan__short block">{plan.duration || plan.subtitle}</span>
                       )}
-                      {isSubmitting ? "در حال ثبت..." : "ثبت سفارش و ادامه"}
-                    </Button>
-                  </div>
+                      {plan.badges && plan.badges.length > 0 && (
+                        <span className="nv-plan__badges">
+                          {plan.badges.map((chip, chipIdx) => (
+                            <span
+                              key={chipIdx}
+                              className="nv-badge"
+                              style={{
+                                color: chip.text_color || undefined,
+                                backgroundColor: chip.background_color || undefined,
+                              }}
+                            >
+                              {chip.label}
+                            </span>
+                          ))}
+                        </span>
+                      )}
+                    </span>
+                    <span className="nv-plan__side">
+                      <span className="nv-plan__price">
+                        {plan.price > 0 ? (
+                          <>
+                            {plan.price.toLocaleString("fa-IR")} <small>تومان</small>
+                          </>
+                        ) : (
+                          <small>استعلام قیمت</small>
+                        )}
+                      </span>
+                      <span className="nv-plan__cta">جزئیات و خرید ←</span>
+                    </span>
+                  </button>
                 );
               };
 
@@ -716,36 +623,20 @@ const ServicePageLayout = ({
                 );
                 const leftovers = paddedPlans.filter((item) => !groupedKeys.has(item.key));
                 return (
-                  <div className="space-y-12">
+                  <div className="space-y-10">
                     {grouped.map(({ group, items }) => (
                       <div key={group.id}>
-                        <div className="flex items-center gap-4 mb-3">
-                          <h3 className="text-xl font-bold whitespace-nowrap">{group.title}</h3>
-                          <div className="h-px flex-1 bg-border/60" />
-                        </div>
-                        {group.description && (
-                          <p className="text-sm text-muted-foreground mb-6">{group.description}</p>
-                        )}
-                        <div
-                          className={`grid gap-6 ${
-                            items.length === 1
-                              ? "grid-cols-1 max-w-xl"
-                              : items.length === 2
-                                ? "grid-cols-1 sm:grid-cols-2 max-w-4xl"
-                                : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-                          }`}
-                        >
+                        <h3 className="nv-group-title mb-1">{group.title}</h3>
+                        {group.description && <p className="nv-group-desc mb-4">{group.description}</p>}
+                        <div className="grid gap-3 mt-3 grid-cols-1 lg:grid-cols-2">
                           {items.map(renderPlanCard)}
                         </div>
                       </div>
                     ))}
                     {leftovers.length > 0 && (
                       <div>
-                        <div className="flex items-center gap-4 mb-6">
-                          <h3 className="text-xl font-bold whitespace-nowrap">سایر پلن‌ها</h3>
-                          <div className="h-px flex-1 bg-border/60" />
-                        </div>
-                        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                        <h3 className="nv-group-title mb-4">سایر پلن‌ها</h3>
+                        <div className="grid gap-3 grid-cols-1 lg:grid-cols-2">
                           {leftovers.map(renderPlanCard)}
                         </div>
                       </div>
@@ -755,7 +646,7 @@ const ServicePageLayout = ({
               }
 
               return (
-                <div className={`grid gap-6 ${planGridClass}`}>
+                <div className="grid gap-3 grid-cols-1 lg:grid-cols-2">
                   {paddedPlans.map(renderPlanCard)}
                 </div>
               );
@@ -763,17 +654,92 @@ const ServicePageLayout = ({
           </div>
         </section>
 
+        {/* Plan detail sheet — mini app style */}
+        {detailPlan && (
+          <>
+            <div className="nv-sheet-backdrop" onClick={() => setDetailPlan(null)} />
+            <div className="nv-sheet" role="dialog" aria-modal="true" dir="rtl">
+              <div className="nv-sheet__handle" />
+              <div className="nv-sheet__head">
+                <div className="nv-sheet__logo" style={{ ["--nv-tile" as string]: `${color}18` }}>
+                  {displayLogo ? <img src={displayLogo} alt={displayTitle} /> : <Icon className="w-7 h-7" style={{ color }} />}
+                </div>
+                <div>
+                  <div className="nv-sheet__name">{detailPlan.name}</div>
+                  {(detailPlan.duration || detailPlan.subtitle) && (
+                    <div className="text-xs mt-1" style={{ color: "var(--nv-muted)" }}>
+                      {detailPlan.duration || detailPlan.subtitle}
+                    </div>
+                  )}
+                  {detailPlan.badges && detailPlan.badges.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mt-2">
+                      {detailPlan.badges.map((chip, chipIdx) => (
+                        <span
+                          key={chipIdx}
+                          className="nv-badge"
+                          style={{
+                            color: chip.text_color || undefined,
+                            backgroundColor: chip.background_color || undefined,
+                          }}
+                        >
+                          {chip.label}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+              {detailPlan.description && <p className="nv-sheet__desc">{detailPlan.description}</p>}
+              {detailPlan.features && detailPlan.features.length > 0 && (
+                <ul className="nv-sheet__features">
+                  {detailPlan.features.map((feature, idx) => (
+                    <li key={idx}>
+                      <Check />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <div className="nv-sheet__foot">
+                <div className="nv-sheet__price flex-1">
+                  <small>قیمت نهایی</small>
+                  <b>
+                    {detailPlan.price > 0 ? (
+                      <>
+                        {detailPlan.price.toLocaleString("fa-IR")} <em>تومان</em>
+                      </>
+                    ) : (
+                      <em>استعلام از پشتیبانی</em>
+                    )}
+                  </b>
+                </div>
+                <button
+                  type="button"
+                  className="nv-btn"
+                  onClick={() => {
+                    const plan = detailPlan;
+                    setDetailPlan(null);
+                    handleOrder(plan);
+                  }}
+                >
+                  ثبت سفارش و ادامه ←
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+
         {/* FAQ Section */}
         {faqs && faqs.length > 0 && (
-          <section className="py-12">
-            <div className="container mx-auto px-4">
-              <h2 className="text-2xl font-bold mb-8">❓ سوالات متداول</h2>
-              <div className="space-y-4 max-w-3xl">
+          <section className="py-8">
+            <div className="container mx-auto px-4 max-w-4xl">
+              <h2 className="nv-section-title mb-5">❓ سوالات متداول</h2>
+              <div className="nv-faq">
                 {faqs.map((faq, idx) => (
-                  <div key={idx} className="glass rounded-2xl p-6">
-                    <h3 className="font-semibold mb-3">{faq.question}</h3>
-                    <p className="text-muted-foreground">{faq.answer}</p>
-                  </div>
+                  <details key={idx}>
+                    <summary>{faq.question}</summary>
+                    <p>{faq.answer}</p>
+                  </details>
                 ))}
               </div>
             </div>

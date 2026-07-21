@@ -68,20 +68,19 @@ const ServicesSection = () => {
     <section id="services" className="py-16">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
-          <h2 className="text-3xl md:text-4xl font-bold mb-3">سرویس‌های نوا شاپ</h2>
-          <p className="text-muted-foreground">
+          <h2 className="text-3xl md:text-4xl font-black mb-3" style={{ color: "var(--nv-ink)" }}>سرویس‌های نوا شاپ</h2>
+          <p style={{ color: "var(--nv-muted)" }}>
             قیمت‌ها و پلن‌ها لحظه‌ای از فروشگاه نوا به‌روز می‌شوند — همان کاتالوگ ربات و مینی‌اپ تلگرام.
           </p>
         </div>
 
         <div className="max-w-2xl mx-auto mb-6">
-          <div className="glass rounded-2xl flex items-center gap-3 px-4 py-3">
-            <Search className="w-5 h-5 text-muted-foreground shrink-0" />
+          <div className="nv-search">
+            <Search className="w-5 h-5" />
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="جست‌وجوی سرویس؛ فارسی یا انگلیسی (مثلاً ChatGPT یا جمینای)"
-              className="bg-transparent outline-none w-full text-sm"
               aria-label="جست‌وجوی سرویس"
             />
           </div>
@@ -93,11 +92,11 @@ const ServicesSection = () => {
               <button
                 key={category.id}
                 onClick={() => setActiveCategory(category.slug === "all" ? "all" : category.id)}
-                className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors border ${
+                className={`nv-chip ${
                   (category.slug === "all" && activeCategory === "all") ||
                   activeCategory === category.id
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "glass border-border/50 text-muted-foreground hover:border-primary/40"
+                    ? "nv-chip--on"
+                    : ""
                 }`}
               >
                 {category.name}
@@ -109,11 +108,11 @@ const ServicesSection = () => {
         {loading && !catalog ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {Array.from({ length: 8 }).map((_, index) => (
-              <div key={index} className="glass rounded-3xl p-6 animate-pulse h-48" />
+              <div key={index} className="nv-pcard animate-pulse h-48" />
             ))}
           </div>
         ) : error && !catalog ? (
-          <div className="text-center text-muted-foreground py-12">
+          <div className="text-center py-12" style={{ color: "var(--nv-muted)" }}>
             کاتالوگ موقتاً در دسترس نیست؛ لطفاً صفحه را دوباره بارگیری کنید یا از{" "}
             <Link to="/support" className="text-primary hover:underline">
               پشتیبانی
@@ -130,51 +129,38 @@ const ServicesSection = () => {
                   <Link
                     key={product.id}
                     to={storeProductRoute(product)}
-                    className="glass rounded-3xl p-5 glass-hover border border-border/50 hover:border-primary/40 transition-all flex flex-col group"
+                    className="nv-pcard group"
+                    style={{ ["--nv-accent" as string]: product.accent_color, ["--nv-tile" as string]: `${product.accent_color}18` }}
                   >
-                    <div className="flex items-start justify-between mb-4">
-                      <div
-                        className="w-14 h-14 rounded-2xl flex items-center justify-center overflow-hidden"
-                        style={{ backgroundColor: `${product.accent_color}18` }}
-                      >
+                    <span className="nv-pcard__glow" />
+                    <div className="flex items-start justify-between w-full mb-1">
+                      <div className="nv-pcard__logo">
                         {logo ? (
-                          <img
-                            src={logo}
-                            alt={product.name}
-                            className="w-9 h-9 object-contain"
-                            loading="lazy"
-                          />
+                          <img src={logo} alt={product.name} loading="lazy" />
                         ) : (
-                          <span
-                            className="text-xl font-black"
-                            style={{ color: product.accent_color }}
-                          >
+                          <span className="text-xl font-black" style={{ color: product.accent_color }}>
                             {product.name.slice(0, 1)}
                           </span>
                         )}
                       </div>
-                      {product.featured && (
-                        <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                      )}
+                      {product.featured && <Star className="w-4 h-4 text-amber-400 fill-amber-400" />}
                     </div>
 
-                    <h3 className="font-bold mb-1 group-hover:text-primary transition-colors">
-                      {product.name}
-                    </h3>
-                    <p className="text-xs text-muted-foreground leading-6 mb-4 line-clamp-2">
+                    <h3 className="nv-pcard__name">{product.name}</h3>
+                    <p className="nv-pcard__eyebrow line-clamp-2">
                       {product.eyebrow || product.short_description}
                     </p>
 
-                    <div className="mt-auto flex items-center justify-between text-xs">
-                      <span className="text-muted-foreground">
+                    <div className="nv-pcard__meta">
+                      <span className="nv-pcard__count">
                         {product.plans.length.toLocaleString("fa-IR")} پلن فعال
                       </span>
-                      <span className="font-bold" style={{ color: product.accent_color }}>
-                        {minPrice > 0 ? `از ${formatToman(minPrice)}` : "استعلام"}
+                      <span className="nv-pcard__price">
+                        {minPrice > 0 ? `از ${formatToman(minPrice)}` : "استعلام قیمت"}
                       </span>
                     </div>
 
-                    <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-primary">
+                    <span className="mt-3 inline-flex items-center gap-1 text-xs font-bold" style={{ color: "var(--nv-brand)" }}>
                       مشاهده پلن‌ها
                       <ArrowLeft className="w-3.5 h-3.5" />
                     </span>
@@ -183,7 +169,7 @@ const ServicesSection = () => {
               })}
             </div>
             {products.length === 0 && (
-              <div className="text-center text-muted-foreground py-12">
+              <div className="text-center py-12" style={{ color: "var(--nv-muted)" }}>
                 نتیجه‌ای برای جست‌وجوی شما پیدا نشد.
               </div>
             )}
