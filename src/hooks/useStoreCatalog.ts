@@ -111,6 +111,10 @@ const LEGACY_ROUTE_KEYWORDS: Record<string, string[]> = {
   spotify: ["spotify", "اسپاتیفای"],
   cursor: ["cursor", "کرسور"],
   "telegram-premium": ["telegram premium", "تلگرام پریمیوم", "تلگرام پرمیوم"],
+  "youtube-premium-music": ["youtube premium music", "youtube", "یوتیوب"],
+  "canva-pro": ["canva pro", "canva", "کانوا"],
+  capcut: ["capcut", "کپ کات", "کپ‌کات"],
+  vpn: ["nova vpn", "vpn", "وی پی ان"],
   cards: ["mastercard", "visa", "مسترکارت", "ویزا", "کارت ارزی"],
   "virtual-number": ["virtual number", "شماره مجازی"],
 };
@@ -147,7 +151,7 @@ export const storeProductRoute = (product: StoreProduct): string => {
       return `/services/${route}`;
     }
   }
-  return `/services/${product.slug.replace(/^adm_/, "")}`;
+  return `/services/${product.slug.replace(/^adm_/, "").replace(/_/g, "-")}`;
 };
 
 export const storeMinPrice = (product: StoreProduct): number => {
