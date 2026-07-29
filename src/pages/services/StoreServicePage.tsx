@@ -13,6 +13,7 @@ import {
   StoreProduct,
   findStoreProduct,
   formatToman,
+  storeMediaUrl,
   storeMinPrice,
   storeProductRoute,
   useStoreCatalog,
@@ -114,7 +115,7 @@ const StoreServicePage = ({ slug: slugProp }: StoreServicePageProps) => {
         features: plan.features || [],
         popular: plan.popular,
         description: plan.description || undefined,
-        image: plan.image_url && !plan.image_url.startsWith("/app/") ? plan.image_url : undefined,
+        image: storeMediaUrl(plan.image_url) || undefined,
         badge: plan.custom_badges?.[0]?.label,
         badges: (plan.custom_badges || []).map((badge) => ({
           label: badge.label,
@@ -199,7 +200,7 @@ const StoreServicePage = ({ slug: slugProp }: StoreServicePageProps) => {
       <ServicePageLayout
         serviceId={`store:${product.slug}`}
         icon={Package}
-        logoSrc={product.image_url && !product.image_url.startsWith("/app/") ? product.image_url : undefined}
+        logoSrc={storeMediaUrl(product.image_url) || undefined}
         title={product.name}
         subtitle={product.eyebrow || `${adapted.plans.length.toLocaleString("fa-IR")} پلن فعال`}
         description={product.description || product.short_description}

@@ -5,6 +5,7 @@ import {
   StoreProduct,
   formatToman,
   normalizeText,
+  storeMediaUrl,
   storeMinPrice,
   storeProductRoute,
   useStoreCatalog,
@@ -20,11 +21,14 @@ const LOCAL_LOGOS: [RegExp, string][] = [
   [/spotify|اسپاتیفای/, "/logos/spotify.svg"],
   [/cursor|کرسور/, "/logos/cursor.svg"],
   [/telegram|تلگرام/, "/logos/telegram.svg"],
-  [/visa|master|کارت/, "/logos/mastercard.svg"],
+  [/youtube|یوتیوب/, "/app/assets/products/youtube-premium-music.svg"],
+  [/vpn|وی پی ان/, "/app/assets/products/vpn.svg"],
+  [/visa|master|کارت|ویزا/, "/app/assets/products/cards.webp"],
 ];
 
 const productLogo = (product: StoreProduct): string | null => {
-  if (product.image_url && /^https?:\/\//.test(product.image_url)) return product.image_url;
+  const configuredLogo = storeMediaUrl(product.image_url);
+  if (configuredLogo) return configuredLogo;
   const hay = normalizeText(
     `${product.slug} ${product.name} ${(product.search_aliases || []).join(" ")}`
   );

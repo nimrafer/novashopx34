@@ -160,6 +160,21 @@ export const storeMinPrice = (product: StoreProduct): number => {
 export const formatToman = (price: number): string =>
   price > 0 ? `${price.toLocaleString("fa-IR")} تومان` : "استعلام قیمت";
 
+/**
+ * Resolve media exactly as it is configured in the Mini App catalog.
+ *
+ * Product images are commonly stored under `/app/assets/...` on the same
+ * production hostname.  The storefront used to reject those paths and replace
+ * them with its own legacy logo map, which made the two storefronts look out of
+ * sync even though they were reading the same product record.
+ */
+export const storeMediaUrl = (value: string | null | undefined): string | null => {
+  const source = String(value || "").trim();
+  if (!source) return null;
+  if (/^https?:\/\//i.test(source) || source.startsWith("/")) return source;
+  return `/${source.replace(/^\.?\//, "")}`;
+};
+
 export const useStoreCatalog = () => {
   const [catalog, setCatalog] = useState<StoreCatalog | null>(catalogCache);
   const [loading, setLoading] = useState(!catalogCache);

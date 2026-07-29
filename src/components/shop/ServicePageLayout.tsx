@@ -113,6 +113,7 @@ const ServicePageLayout = ({
   const [detailPlan, setDetailPlan] = useState<Plan | null>(null);
   const highlightedPlanId = (searchParams.get("plan") || "").trim();
   const resolvedServiceId = serviceId || location.pathname.replace("/services/", "");
+  const usesCentralStoreCheckout = resolvedServiceId.startsWith("store:");
   const catalogService = useMemo(
     () => catalog.find((service) => service.id === resolvedServiceId || service.slug === resolvedServiceId),
     [catalog, resolvedServiceId],
@@ -210,6 +211,24 @@ const ServicePageLayout = ({
   };
 
   const handleOrder = async (plan: Plan) => {
+    if (usesCentralStoreCheckout) {
+      const planId = Number(plan.id);
+      if (!Number.isInteger(planId) || planId <= 0) {
+        toast({
+          title: "این پلن فعلاً قابل سفارش نیست",
+          description: "شناسه پلن با فروشگاه مرکزی همگام نشده است.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // The Mini App checkout is also a first-class browser checkout. It
+      // creates a guest web session when Telegram initData is absent and uses
+      // the exact same order, discount, central payment and delivery APIs.
+      window.location.assign(`/app/#/checkout/${encodeURIComponent(String(planId))}`);
+      return;
+    }
+
     if (!user) {
       toast({
         title: "ابتدا وارد حساب شوید",
@@ -555,7 +574,18 @@ const ServicePageLayout = ({
           <div className="container mx-auto px-4 max-w-4xl">
             <h2 className="nv-section-title mb-2">🛍 پلن‌های خرید <small>روی هر پلن بزنید</small></h2>
             <p className="text-sm mb-6" style={{ color: "var(--nv-muted)" }}>
-              بعد از ثبت سفارش، وضعیت آن از <Link to="/dashboard" className="underline">پنل کاربری</Link> قابل پیگیری است.
+              {usesCentralStoreCheckout ? (
+                <>
+                  پرداخت از طریق سامانه مرکزی نوا انجام می‌شود؛ مبلغ دقیق و وضعیت
+                  تأیید پرداخت به‌صورت خودکار نمایش داده خواهد شد.
+                </>
+              ) : (
+                <>
+                  بعد از ثبت سفارش، وضعیت آن از{" "}
+                  <Link to="/dashboard" className="underline">پنل کاربری</Link>{" "}
+                  قابل پیگیری است.
+                </>
+              )}
             </p>
             {(() => {
               const renderPlanCard = (item: { key: string; plan: Plan }) => {
@@ -722,7 +752,7 @@ const ServicePageLayout = ({
                     handleOrder(plan);
                   }}
                 >
-                  ثبت سفارش و ادامه ←
+                  {usesCentralStoreCheckout ? "خرید و پرداخت خودکار ←" : "ثبت سفارش و ادامه ←"}
                 </button>
               </div>
             </div>
