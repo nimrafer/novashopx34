@@ -21,6 +21,7 @@ const LOCAL_LOGOS: [RegExp, string][] = [
   [/spotify|اسپاتیفای/, "/logos/spotify.svg"],
   [/cursor|کرسور/, "/logos/cursor.svg"],
   [/telegram|تلگرام/, "/logos/telegram.svg"],
+  [/capcut|کپ کات/, "/logos/capcut.svg"],
   [/youtube|یوتیوب/, "/app/assets/products/youtube-premium-music.svg"],
   [/vpn|وی پی ان/, "/app/assets/products/vpn.svg"],
   [/visa|master|کارت|ویزا/, "/app/assets/products/cards.webp"],
