@@ -13,7 +13,7 @@ const ShopFooter = () => {
             <div className="lg:col-span-2">
               <h3 className="text-2xl md:text-3xl font-black mb-3">برای خرید سریع آماده‌ای؟</h3>
               <p className="text-muted-foreground leading-8 max-w-2xl">
-                سفارش را مستقیم داخل سایت ثبت کن، از پنل کاربری وضعیت را ببین و اگر سوال داشتی همان لحظه با پشتیبانی در ارتباط باش.
+                پلن را انتخاب کن و بدون نیاز به ورود، پرداخت را در سامانه مرکزی نوا انجام بده؛ وضعیت تأیید همان‌جا خودکار نمایش داده می‌شود.
               </p>
               <div className="mt-5 flex flex-col sm:flex-row gap-3">
                 <Button size="lg" className="bg-gradient-primary text-primary-foreground hover:opacity-95" asChild>
@@ -42,8 +42,8 @@ const ShopFooter = () => {
               </div>
               <div className="rounded-2xl bg-card border border-border p-4 text-center">
                 <Clock3 className="w-5 h-5 mx-auto text-accent mb-2" />
-                <p className="font-semibold text-sm">پیگیری سفارش</p>
-                <p className="text-xs text-muted-foreground mt-1">از داخل پنل کاربری</p>
+                <p className="font-semibold text-sm">تأیید پرداخت</p>
+                <p className="text-xs text-muted-foreground mt-1">خودکار و لحظه‌ای</p>
               </div>
             </div>
           </div>
