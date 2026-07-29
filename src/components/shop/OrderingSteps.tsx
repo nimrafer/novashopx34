@@ -1,35 +1,35 @@
-import { UserPlus, Search, ShoppingCart, CreditCard, ArrowLeft } from "lucide-react";
+import { Search, ShoppingCart, CreditCard, BadgeCheck, ArrowLeft } from "lucide-react";
 
 const steps = [
     {
         number: "۱",
-        title: "ثبت‌نام و ورود",
-        titleEn: "Sign Up",
-        icon: UserPlus,
+        title: "انتخاب محصول",
+        titleEn: "Choose Product",
+        icon: Search,
         color: "from-blue-500 to-cyan-500",
         glowColor: "blue-500",
     },
     {
         number: "۲",
-        title: "جستجو و انتخاب محصول",
-        titleEn: "Search & Choose",
-        icon: Search,
+        title: "انتخاب پلن",
+        titleEn: "Choose Plan",
+        icon: ShoppingCart,
         color: "from-purple-500 to-pink-500",
         glowColor: "purple-500",
     },
     {
         number: "۳",
-        title: "ثبت سفارش در سایت",
-        titleEn: "Place Order",
-        icon: ShoppingCart,
+        title: "پرداخت مرکزی",
+        titleEn: "Central Payment",
+        icon: CreditCard,
         color: "from-emerald-500 to-teal-500",
         glowColor: "emerald-500",
     },
     {
         number: "۴",
-        title: "پرداخت و تحویل فوری",
-        titleEn: "Pay & Receive",
-        icon: CreditCard,
+        title: "تأیید و تحویل",
+        titleEn: "Verify & Receive",
+        icon: BadgeCheck,
         color: "from-amber-500 to-orange-500",
         glowColor: "amber-500",
     },
