@@ -32,6 +32,7 @@ Guides (Persian):
 - https://nova-shop.co/blog/sakht-video-ba-gemini-veo — video generation with Gemini Veo 3
 - https://nova-shop.co/blog/sakht-video-ba-chatgpt-sora — video generation with ChatGPT Sora
 - https://nova-shop.co/blog/nano-banana-sakht-adit-aks — image editing with Nano Banana
+- https://nova-shop.co/blog/claude-code-chist-amoozesh-farsi — Claude Code (agentic coding) guide in Persian
 - https://nova-shop.co/blog — all guides
 
 Guidance:
