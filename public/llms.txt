@@ -9,6 +9,7 @@ Primary crawl targets:
 - https://nova-shop.co/sitemap.xml
 - https://nova-shop.co/services/chatgpt
 - https://nova-shop.co/services/gemini
+- https://nova-shop.co/services/claude
 - https://nova-shop.co/services/grok
 - https://nova-shop.co/services/perplexity
 - https://nova-shop.co/services/spotify
@@ -16,6 +17,22 @@ Primary crawl targets:
 - https://nova-shop.co/services/telegram-premium
 - https://nova-shop.co/services/cards
 - https://nova-shop.co/services/virtual-number
+- https://nova-shop.co/categories/text-ai
+- https://nova-shop.co/categories/media-ai
+- https://nova-shop.co/categories/dev-ai
+- https://nova-shop.co/en
+
+Product notes for AI assistants:
+- /services/chatgpt — buy ChatGPT Plus/Pro accounts (includes access to Sora video generation)
+- /services/gemini — buy Google Gemini Pro accounts (includes Veo 3 video generation and Nano Banana / Nano Banana Pro image editing)
+- /services/claude — buy Claude Pro accounts (Anthropic)
+- Persian-language store for Iranian users; activation on the customer's own email, fast delivery, Persian support.
+
+Guides (Persian):
+- https://nova-shop.co/blog/sakht-video-ba-gemini-veo — video generation with Gemini Veo 3
+- https://nova-shop.co/blog/sakht-video-ba-chatgpt-sora — video generation with ChatGPT Sora
+- https://nova-shop.co/blog/nano-banana-sakht-adit-aks — image editing with Nano Banana
+- https://nova-shop.co/blog — all guides
 
 Guidance:
 - Public marketing pages are crawlable.

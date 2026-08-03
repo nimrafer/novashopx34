@@ -35,27 +35,55 @@ const BlogPost = () => {
   return (
     <>
       <SEOHead
-        title={`${post.title} | بلاگ نوا`}
-        description={post.excerpt}
+        title={post.metaTitle || `${post.title} | بلاگ نوا`}
+        description={post.metaDescription || post.excerpt}
         keywords={post.tags.join("، ")}
         canonicalUrl={`https://nova-shop.co/blog/${post.id}`}
         ogImage={post.image}
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "BlogPosting",
-          "headline": post.title,
-          "description": post.excerpt,
-          "image": post.image,
-          "author": {
-            "@type": "Person",
-            "name": post.author
+        ogType="article"
+        jsonLd={[
+          {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": post.title,
+            "description": post.metaDescription || post.excerpt,
+            "image": `https://nova-shop.co${post.image}`,
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": `https://nova-shop.co/blog/${post.id}`
+            },
+            "author": {
+              "@type": "Person",
+              "name": post.author
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "Nova AI Shop",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://nova-shop.co/about-logo.webp"
+              }
+            },
+            "datePublished": post.dateISO || post.date,
+            "dateModified": post.dateISO || post.date
           },
-          "publisher": {
-            "@type": "Organization",
-            "name": "Nova AI Shop"
-          },
-          "datePublished": post.date
-        }}
+          ...(post.faqs && post.faqs.length
+            ? [
+                {
+                  "@context": "https://schema.org",
+                  "@type": "FAQPage",
+                  "mainEntity": post.faqs.map((faq) => ({
+                    "@type": "Question",
+                    "name": faq.question,
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": faq.answer
+                    }
+                  }))
+                }
+              ]
+            : [])
+        ]}
       />
       
       <div className="min-h-screen bg-background text-foreground" dir="rtl">
@@ -105,8 +133,12 @@ const BlogPost = () => {
             <div className="aspect-video bg-gradient-to-br from-primary/20 to-purple-500/20 rounded-2xl flex items-center justify-center mb-12">
               <img
                 src={post.image}
-                alt={post.title}
+                alt={`تصویر شاخص مقاله ${post.title} — بلاگ نوا شاپ`}
+                width={512}
+                height={512}
                 className="w-32 h-32 object-contain"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             
