@@ -36,7 +36,7 @@
     --radius: 1.125rem;
 
     /* haxmac gradient system */
-    --gg-hero: linear-gradient(110deg, #3a2a7d 0%, #7b2aa0 30%, #c5379c 58%, #ff7a45 100%);
+    --gg-hero: linear-gradient(110deg, #40327f 0%, #7d3c9f 30%, #c14d9d 58%, #f78556 100%);
     --gg-sunset: linear-gradient(120deg, #ffb259 0%, #ff7a6b 38%, #ff5f9e 68%, #8a6bff 100%);
     --gg-sunset-soft: linear-gradient(120deg, #ffb25929, #ff5f9e21, #7b6cff29);
     --gg-hairline: linear-gradient(90deg, #ffb259, #ff5f9e, #7b6cff);
