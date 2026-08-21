@@ -1,21 +1,47 @@
-/* Nova storefront — mini-app visual parity, scoped under .nv-scope */
+/* Nova storefront — mini-app visual parity, scoped under .nv-scope
+   Reskinned with the haxmac warm DNA (plans/01-site-dna.md). */
 .nv-scope {
-  --nv-bg: #f6f7fb;
+  --nv-bg: #f0ece4;
   --nv-paper: #ffffff;
-  --nv-ink: #171a2b;
-  --nv-text: #23273a;
-  --nv-muted: #6b7284;
-  --nv-line: rgba(23, 26, 43, 0.08);
-  --nv-brand: #7c3aed;
-  --nv-brand-dark: #5b21b6;
-  --nv-brand-soft: #f1eafe;
-  --nv-hero-start: #7c3aed;
-  --nv-hero-end: #5b21b6;
-  --nv-hero-glow: #a78bfa;
+  --nv-ink: #1f1d1a;
+  --nv-text: #1f1d1a;
+  --nv-muted: #6f6a60;
+  --nv-line: #4a3a1e1a;
+  --nv-brand: #0a84ff;
+  --nv-brand-dark: #0666c5;
+  --nv-brand-soft: rgba(10, 132, 255, 0.12);
+  --nv-hero-start: #3a2a7d;
+  --nv-hero-end: #ff7a45;
+  --nv-hero-glow: rgba(255, 255, 255, 0.4);
   --nv-radius: 18px;
-  --nv-shadow: 0 8px 28px rgba(23, 26, 43, 0.07);
+  --nv-shadow: 0 1px 2px #0000000d, 0 8px 24px #0000000f;
   background: var(--nv-bg);
   color: var(--nv-text);
+}
+.dark .nv-scope {
+  --nv-bg: #1d1b18;
+  --nv-paper: #28251f;
+  --nv-ink: #f6f3ec;
+  --nv-text: #f6f3ec;
+  --nv-muted: #9b958a;
+  --nv-line: #fff4e01a;
+  --nv-brand-dark: #3e9dff;
+  --nv-brand-soft: rgba(10, 132, 255, 0.16);
+  --nv-shadow: 0 1px 2px #0006, 0 8px 24px #00000059;
+}
+
+/* ---------- haxmac glass header (used by ShopHeader) ---------- */
+.nv-glass-header {
+  background:
+    linear-gradient(90deg, #ffaa5021, #ff5f9e0f 48%, #7b6cff1c),
+    hsl(var(--background) / 0.7);
+  -webkit-backdrop-filter: saturate(1.8) blur(20px);
+  backdrop-filter: saturate(1.8) blur(20px);
+}
+.nv-glass-header.is-scrolled {
+  background:
+    linear-gradient(90deg, #ffaa5021, #ff5f9e0f 48%, #7b6cff1c),
+    hsl(var(--background) / 0.94);
 }
 
 /* ---------- hero (mini-app gradient card) ---------- */
@@ -26,11 +52,24 @@
   padding: 28px 24px;
   color: #fff;
   background:
-    radial-gradient(120% 160% at 85% -20%, var(--nv-hero-glow) 0%, transparent 55%),
-    radial-gradient(100% 140% at 0% 110%, #4c1d95 0%, transparent 60%),
-    linear-gradient(135deg, var(--nv-hero-start), var(--nv-hero-end));
-  box-shadow: 0 14px 34px rgba(91, 33, 182, 0.28);
+    radial-gradient(120% 150% at 86% -25%, var(--nv-hero-glow) 0%, transparent 55%),
+    linear-gradient(110deg, #3a2a7d 0%, #7b2aa0 30%, #c5379c 58%, #ff7a45 100%);
+  box-shadow: 0 20px 50px #5a288257;
 }
+/* haxmac glass squircle motif */
+.nv-hero::before {
+  content: "";
+  position: absolute;
+  top: -70px;
+  inset-inline-end: -40px;
+  width: 190px;
+  height: 190px;
+  border-radius: 44px;
+  transform: rotate(8deg);
+  background: linear-gradient(135deg, #ffffff47, #ffffff0f);
+  pointer-events: none;
+}
+.nv-hero > * { position: relative; }
 .nv-hero__tag {
   display: inline-flex;
   align-items: center;
@@ -82,12 +121,12 @@
   padding: 8px 16px;
   transition: all 0.15s;
 }
-.nv-chip:hover { border-color: rgba(124, 58, 237, 0.4); }
+.nv-chip:hover { border-color: rgba(10, 132, 255, 0.4); }
 .nv-chip--on {
   color: #fff;
   background: var(--nv-brand);
   border-color: var(--nv-brand);
-  box-shadow: 0 6px 14px rgba(124, 58, 237, 0.3);
+  box-shadow: 0 6px 14px rgba(10, 132, 255, 0.3);
 }
 
 /* ---------- product cards (mini-app pcard) ---------- */
@@ -171,7 +210,7 @@
 .nv-note--info { background: #e8effd; border-color: rgba(37, 99, 235, 0.15); color: #1e40af; }
 .nv-note--ok { background: #e3f7ef; border-color: rgba(14, 159, 110, 0.18); color: #065f46; }
 .nv-note--warn { background: #fdf1df; border-color: rgba(217, 119, 6, 0.2); color: #92400e; }
-.nv-note--brand { background: var(--nv-brand-soft); border-color: rgba(124, 58, 237, 0.2); color: var(--nv-brand-dark); }
+.nv-note--brand { background: var(--nv-brand-soft); border-color: rgba(10, 132, 255, 0.2); color: var(--nv-brand-dark); }
 .nv-note b, .nv-note strong { font-weight: 800; }
 
 /* ---------- group titles ---------- */
@@ -203,9 +242,9 @@
   overflow: hidden;
   cursor: pointer;
 }
-.nv-plan:hover { border-color: rgba(124, 58, 237, 0.35); }
+.nv-plan:hover { border-color: rgba(10, 132, 255, 0.35); }
 .nv-plan:active { transform: scale(0.99); }
-.nv-plan--popular { border-color: rgba(124, 58, 237, 0.35); }
+.nv-plan--popular { border-color: rgba(10, 132, 255, 0.35); }
 .nv-plan__pop {
   position: absolute;
   top: 0;
@@ -213,7 +252,7 @@
   font-size: 10px;
   font-weight: 700;
   color: #fff;
-  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  background: linear-gradient(120deg, #ffb259 0%, #ff7a6b 38%, #ff5f9e 68%, #8a6bff 100%);
   border-radius: 0 0 8px 8px;
   padding: 3px 10px;
 }
@@ -343,7 +382,7 @@
   border-radius: var(--nv-radius);
   padding: 15px;
 }
-.nv-compare__col--brand { border-color: rgba(124, 58, 237, 0.3); background: linear-gradient(180deg, #faf7ff, #fff); }
+.nv-compare__col--brand { border-color: rgba(10, 132, 255, 0.3); background: linear-gradient(180deg, #fdf9f2, #fff); }
 .nv-compare__head { font-size: 13.5px; font-weight: 800; margin-bottom: 10px; color: var(--nv-ink); }
 .nv-compare__col--brand .nv-compare__head { color: var(--nv-brand-dark); }
 .nv-compare__item { font-size: 12px; color: var(--nv-muted); line-height: 2; display: flex; gap: 7px; margin-bottom: 6px; }
@@ -381,43 +420,54 @@
 .nv-section-title small { font-size: 12px; font-weight: 500; color: var(--nv-muted); }
 
 /* ---------- homepage hero v2 (premium, shared world with service pages) ---------- */
-.nv2-hero { position: relative; overflow: hidden; background: #0b101f;
-  border-radius: 0 0 30px 30px; padding: 118px 0 46px; }
-.nv2-hero__aurora { position: absolute; inset: -30%; pointer-events: none; filter: blur(14px);
-  background:
-    radial-gradient(32% 30% at 20% 20%, rgba(124, 92, 240, 0.18), transparent 70%),
-    radial-gradient(28% 26% at 80% 26%, rgba(16, 163, 127, 0.13), transparent 70%),
-    radial-gradient(26% 26% at 55% 95%, rgba(71, 150, 227, 0.12), transparent 70%); }
+/* "The Sunset Prism" — haxmac hero gradient band (gg-hero) */
+.nv2-hero { position: relative; overflow: hidden;
+  background: linear-gradient(110deg, #3a2a7d 0%, #7b2aa0 30%, #c5379c 58%, #ff7a45 100%);
+  border-radius: 0 0 30px 30px; padding: 118px 0 46px;
+  box-shadow: 0 20px 50px #5a288257; }
+/* radial white glow + stacked glass squircles (haxmac composition) */
+.nv2-hero__aurora { position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(120% 150% at 86% -25%, rgba(255, 255, 255, 0.4), transparent 55%); }
+.nv2-hero__aurora::before { content: ""; position: absolute; top: -115px; inset-inline-end: 6%;
+  width: 230px; height: 230px; border-radius: 52px; transform: rotate(8deg);
+  background: linear-gradient(135deg, #ffffff47, #ffffff0f); }
+.nv2-hero__aurora::after { content: ""; position: absolute; top: -40px; inset-inline-end: -60px;
+  width: 300px; height: 300px; border-radius: 68px; transform: rotate(8deg);
+  background: linear-gradient(135deg, #ffffff24, #ffffff05); opacity: 0.55; }
 .nv2-hero__inner { position: relative; max-width: 880px; margin: 0 auto; text-align: center; }
-.nv2-hero__badge { display: inline-block; font-size: 12.5px; font-weight: 700; color: #b9c3e6;
-  border: 1px solid rgba(148, 163, 218, 0.28); background: rgba(255, 255, 255, 0.05);
+.nv2-hero__badge { display: inline-block; font-size: 12.5px; font-weight: 700; color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.24); background: rgba(255, 255, 255, 0.16);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
   border-radius: 999px; padding: 7px 18px; margin-bottom: 20px; }
-.nv2-hero__title { font-size: clamp(26px, 4.6vw, 46px); font-weight: 900; color: #eef2ff;
+.nv2-hero__title { font-size: clamp(26px, 4.6vw, 46px); font-weight: 800; color: #ffffff;
   line-height: 1.7; margin-bottom: 14px; letter-spacing: -0.02em; }
-.nv2-hero__sub { font-size: clamp(13.5px, 1.7vw, 16px); color: #b9c3e6; line-height: 2.1;
+.nv2-hero__sub { font-size: clamp(13.5px, 1.7vw, 16px); color: rgba(255, 255, 255, 0.85); line-height: 2.1;
   max-width: 620px; margin: 0 auto 26px; }
 .nv2-hero__cta { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 22px; }
 .nv2-btn { display: inline-flex; align-items: center; gap: 8px; border-radius: 14px;
   padding: 13px 26px; font-size: 14px; font-weight: 800; text-decoration: none;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-.nv2-btn:focus-visible { outline: 3px solid #8ab6f5; outline-offset: 3px; }
-.nv2-btn--primary { color: #fff; background: linear-gradient(110deg, #4f7cf0, #7c5cf0);
-  box-shadow: 0 12px 30px -10px rgba(99, 121, 245, 0.55); }
-.nv2-btn--primary:hover { transform: translateY(-2px); box-shadow: 0 18px 40px -10px rgba(99, 121, 245, 0.7); }
-.nv2-btn--ghost { color: #eef2ff; background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(148, 163, 218, 0.28); }
-.nv2-btn--ghost:hover { transform: translateY(-2px); background: rgba(255, 255, 255, 0.1); }
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.22s, filter 0.22s; }
+.nv2-btn:focus-visible { outline: 3px solid rgba(255, 255, 255, 0.55); outline-offset: 3px; }
+/* white pill on gradient — haxmac hero CTA */
+.nv2-btn--primary { color: #1f1d1a; background: #ffffff;
+  box-shadow: 0 12px 30px -10px rgba(30, 15, 60, 0.55); }
+.nv2-btn--primary:hover { transform: translateY(-2px); filter: brightness(1.05);
+  box-shadow: 0 18px 40px -10px rgba(30, 15, 60, 0.65); }
+.nv2-btn--ghost { color: #ffffff; background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.nv2-btn--ghost:hover { transform: translateY(-2px); background: rgba(255, 255, 255, 0.22); }
 .nv2-hero__perks { display: flex; justify-content: center; gap: 8px 20px; flex-wrap: wrap;
-  font-size: 12.5px; color: #93a0c8; margin-bottom: 34px; }
+  font-size: 12.5px; color: rgba(255, 255, 255, 0.85); margin-bottom: 34px; }
 .nv2-hero__perk { display: inline-flex; align-items: center; gap: 6px; }
-.nv2-hero__perk svg { color: #34d399; }
+.nv2-hero__perk svg { color: #28c840; }
 .nv2-brands { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
 .nv2-brand { display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
-  color: #cdd5f0; font-size: 12.5px; font-weight: 700; padding: 9px 15px; border-radius: 13px;
-  background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(148, 163, 218, 0.2);
+  color: #ffffff; font-size: 12.5px; font-weight: 700; padding: 9px 15px; border-radius: 13px;
+  background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.22);
   animation: nv2-float 6.5s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.35s, background 0.35s; }
-.nv2-brand:hover { transform: translateY(-3px); border-color: rgba(148, 183, 245, 0.55);
+.nv2-brand:hover { transform: translateY(-3px); border-color: rgba(255, 255, 255, 0.55);
   background: rgba(255, 255, 255, 0.09); }
 .nv2-brand img { width: 26px; height: 26px; object-fit: contain; display: block; }
 @keyframes nv2-float { from { transform: translateY(0); } to { transform: translateY(-6px); } }
@@ -438,7 +488,7 @@
 /* ---------- product badges (synced with the mini app) ---------- */
 .nv-pbadge {
   display: inline-flex; align-items: center; font-size: 10px; font-weight: 800;
-  line-height: 1; padding: 4px 8px; border-radius: 999px; color: #fff; background: #7c3aed;
+  line-height: 1; padding: 4px 8px; border-radius: 999px; color: #fff; background: linear-gradient(120deg, #ff7a6b, #ff5f9e);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.16); white-space: nowrap;
 }
 .nv-pbadge--new { background: linear-gradient(135deg, #22c55e, #059669); animation: nv-pbadge-glow 2.2s ease-in-out infinite; }

@@ -4,35 +4,48 @@
 
 @layer base {
   :root {
-    --background: 145 40% 98%;
-    --foreground: 216 24% 16%;
+    /* haxmac warm cream palette — see plans/01-site-dna.md */
+    --background: 40 29% 92%;
+    --foreground: 36 9% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 216 24% 16%;
+    --card-foreground: 36 9% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 216 24% 16%;
+    --popover-foreground: 36 9% 11%;
 
-    --primary: 92 74% 68%;
-    --primary-foreground: 160 48% 14%;
+    --primary: 211 100% 52%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 102 42% 93%;
-    --secondary-foreground: 216 24% 16%;
+    --secondary: 40 38% 92%;
+    --secondary-foreground: 36 9% 11%;
 
-    --muted: 210 24% 95%;
-    --muted-foreground: 215 14% 38%;
+    --muted: 40 25% 93%;
+    --muted-foreground: 40 7% 41%;
 
-    --accent: 165 52% 33%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 36 80% 78%;
+    --accent-foreground: 240 3% 12%;
 
-    --destructive: 0 80% 54%;
+    --destructive: 0 100% 42%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214 28% 88%;
-    --input: 214 28% 90%;
-    --ring: 92 74% 68%;
+    --border: 38 23% 84%;
+    --input: 38 23% 86%;
+    --ring: 211 100% 52%;
 
-    --radius: 1rem;
+    --radius: 1.125rem;
+
+    /* haxmac gradient system */
+    --gg-hero: linear-gradient(110deg, #3a2a7d 0%, #7b2aa0 30%, #c5379c 58%, #ff7a45 100%);
+    --gg-sunset: linear-gradient(120deg, #ffb259 0%, #ff7a6b 38%, #ff5f9e 68%, #8a6bff 100%);
+    --gg-sunset-soft: linear-gradient(120deg, #ffb25929, #ff5f9e21, #7b6cff29);
+    --gg-hairline: linear-gradient(90deg, #ffb259, #ff5f9e, #7b6cff);
+    --dl-color: #f4d19c;
+    --dl-text: #1d1d1f;
+    --tl-red: #ff5f57;
+    --tl-yellow: #febc2e;
+    --tl-green: #28c840;
+    --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
 
     --chatgpt: 160 84% 39%;
     --gemini: 217 91% 60%;
@@ -56,33 +69,34 @@
   }
 
   .dark {
-    --background: 215 34% 9%;
-    --foreground: 210 40% 98%;
+    /* haxmac warm roast — brown-black, never gray/blue */
+    --background: 36 9% 10%;
+    --foreground: 40 33% 95%;
 
-    --card: 216 31% 12%;
-    --card-foreground: 210 40% 98%;
+    --card: 40 13% 14%;
+    --card-foreground: 40 33% 95%;
 
-    --popover: 216 31% 12%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 40 13% 14%;
+    --popover-foreground: 40 33% 95%;
 
-    --primary: 92 74% 68%;
-    --primary-foreground: 160 48% 14%;
+    --primary: 211 100% 52%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 216 26% 18%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 40 11% 17%;
+    --secondary-foreground: 40 33% 95%;
 
-    --muted: 216 26% 18%;
-    --muted-foreground: 215 20% 70%;
+    --muted: 40 11% 17%;
+    --muted-foreground: 39 8% 57%;
 
-    --accent: 165 52% 42%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 36 60% 66%;
+    --accent-foreground: 240 3% 12%;
 
-    --destructive: 0 70% 52%;
+    --destructive: 0 100% 65%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 215 20% 24%;
-    --input: 215 20% 24%;
-    --ring: 92 74% 68%;
+    --border: 40 15% 22%;
+    --input: 40 15% 22%;
+    --ring: 211 100% 62%;
 
     --sidebar-background: 216 31% 12%;
     --sidebar-foreground: 210 40% 98%;
@@ -111,8 +125,8 @@
     min-height: 100vh;
     background-color: hsl(var(--background));
     background-image:
-      radial-gradient(circle at 10% 0%, hsl(var(--primary) / 0.18) 0%, transparent 35%),
-      radial-gradient(circle at 85% 5%, hsl(var(--accent) / 0.12) 0%, transparent 30%),
+      radial-gradient(circle at 10% 0%, #ffb25918 0%, transparent 35%),
+      radial-gradient(circle at 85% 5%, #7b6cff12 0%, transparent 30%),
       linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--background)) 100%);
     background-attachment: fixed;
   }
@@ -129,11 +143,11 @@
 
   .text-gradient {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--primary)) 100%);
+    background-image: var(--gg-sunset);
   }
 
   .bg-gradient-primary {
-    background-image: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent) / 0.9) 100%);
+    background-image: var(--gg-hero);
   }
 
   .bg-gradient-glow {

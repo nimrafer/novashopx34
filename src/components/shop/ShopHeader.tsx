@@ -12,10 +12,13 @@ import {
   Info,
   LayoutList,
   ShieldCheck,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "next-themes";
 import { useState, useRef, useEffect } from "react";
 import novaLogo from "@/assets/nova-logo.webp";
 
@@ -43,6 +46,9 @@ const services: ServiceItem[] = [
 
 const ShopHeader = () => {
   const { user, signOut } = useAuth();
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -93,10 +99,8 @@ const ShopHeader = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-background/95 backdrop-blur-xl border-b border-border shadow-sm"
-          : "bg-background/70 backdrop-blur border-b border-transparent"
+      className={`nv-glass-header fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? "is-scrolled border-b border-border shadow-sm" : "border-b border-transparent"
       }`}
     >
       <div className="container mx-auto px-4">
@@ -210,6 +214,16 @@ const ShopHeader = () => {
           <div className="hidden lg:flex items-center gap-2">
             <Button
               variant="ghost"
+              size="icon"
+              className="rounded-full w-9 h-9"
+              aria-label="تغییر تم روشن/تیره"
+              onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+            >
+              {mounted && resolvedTheme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </Button>
+
+            <Button
+              variant="ghost"
               size="sm"
               className="rounded-full"
               onClick={() => window.open(`https://t.me/${CHANNEL_USERNAME}`, "_blank")}
@@ -255,14 +269,25 @@ const ShopHeader = () => {
             )}
           </div>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden rounded-full"
-            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-          >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </Button>
+          <div className="lg:hidden flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full"
+              aria-label="تغییر تم روشن/تیره"
+              onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+            >
+              {mounted && resolvedTheme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full"
+              onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </Button>
+          </div>
         </div>
 
         {isMobileMenuOpen && (
