@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { CheckCircle2, MessagesSquare, Clapperboard, Code2, ArrowLeft } from "lucide-react";
 import SEOHead from "@/components/seo/SEOHead";
 import {
   organizationSchema,
@@ -90,10 +91,10 @@ const Index = () => {
           <section className="py-16 bg-muted/30">
             <div className="container mx-auto px-4">
               <div className="max-w-4xl mx-auto">
-                <h2 className="text-2xl font-bold mb-6 text-center">
+                <h2 className="text-2xl md:text-3xl font-black mb-8 text-center text-foreground">
                   راهنمای انتخاب و خرید اکانت‌های هوش مصنوعی
                 </h2>
-                <div className="space-y-6 text-muted-foreground leading-8 text-justify">
+                <div className="space-y-6 text-muted-foreground leading-8 text-right">
                   <p>
                     در عصری که <strong className="text-foreground">هوش مصنوعی</strong> مرزهای توانمندی انسان را جابه‌جا کرده است، دسترسی بدون محدودیت به برترین ابزارها دیگر یک انتخاب نیست؛ بلکه <strong className="text-foreground">یک ضرورت</strong> است. <strong className="text-foreground">نوا شاپ</strong> با هدف حذف تحریم‌ها و موانع پرداخت ارزی، بستری امن برای <strong className="text-foreground">خرید اکانت هوش مصنوعی</strong> فراهم کرده تا کاربران ایرانی بتوانند سریع و مطمئن به سرویس‌های روز دنیا دسترسی داشته باشند.
                   </p>
@@ -112,45 +113,67 @@ const Index = () => {
                 </div>
 
                 {/* Additional SEO Keywords Section */}
-                <div className="mt-8 pt-8 border-t border-border">
-                  <h3 className="text-xl font-semibold mb-4 text-center">
+                <div className="mt-12">
+                  <h3 className="text-xl md:text-2xl font-black mb-6 text-center text-foreground">
                     چرا نوا شاپ؟
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-muted-foreground">
-                    <div className="flex items-start gap-2">
-                      <span className="text-primary">✓</span>
-                      <span><strong className="text-foreground">تحویل فوری:</strong> اکانت شما در کمتر از ۱ ساعت فعال می‌شود</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <span className="text-primary">✓</span>
-                      <span><strong className="text-foreground">گارانتی تعویض:</strong> در صورت مشکل، فوراً اکانت جدید دریافت کنید</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <span className="text-primary">✓</span>
-                      <span><strong className="text-foreground">پشتیبانی ۲۴/۷:</strong> تیم پشتیبانی فوری همیشه در دسترس شماست</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <span className="text-primary">✓</span>
-                      <span><strong className="text-foreground">اکانت ۱۰۰٪ اصلی:</strong> تمام اشتراک‌ها قانونی و مستقیم از سرویس‌دهنده</span>
-                    </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {[
+                      ["تحویل فوری", "اکانت شما در کمتر از ۱ ساعت فعال می‌شود"],
+                      ["گارانتی تعویض", "در صورت مشکل، فوراً اکانت جدید دریافت کنید"],
+                      ["پشتیبانی ۲۴/۷", "تیم پشتیبانی فوری همیشه در دسترس شماست"],
+                      ["اکانت ۱۰۰٪ اصلی", "تمام اشتراک‌ها قانونی و مستقیم از سرویس‌دهنده"],
+                    ].map(([title, text]) => (
+                      <div key={title} className="flex items-start gap-3 rounded-2xl bg-card border border-border/70 p-5">
+                        <CheckCircle2 className="w-5 h-5 text-accent shrink-0 mt-1" aria-hidden="true" />
+                        <div>
+                          <p className="font-bold text-foreground mb-1">{title}</p>
+                          <p className="text-sm text-muted-foreground leading-7">{text}</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                <div className="mt-10 pt-8 border-t border-border">
-                  <h3 className="text-xl font-semibold mb-4 text-center">دسته‌بندی ابزارها بر اساس کاربرد</h3>
+                <div className="mt-12">
+                  <h3 className="text-xl md:text-2xl font-black mb-6 text-center text-foreground">دسته‌بندی ابزارها بر اساس کاربرد</h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <Link to="/categories/text-ai" className="glass rounded-2xl p-5 hover:border-primary/40">
-                      <h4 className="font-bold mb-2">چت‌بات‌ها و تولید متن</h4>
-                      <p className="text-sm text-muted-foreground">مناسب تولید محتوا، تحقیق و پاسخ‌گویی هوشمند</p>
-                    </Link>
-                    <Link to="/categories/media-ai" className="glass rounded-2xl p-5 hover:border-primary/40">
-                      <h4 className="font-bold mb-2">تولید تصویر / صدا / ویدیو</h4>
-                      <p className="text-sm text-muted-foreground">برای محتوای چندرسانه‌ای با Gemini Veo 3.1 و Nano Banana Pro</p>
-                    </Link>
-                    <Link to="/categories/dev-ai" className="glass rounded-2xl p-5 hover:border-primary/40">
-                      <h4 className="font-bold mb-2">برنامه‌نویسی و API</h4>
-                      <p className="text-sm text-muted-foreground">ابزارهای توسعه با Cursor، ChatGPT، Gemini (Jules) و Claude</p>
-                    </Link>
+                    {[
+                      {
+                        to: "/categories/text-ai",
+                        icon: MessagesSquare,
+                        title: "چت‌بات‌ها و تولید متن",
+                        text: "مناسب تولید محتوا، تحقیق و پاسخ‌گویی هوشمند",
+                      },
+                      {
+                        to: "/categories/media-ai",
+                        icon: Clapperboard,
+                        title: "تولید تصویر / صدا / ویدیو",
+                        text: "برای محتوای چندرسانه‌ای با Gemini Veo 3.1 و Nano Banana Pro",
+                      },
+                      {
+                        to: "/categories/dev-ai",
+                        icon: Code2,
+                        title: "برنامه‌نویسی و API",
+                        text: "ابزارهای توسعه با Cursor، ChatGPT، Gemini (Jules) و Claude",
+                      },
+                    ].map(({ to, icon: Icon, title, text }) => (
+                      <Link
+                        key={to}
+                        to={to}
+                        className="group rounded-2xl bg-card border border-border/70 p-6 transition-all duration-300 hover:border-accent/40 hover:shadow-[0_24px_48px_-32px_hsl(165_52%_33%/0.45)]"
+                      >
+                        <span className="w-11 h-11 rounded-xl bg-accent/10 text-accent flex items-center justify-center mb-4 transition-colors duration-300 group-hover:bg-accent group-hover:text-accent-foreground">
+                          <Icon className="w-5 h-5" aria-hidden="true" />
+                        </span>
+                        <h4 className="font-bold text-foreground mb-2">{title}</h4>
+                        <p className="text-sm text-muted-foreground leading-7 mb-4">{text}</p>
+                        <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent">
+                          مشاهده ابزارها
+                          <ArrowLeft className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1" aria-hidden="true" />
+                        </span>
+                      </Link>
+                    ))}
                   </div>
                 </div>
               </div>

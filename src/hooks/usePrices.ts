@@ -9,6 +9,35 @@ interface PricesData {
   [key: string]: PriceItem;
 }
 
+export interface CatalogPlan {
+  id: string;
+  name: string;
+  subtitle: string;
+  duration: string;
+  priceKey?: string;
+  price: number;
+  badge?: string;
+  description?: string;
+  image?: string;
+  sortOrder: number;
+  requiresActivationEmail?: boolean;
+  activationEmailLabel?: string;
+  isActive: boolean;
+}
+
+export interface CatalogService {
+  id: string;
+  slug: string;
+  name: string;
+  description: string;
+  logo?: string;
+  emoji?: string;
+  color: string;
+  sortOrder: number;
+  routePath: string;
+  plans: CatalogPlan[];
+}
+
 const FALLBACK_PRICES: PricesData = {
   // ChatGPT (bot-aligned)
   cgpt_pro_30day: { name: "چت جی پی تی (ChatGPT) Pro-Business 30 روزه", price: 499000 },
@@ -78,8 +107,9 @@ const FALLBACK_PRICES: PricesData = {
 };
 
 let pricesCache: PricesData | null = null;
+let catalogCache: CatalogService[] = [];
 let cacheTimestamp = 0;
-const CACHE_DURATION = 5 * 60 * 1000;
+const CACHE_DURATION = 60 * 1000;
 
 export const formatPricePersian = (price: number): string => {
   return `${price.toLocaleString("fa-IR")} تومان`;
@@ -99,6 +129,7 @@ export const getPriceName = (prices: PricesData, key: string): string => {
 
 export const usePrices = () => {
   const [prices, setPrices] = useState<PricesData>(pricesCache || FALLBACK_PRICES);
+  const [catalog, setCatalog] = useState<CatalogService[]>(catalogCache);
   const [loading, setLoading] = useState(!pricesCache);
   const [error, setError] = useState<string | null>(null);
 
@@ -111,7 +142,7 @@ export const usePrices = () => {
 
     try {
       setLoading(true);
-      const response = await fetch("/prices.json", {
+      const response = await fetch("/api/bot-admin/catalog", {
         cache: "no-cache",
         headers: {
           "Cache-Control": "no-cache",
@@ -119,18 +150,28 @@ export const usePrices = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch prices");
+        throw new Error("Failed to fetch bot catalog");
       }
 
-      const data: PricesData = await response.json();
-      pricesCache = data;
+      const data: { prices: PricesData; services: CatalogService[] } = await response.json();
+      pricesCache = data.prices;
+      catalogCache = Array.isArray(data.services) ? data.services : [];
       cacheTimestamp = Date.now();
-      setPrices(data);
+      setPrices(pricesCache);
+      setCatalog(catalogCache);
       setError(null);
     } catch (err) {
-      console.error("Error fetching prices:", err);
-      setError("Failed to load prices");
-      setPrices(FALLBACK_PRICES);
+      console.error("Error fetching bot catalog:", err);
+      try {
+        const fallbackResponse = await fetch("/prices.json", { cache: "no-cache" });
+        if (!fallbackResponse.ok) throw new Error("Failed to fetch fallback prices");
+        const fallbackData: PricesData = await fallbackResponse.json();
+        setPrices(fallbackData);
+        setError("Catalog unavailable; fallback prices loaded");
+      } catch (_fallbackError) {
+        setError("Failed to load prices");
+        setPrices(FALLBACK_PRICES);
+      }
     } finally {
       setLoading(false);
     }
@@ -138,10 +179,18 @@ export const usePrices = () => {
 
   useEffect(() => {
     fetchPrices();
+    const timer = window.setInterval(fetchPrices, CACHE_DURATION);
+    const onFocus = () => fetchPrices();
+    window.addEventListener("focus", onFocus);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("focus", onFocus);
+    };
   }, [fetchPrices]);
 
   return {
     prices,
+    catalog,
     loading,
     error,
     refetch: fetchPrices,

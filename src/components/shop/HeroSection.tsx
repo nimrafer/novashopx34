@@ -18,9 +18,9 @@ const HeroSection = () => {
             </div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-5">
-              خرید اشتراک AI
+              خرید چت جی پی تی (ChatGPT) و جمینای (Gemini)
               <br />
-              <span className="text-gradient">با طراحی ساده، سفارش سریع</span>
+              <span className="text-gradient">گراک (Grok)، پرپلکسیتی و کلود با سفارش سریع</span>
             </h1>
 
             <p className="text-lg text-muted-foreground leading-8 max-w-2xl mb-8">

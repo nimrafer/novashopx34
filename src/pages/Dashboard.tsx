@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   AlertCircle,
   ArrowLeft,
@@ -25,17 +25,13 @@ import {
   OrderRecord,
   sendOrderMessage,
   submitOrderPayment,
+  startOrderZarinpalPayment,
   PaymentStatus,
   FulfillmentStatus,
   OrderStatus,
 } from "@/lib/orders";
 import { SUPPORT_USERNAME } from "@/constants/support";
-import novaLogo from "@/assets/nova-logo.jpeg";
-
-const ADMIN_EMAILS = String(import.meta.env.VITE_ADMIN_EMAILS || "admin@nova-shop.co")
-  .split(",")
-  .map((email) => email.trim().toLowerCase())
-  .filter(Boolean);
+import novaLogo from "@/assets/nova-logo.webp";
 
 const orderStatusMeta: Record<OrderStatus, { label: string; className: string }> = {
   pending: { label: "در انتظار", className: "bg-amber-100 text-amber-700" },
@@ -63,8 +59,18 @@ const fulfillmentStatusMeta: Record<FulfillmentStatus, { label: string; classNam
 };
 
 const Dashboard = () => {
+  /* Unified customer panel: the Mini App panel (same session cookies, same
+     orders DB as web checkouts) is the single پنل کاربری. The legacy web
+     dashboard stays reachable at /dashboard?legacy=1 for admins. */
+  const isLegacyView =
+    typeof window !== "undefined" && window.location.search.includes("legacy");
+  useEffect(() => {
+    if (!isLegacyView) window.location.replace("/orders");
+  }, [isLegacyView]);
+
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
 
   const [orders, setOrders] = useState<OrderRecord[]>([]);
@@ -82,8 +88,9 @@ const Dashboard = () => {
 
   const [sendingMessageId, setSendingMessageId] = useState<string | null>(null);
   const [sendingPaymentId, setSendingPaymentId] = useState<string | null>(null);
+  const [startingGatewayOrderId, setStartingGatewayOrderId] = useState<string | null>(null);
 
-  const isAdmin = !!user && (user.isAdmin || ADMIN_EMAILS.includes(user.email.toLowerCase()));
+  const isAdmin = !!user?.isAdmin;
 
   const loadOrders = async () => {
     if (!user) return;
@@ -130,6 +137,43 @@ const Dashboard = () => {
       clearInterval(interval);
     };
   }, [user]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("payment") !== "zarinpal") return;
+
+    const status = (params.get("status") || "").toLowerCase();
+    const orderId = params.get("orderId") || "";
+    const refId = params.get("refId") || "";
+    const code = params.get("code") || "";
+
+    if (status === "success") {
+      toast({
+        title: "پرداخت با موفقیت تایید شد",
+        description: `سفارش ${orderId || "شما"} تایید شد${refId ? ` | Ref: ${refId}` : ""}`,
+      });
+    } else if (status === "cancelled") {
+      toast({
+        title: "پرداخت لغو شد",
+        description: "پرداخت توسط کاربر لغو شد. در صورت نیاز دوباره تلاش کنید.",
+        variant: "destructive",
+      });
+    } else if (status === "failed") {
+      toast({
+        title: "تایید پرداخت ناموفق بود",
+        description: `کد خطا: ${code || "نامشخص"}`,
+        variant: "destructive",
+      });
+    } else if (status) {
+      toast({
+        title: "وضعیت پرداخت",
+        description: status,
+      });
+    }
+
+    navigate("/dashboard", { replace: true });
+    void loadOrders();
+  }, [location.search, navigate, toast]);
 
   const summary = useMemo(() => {
     const totalPaid = orders
@@ -209,6 +253,42 @@ const Dashboard = () => {
     toast({ title: "اطلاعات پرداخت ثبت شد", description: "رسید شما برای بررسی ادمین ارسال شد." });
   };
 
+  const handleStartZarinpal = async (order: OrderRecord) => {
+    if ((order.price || 0) <= 0) {
+      toast({
+        title: "این سفارش پرداخت آنلاین ندارد",
+        description: "برای این سفارش از پشتیبانی راهنمایی بگیرید.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setStartingGatewayOrderId(order.id);
+    const result = await startOrderZarinpalPayment(order.id);
+    setStartingGatewayOrderId(null);
+
+    if ("error" in result) {
+      toast({
+        title: "اتصال به زرین‌پال ناموفق بود",
+        description: result.error,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    window.location.href = result.data.payment.paymentUrl;
+  };
+
+  if (!isLegacyView) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-background">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary/30 border-t-primary" />
+        <p className="text-sm text-muted-foreground">در حال انتقال به پنل کاربری…</p>
+        <a href="/orders" className="text-primary text-sm hover:underline">اگر منتقل نشدید اینجا بزنید</a>
+      </div>
+    );
+  }
+
   if (loading || !user) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -227,7 +307,15 @@ const Dashboard = () => {
           </Link>
 
           <Link to="/">
-            <img src={novaLogo} alt="Nova AI Shop" className="w-9 h-9 rounded-lg object-cover" />
+            <img
+              src={novaLogo}
+              alt="Nova AI Shop"
+              width={36}
+              height={36}
+              loading="eager"
+              decoding="async"
+              className="w-9 h-9 rounded-lg object-cover"
+            />
           </Link>
 
           <div className="flex items-center gap-2">
@@ -308,7 +396,10 @@ const Dashboard = () => {
               const status = orderStatusMeta[order.status];
               const payment = paymentStatusMeta[order.paymentStatus];
               const fulfillment = fulfillmentStatusMeta[order.fulfillmentStatus];
-              const shortTimeline = [...(order.timeline || [])].slice(-3).reverse();
+              const shortTimeline = [...(order.timeline || [])].slice(-5).reverse();
+              const chatTimeline = [...(order.timeline || [])]
+                .filter((item) => item.type === "customer_message" || item.type === "admin_message")
+                .slice(-12);
 
               return (
                 <div key={order.id} className="glass rounded-2xl p-5">
@@ -364,6 +455,27 @@ const Dashboard = () => {
                     </div>
                   ) : null}
 
+                  <div className="rounded-xl border border-border/60 bg-card/40 p-3 mb-4">
+                    <p className="text-xs text-muted-foreground mb-2">گفتگو با پشتیبانی</p>
+                    {chatTimeline.length === 0 ? (
+                      <p className="text-sm text-muted-foreground">هنوز پیامی ثبت نشده است.</p>
+                    ) : (
+                      <div className="space-y-2">
+                        {chatTimeline.map((item) => (
+                          <div key={item.id} className="rounded-lg border border-border/60 px-3 py-2">
+                            <div className="flex items-center justify-between gap-2 mb-1">
+                              <span className="text-xs font-semibold">
+                                {item.type === "admin_message" ? "ادمین" : "شما"}
+                              </span>
+                              <span className="text-xs text-muted-foreground">{new Date(item.at).toLocaleString("fa-IR")}</span>
+                            </div>
+                            <p className="text-sm">{item.message}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
                   <div className="flex flex-wrap gap-2">
                     <Button asChild variant="outline">
                       <a href={getTelegramTrackingUrl(order)} target="_blank" rel="noreferrer">
@@ -377,9 +489,20 @@ const Dashboard = () => {
                       پیام به ادمین
                     </Button>
 
+                    {order.paymentStatus !== "verified" && order.paymentStatus !== "refunded" ? (
+                      <Button variant="outline" onClick={() => handleStartZarinpal(order)} disabled={startingGatewayOrderId === order.id}>
+                        {startingGatewayOrderId === order.id ? (
+                          <Loader2 className="w-4 h-4 animate-spin ml-2" />
+                        ) : (
+                          <Wallet className="w-4 h-4 ml-2" />
+                        )}
+                        {startingGatewayOrderId === order.id ? "در حال اتصال..." : "پرداخت آنلاین زرین‌پال"}
+                      </Button>
+                    ) : null}
+
                     <Button variant="outline" onClick={() => setOpenPaymentFor((prev) => (prev === order.id ? null : order.id))}>
                       <Wallet className="w-4 h-4 ml-2" />
-                      ثبت اطلاعات پرداخت
+                      ثبت اطلاعات پرداخت دستی
                     </Button>
                   </div>
 

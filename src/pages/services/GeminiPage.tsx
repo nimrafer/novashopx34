@@ -171,7 +171,7 @@ const GeminiPage = () => {
       "خرید اشتراک Gemini Pro و Gemini Ultra با دسترسی به Nano Banana Pro، NoteBookLLM، Veo 3.1، Flow و Jules همراه با پشتیبانی فارسی و تحویل سریع.",
     price: lowestPrice,
     url: "/services/gemini",
-    image: "https://nova-shop.co/logos/gemini.png",
+    image: "https://nova-shop.co/logos/gemini-2025.svg",
     category: "اشتراک هوش مصنوعی",
     sku: "GEM-PRO-ULTRA",
     ratingValue: 4.8,
@@ -198,7 +198,7 @@ const GeminiPage = () => {
       <ServicePageLayout
         serviceId="gemini"
         icon={Sparkles}
-        logoSrc="/logos/gemini.png"
+        logoSrc="/logos/gemini-2025.svg"
         title="خرید اشتراک Gemini | هوش مصنوعی گوگل برای متن، تصویر و تحلیل داده + دسترسی به نانو بنانا پرو 🍌 + NoteBookLLM و Veo3.1"
         subtitle="Gemini Pro / Gemini Ultra"
         description="با خرید اشتراک Gemini، از هوش مصنوعی چندحالته گوگل برای نوشتن متن، تولید تصویر، تحلیل داده، تولید ویدیو با Veo 3.1 و ساخت صحنه های سینمایی با Flow استفاده کنید. در این پلن ها دسترسی به Nano Banana Pro، NoteBookLLM (NotebookLM) و ابزار Jules گوگل برای کدنویسی نیز لحاظ شده و محدودیت های نسخه رایگان تا حد زیادی برداشته می شود."

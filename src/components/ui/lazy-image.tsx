@@ -5,6 +5,8 @@ interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string;
   alt: string;
   className?: string;
+  /** Classes for the <img> itself (the wrapper takes `className`). */
+  imgClassName?: string;
   placeholderClassName?: string;
 }
 
@@ -12,6 +14,7 @@ const LazyImage = ({
   src,
   alt,
   className,
+  imgClassName,
   placeholderClassName,
   ...props
 }: LazyImageProps) => {
@@ -62,6 +65,7 @@ const LazyImage = ({
           onLoad={() => setIsLoaded(true)}
           className={cn(
             "w-full h-full object-contain transition-all duration-700 ease-out",
+            imgClassName,
             isLoaded ? "opacity-100 blur-0 scale-100" : "opacity-0 blur-lg scale-95"
           )}
           {...props}

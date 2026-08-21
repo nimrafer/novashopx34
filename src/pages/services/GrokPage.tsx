@@ -133,7 +133,7 @@ const GrokPage = () => {
       "خرید دسترسی Grok روی پلتفرم X با تحویل سریع، پشتیبانی فارسی و مناسب تحلیل ترندها و اخبار زنده.",
     price: lowestPrice,
     url: "/services/grok",
-    image: "https://nova-shop.co/logos/grok.png",
+    image: "https://nova-shop.co/logos/grok.svg",
     category: "اشتراک هوش مصنوعی",
     sku: "GROK-X",
     ratingValue: 4.7,
@@ -160,7 +160,7 @@ const GrokPage = () => {
       <ServicePageLayout
         serviceId="grok"
         icon={MessageCircle}
-        logoSrc="/logos/grok.png"
+        logoSrc="/logos/grok.svg"
         title="خرید دسترسی گراک (Grok) | هوش مصنوعی xAI روی پلتفرم X"
         subtitle="Grok by xAI on X"
         description="Grok هوش مصنوعی ساخته شرکت xAI است که روی پلتفرم X فعال است و به داده های زنده این شبکه اجتماعی دسترسی دارد. با تهیه اشتراک، به نسخه های به روز Grok برای تحلیل ترندها، تولید محتوا و پاسخ گویی خلاقانه دسترسی پیدا می کنید. سفارش شما با پشتیبانی فارسی تحویل می شود."

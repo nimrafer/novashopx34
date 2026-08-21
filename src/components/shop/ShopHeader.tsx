@@ -17,13 +17,9 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useState, useRef, useEffect } from "react";
-import novaLogo from "@/assets/nova-logo.jpeg";
+import novaLogo from "@/assets/nova-logo.webp";
 
 const CHANNEL_USERNAME = "Nova_Ai_Shop";
-const ADMIN_EMAILS = String(import.meta.env.VITE_ADMIN_EMAILS || "admin@nova-shop.co")
-  .split(",")
-  .map((email) => email.trim().toLowerCase())
-  .filter(Boolean);
 
 interface ServiceItem {
   name: string;
@@ -35,13 +31,14 @@ interface ServiceItem {
 }
 
 const services: ServiceItem[] = [
-  { name: "چت جی پی تی", nameEn: "ChatGPT", description: "هوش مصنوعی OpenAI", href: "/services/chatgpt", icon: "🤖", color: "text-green-600" },
-  { name: "جمینای", nameEn: "Gemini", description: "هوش مصنوعی گوگل", href: "/services/gemini", icon: "✨", color: "text-blue-600" },
-  { name: "گراک", nameEn: "Grok", description: "هوش مصنوعی ایکس", href: "/services/grok", icon: "⚡", color: "text-slate-700" },
-  { name: "کرسور", nameEn: "Cursor", description: "کدنویسی با AI", href: "/services/cursor", icon: "💻", color: "text-indigo-600" },
-  { name: "پرپلکسیتی", nameEn: "Perplexity", description: "جستجوی هوشمند", href: "/services/perplexity", icon: "🔍", color: "text-cyan-600" },
-  { name: "اسپاتیفای", nameEn: "Spotify", description: "موسیقی نامحدود", href: "/services/spotify", icon: "🎵", color: "text-emerald-600" },
-  { name: "تلگرام پریمیوم", nameEn: "Telegram", description: "امکانات ویژه", href: "/services/telegram-premium", icon: "📱", color: "text-sky-600" },
+  { name: "چت جی پی تی", nameEn: "ChatGPT", description: "پلن‌های Plus، Go و Team — اشتراکی و اختصاصی", href: "/services/chatgpt", icon: "/logos/chatgpt.svg", color: "text-green-600" },
+  { name: "جمینای", nameEn: "Gemini", description: "Google AI Pro — آفر ۱۲ و ۱۸ ماهه با گارانتی", href: "/services/gemini", icon: "/logos/gemini-2025.svg", color: "text-blue-600" },
+  { name: "کلود", nameEn: "Claude", description: "Claude Pro — بهترین برای کدنویسی", href: "/services/claude", icon: "/logos/claude.webp", color: "text-violet-600" },
+  { name: "گراک", nameEn: "Grok", description: "SuperGrok و X Premium از xAI", href: "/services/grok", icon: "/logos/grok.svg", color: "text-slate-700" },
+  { name: "کرسور", nameEn: "Cursor", description: "ادیتور کدنویسی هوش مصنوعی", href: "/services/cursor", icon: "/logos/cursor.svg", color: "text-indigo-600" },
+  { name: "پرپلکسیتی", nameEn: "Perplexity", description: "جستجوی هوشمند با ذکر منبع", href: "/services/perplexity", icon: "/logos/perplexity.svg", color: "text-cyan-600" },
+  { name: "اسپاتیفای", nameEn: "Spotify", description: "موسیقی بدون تبلیغ و آفلاین", href: "/services/spotify", icon: "/logos/spotify.svg", color: "text-emerald-600" },
+  { name: "تلگرام پریمیوم", nameEn: "Telegram", description: "بدون نیاز به ورود به اکانت شما", href: "/services/telegram-premium", icon: "/logos/telegram.svg", color: "text-sky-600" },
 ];
 
 const ShopHeader = () => {
@@ -52,12 +49,31 @@ const ShopHeader = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const isAdmin = !!user && ADMIN_EMAILS.includes(user.email.toLowerCase());
+  const isAdmin = !!user?.isAdmin;
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 14);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Touch devices have no mouseleave: close the services menu on any tap
+  // outside it, and on Escape for keyboards.
+  useEffect(() => {
+    const closeOnOutside = (event: MouseEvent | TouchEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsServicesOpen(false);
+      }
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsServicesOpen(false);
+    };
+    document.addEventListener("pointerdown", closeOnOutside);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutside);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
   }, []);
 
   const handleMouseEnter = () => {
@@ -89,6 +105,10 @@ const ShopHeader = () => {
             <img
               src={novaLogo}
               alt="Nova AI Shop"
+              width={44}
+              height={44}
+              loading="eager"
+              decoding="async"
               className="w-11 h-11 rounded-2xl object-cover border border-border shadow-sm"
             />
             <div>
@@ -113,6 +133,10 @@ const ShopHeader = () => {
               onMouseLeave={handleMouseLeave}
             >
               <button
+                type="button"
+                aria-expanded={isServicesOpen}
+                aria-haspopup="menu"
+                onClick={() => setIsServicesOpen((prev) => !prev)}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-full transition-all duration-200 text-sm ${
                   isServicesOpen
                     ? "bg-primary text-primary-foreground"
@@ -135,8 +159,8 @@ const ShopHeader = () => {
                         className="flex items-center gap-3 px-3 py-2.5 rounded-2xl hover:bg-secondary transition-colors group"
                         onClick={() => setIsServicesOpen(false)}
                       >
-                        <span className="text-xl w-10 h-10 rounded-xl bg-secondary flex items-center justify-center">
-                          {service.icon}
+                        <span className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center overflow-hidden shrink-0">
+                          <img src={service.icon} alt="" width={24} height={24} loading="lazy" className="w-6 h-6 object-contain" />
                         </span>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
@@ -194,15 +218,15 @@ const ShopHeader = () => {
               کانال
             </Button>
 
+            <Button variant="ghost" size="sm" asChild className="rounded-full">
+              <Link to="/orders">
+                <LayoutList className="w-4 h-4 ml-2" />
+                پنل کاربری
+              </Link>
+            </Button>
+
             {user ? (
               <>
-                <Button variant="ghost" size="sm" asChild className="rounded-full">
-                  <Link to="/dashboard">
-                    <LayoutList className="w-4 h-4 ml-2" />
-                    پنل کاربری
-                  </Link>
-                </Button>
-
                 {isAdmin && (
                   <Button variant="outline" size="sm" asChild className="rounded-full border-primary/50">
                     <Link to="/admin/orders">
@@ -242,7 +266,13 @@ const ShopHeader = () => {
         </div>
 
         {isMobileMenuOpen && (
-          <div className="lg:hidden fixed inset-0 top-[72px] bg-background/95 backdrop-blur-xl z-40 overflow-y-auto border-t border-border">
+          // absolute (not fixed): the header's backdrop-filter makes it the
+          // containing block for fixed children, which collapsed this panel
+          // to a 1px sliver on phones.
+          <div
+            className="lg:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-xl z-40 overflow-y-auto border-t border-border"
+            style={{ height: "calc(100dvh - 72px)" }}
+          >
             <div className="p-4 space-y-6">
               <div className="grid grid-cols-2 gap-3">
                 {services.map((service) => (
@@ -252,7 +282,9 @@ const ShopHeader = () => {
                     className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card border border-border"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <span className="text-2xl">{service.icon}</span>
+                    <span className="w-11 h-11 rounded-xl bg-secondary flex items-center justify-center overflow-hidden">
+                      <img src={service.icon} alt="" width={28} height={28} loading="lazy" className="w-7 h-7 object-contain" />
+                    </span>
                     <span className="text-sm font-semibold text-center">{service.name}</span>
                   </Link>
                 ))}
@@ -280,20 +312,18 @@ const ShopHeader = () => {
                   <span className="font-medium">پشتیبانی</span>
                 </Link>
                 <Link to="/services/cards" className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-secondary" onClick={() => setIsMobileMenuOpen(false)}>
-                  <span className="text-lg">💳</span>
+                  <img src="/logos/visa.svg" alt="" width={20} height={20} className="w-5 h-5 object-contain" />
                   <span className="font-medium">کارت ارزی</span>
                 </Link>
                 <Link to="/services/virtual-number" className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-secondary" onClick={() => setIsMobileMenuOpen(false)}>
-                  <span className="text-lg">📞</span>
+                  <Phone className="w-5 h-5 text-muted-foreground" />
                   <span className="font-medium">شماره مجازی</span>
                 </Link>
 
-                {user && (
-                  <Link to="/dashboard" className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-secondary" onClick={() => setIsMobileMenuOpen(false)}>
-                    <LayoutList className="w-5 h-5 text-muted-foreground" />
-                    <span className="font-medium">پنل کاربری</span>
-                  </Link>
-                )}
+                <Link to="/orders" className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-secondary" onClick={() => setIsMobileMenuOpen(false)}>
+                  <LayoutList className="w-5 h-5 text-muted-foreground" />
+                  <span className="font-medium">پنل کاربری</span>
+                </Link>
 
                 {isAdmin && (
                   <Link to="/admin/orders" className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-secondary" onClick={() => setIsMobileMenuOpen(false)}>

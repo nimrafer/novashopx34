@@ -5,7 +5,7 @@ export const organizationSchema = {
   "name": "نوا شاپ - Nova AI Shop",
   "alternateName": ["نوا ای آی شاپ", "Nova Shop", "نوا"],
   "url": "https://nova-shop.co",
-  "logo": "https://nova-shop.co/nova-logo.jpeg",
+  "logo": "https://nova-shop.co/nova-logo.webp",
   "description": "فروشگاه تخصصی اکانت‌های پریمیوم هوش مصنوعی در ایران - خرید اشتراک چت جی پی تی (ChatGPT)، جمینای (Gemini)، گراک (Grok)، پرپلکسیتی (Perplexity) و کرسور (Cursor) با تحویل فوری و پشتیبانی دائمی",
   "foundingDate": "2022",
   "address": {
@@ -157,7 +157,7 @@ export const localBusinessSchema = {
   "description": "فروشگاه آنلاین اکانت‌های پریمیوم هوش مصنوعی - خرید چت جی پی تی (ChatGPT)، جمینای (Gemini)، گراک (Grok)، پرپلکسیتی (Perplexity)، کرسور (Cursor)",
   "url": "https://nova-shop.co",
   "telephone": "+98 999 970 8896",
-  "image": "https://nova-shop.co/nova-logo.jpeg",
+  "image": "https://nova-shop.co/nova-logo.webp",
   "address": {
     "@type": "PostalAddress",
     "addressCountry": "IR",
@@ -264,7 +264,7 @@ export const createArticleSchema = ({
     "name": "Nova AI Shop",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://nova-shop.co/nova-logo.jpeg"
+      "url": "https://nova-shop.co/nova-logo.webp"
     }
   },
   "mainEntityOfPage": {

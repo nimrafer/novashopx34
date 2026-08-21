@@ -196,7 +196,7 @@ const ChatGPTPage = () => {
       "خرید اشتراک چت جی پی تی (ChatGPT) با دسترسی به پلن های Plus، Pro-Business و Team. تحویل سریع، پشتیبانی فارسی و راهنمای شروع.",
     price: lowestPrice,
     url: "/services/chatgpt",
-    image: "https://nova-shop.co/logos/chatgpt.png",
+    image: "https://nova-shop.co/logos/chatgpt.svg",
     category: "اشتراک هوش مصنوعی",
     sku: "CGPT-SUBS",
     ratingValue: 4.9,
@@ -223,7 +223,7 @@ const ChatGPTPage = () => {
       <ServicePageLayout
         serviceId="chatgpt"
         icon={Bot}
-        logoSrc="/logos/chatgpt.png"
+        logoSrc="/logos/chatgpt.svg"
         title="خرید اشتراک چت جی پی تی (ChatGPT) | دسترسی کامل به هوش مصنوعی"
         subtitle="ChatGPT Plus / Pro-Business / Team"
         description="با خرید اشتراک چت جی پی تی (ChatGPT)، به قدرتمندترین نسخه های هوش مصنوعی OpenAI دسترسی پیدا می کنید. این سرویس برای تولید محتوا، برنامه نویسی، ترجمه، تحقیق و ایده سازی عالی است. اکانت شما با راهنمای فارسی و پشتیبانی کامل تحویل می شود."

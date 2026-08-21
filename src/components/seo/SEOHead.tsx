@@ -5,6 +5,7 @@ interface SEOHeadProps {
   description: string;
   keywords?: string;
   canonicalUrl?: string;
+  lang?: "fa" | "en";
   ogImage?: string;
   ogType?: "website" | "product" | "article";
   jsonLd?: object | object[];
@@ -28,7 +29,8 @@ const SEOHead = ({
   description,
   keywords,
   canonicalUrl,
-  ogImage = "https://nova-shop.co/nova-logo.jpeg",
+  lang = "fa",
+  ogImage = "https://nova-shop.co/nova-logo.webp",
   ogType = "website",
   jsonLd,
   noindex = false,
@@ -36,7 +38,9 @@ const SEOHead = ({
   product,
 }: SEOHeadProps) => {
   const siteUrl = "https://nova-shop.co";
-  const fullCanonicalUrl = canonicalUrl ? `${siteUrl}${canonicalUrl}` : siteUrl;
+  const fullCanonicalUrl = canonicalUrl
+    ? (canonicalUrl.startsWith("http://") || canonicalUrl.startsWith("https://") ? canonicalUrl : `${siteUrl}${canonicalUrl}`)
+    : siteUrl;
 
   // Ensure title is under 60 chars and description under 160 chars
   const optimizedTitle = title.length > 60 ? title.substring(0, 57) + "..." : title;
@@ -45,7 +49,7 @@ const SEOHead = ({
   return (
     <Helmet>
       {/* Basic Meta Tags */}
-      <html lang="fa" dir="rtl" />
+      <html lang={lang} dir={lang === "fa" ? "rtl" : "ltr"} />
       <title>{optimizedTitle}</title>
       <meta name="description" content={optimizedDescription} />
       {keywords && <meta name="keywords" content={keywords} />}
@@ -60,7 +64,7 @@ const SEOHead = ({
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <meta property="og:image:alt" content={optimizedTitle} />
-      <meta property="og:locale" content="fa_IR" />
+      <meta property="og:locale" content={lang === "fa" ? "fa_IR" : "en_US"} />
       <meta property="og:site_name" content="نوا شاپ - Nova AI Shop" />
 
       {/* Product specific OG tags */}
@@ -96,7 +100,7 @@ const SEOHead = ({
       <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
       <meta name="googlebot" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large"} />
       <meta name="bingbot" content={noindex ? "noindex, nofollow" : "index, follow"} />
-      <meta name="language" content="Persian" />
+      <meta name="language" content={lang === "fa" ? "Persian" : "English"} />
       <meta name="revisit-after" content="3 days" />
       <meta name="author" content="Nova AI Shop" />
       <meta name="publisher" content="Nova AI Shop" />
@@ -109,7 +113,7 @@ const SEOHead = ({
       <meta name="geo.placename" content="Iran" />
       <meta name="geo.position" content="35.6892;51.3890" />
       <meta name="ICBM" content="35.6892, 51.3890" />
-      <meta name="content-language" content="fa" />
+      <meta name="content-language" content={lang} />
 
       {/* Mobile optimization */}
       <meta name="format-detection" content="telephone=no" />
@@ -127,15 +131,13 @@ const SEOHead = ({
       <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
       <meta name="referrer" content="origin-when-cross-origin" />
 
-      {/* Preconnect for performance */}
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-      <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+      {/* Lightweight DNS hints */}
+      <link rel="dns-prefetch" href="https://t.me" />
 
       {/* Alternate languages (for future) */}
-      <link rel="alternate" hrefLang="fa" href={fullCanonicalUrl} />
-      <link rel="alternate" hrefLang="x-default" href={fullCanonicalUrl} />
+      <link rel="alternate" hrefLang="fa" href={siteUrl} />
+      <link rel="alternate" hrefLang="en" href={`${siteUrl}/en`} />
+      <link rel="alternate" hrefLang="x-default" href={siteUrl} />
 
       {/* JSON-LD Structured Data */}
       {jsonLd && (

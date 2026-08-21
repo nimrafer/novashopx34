@@ -59,6 +59,18 @@ export interface OrderRecord {
   paymentReceipt: string | null;
   paymentSubmittedAt: string | null;
   paymentVerifiedAt: string | null;
+  paymentProvider?: string | null;
+  zarinpalAuthority?: string | null;
+  zarinpalRefId?: string | null;
+  zarinpalCardPan?: string | null;
+  zarinpalCardHash?: string | null;
+  zarinpalFeeType?: string | null;
+  zarinpalFee?: number | null;
+  zarinpalStatus?: string | null;
+  zarinpalLastCode?: string | null;
+  zarinpalLastMessage?: string | null;
+  zarinpalRequestedAt?: string | null;
+  zarinpalVerifiedAt?: string | null;
 
   deliveryAccount: string | null;
   deliveredAt: string | null;
@@ -123,6 +135,20 @@ export interface PriceRecord {
   updatedAt?: string;
 }
 
+export interface TelegramBotPriceRecord {
+  key: string;
+  name: string;
+  price: number;
+}
+
+export interface TelegramBotStatus {
+  service: string;
+  active: string;
+  enabled: string;
+  details: string;
+  checkedAt: string;
+}
+
 export interface DiscountRecord {
   id: string;
   code: string;
@@ -183,7 +209,7 @@ export type ApiResult<T> = ApiSuccess<T> | ApiFailure;
 async function apiRequest<T>(
   path: string,
   options?: {
-    method?: "GET" | "POST" | "PATCH" | "DELETE";
+    method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
     body?: Record<string, unknown>;
   },
 ): Promise<ApiResult<T>> {
@@ -281,6 +307,36 @@ export async function submitOrderPayment(
   return apiRequest<{ order: OrderRecord }>(`/api/auth/orders/${encodeURIComponent(orderId)}/payment`, {
     method: "POST",
     body: payload,
+  });
+}
+
+export async function startOrderZarinpalPayment(orderId: string): Promise<
+  ApiResult<{
+    message: string;
+    order: OrderRecord;
+    payment: {
+      provider: "zarinpal";
+      authority: string;
+      code: number;
+      paymentUrl: string;
+      callbackUrl: string;
+      sandbox: boolean;
+    };
+  }>
+> {
+  return apiRequest<{
+    message: string;
+    order: OrderRecord;
+    payment: {
+      provider: "zarinpal";
+      authority: string;
+      code: number;
+      paymentUrl: string;
+      callbackUrl: string;
+      sandbox: boolean;
+    };
+  }>(`/api/auth/orders/${encodeURIComponent(orderId)}/pay/zarinpal`, {
+    method: "POST",
   });
 }
 
@@ -539,5 +595,29 @@ export async function updateAdminOffer(
 export async function deleteAdminOffer(id: string): Promise<ApiResult<{ message: string }>> {
   return apiRequest<{ message: string }>(`/api/auth/admin/offers/${encodeURIComponent(id)}`, {
     method: "DELETE",
+  });
+}
+
+export async function fetchAdminTelegramBot(): Promise<
+  ApiResult<{ status: TelegramBotStatus; prices: TelegramBotPriceRecord[] }>
+> {
+  return apiRequest<{ status: TelegramBotStatus; prices: TelegramBotPriceRecord[] }>("/api/auth/admin/telegram-bot");
+}
+
+export async function runAdminTelegramBotAction(
+  action: "start" | "stop" | "restart",
+): Promise<ApiResult<{ message: string; status: TelegramBotStatus; output: string }>> {
+  return apiRequest<{ message: string; status: TelegramBotStatus; output: string }>("/api/auth/admin/telegram-bot/actions", {
+    method: "POST",
+    body: { action },
+  });
+}
+
+export async function saveAdminTelegramBotPrices(
+  prices: TelegramBotPriceRecord[],
+): Promise<ApiResult<{ message: string; prices: TelegramBotPriceRecord[] }>> {
+  return apiRequest<{ message: string; prices: TelegramBotPriceRecord[] }>("/api/auth/admin/telegram-bot/prices", {
+    method: "PUT",
+    body: { prices: prices as unknown as Record<string, unknown>[] },
   });
 }

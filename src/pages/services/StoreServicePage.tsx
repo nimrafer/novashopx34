@@ -15,6 +15,8 @@ import {
   formatToman,
   storeMediaUrl,
   storeMinPrice,
+  planEffectivePrice,
+  planDurationMonths,
   storeProductRoute,
   useStoreCatalog,
 } from "@/hooks/useStoreCatalog";
@@ -104,6 +106,7 @@ const StoreServicePage = ({ slug: slugProp }: StoreServicePageProps) => {
         };
         return (
           groupIndex(a.plan_group_id) - groupIndex(b.plan_group_id) ||
+          planDurationMonths(a) - planDurationMonths(b) ||
           a.sort_order - b.sort_order
         );
       })
@@ -111,18 +114,22 @@ const StoreServicePage = ({ slug: slugProp }: StoreServicePageProps) => {
         id: String(plan.id),
         name: plan.name,
         duration: plan.short_description || "",
-        price: plan.price,
+        price: planEffectivePrice(plan),
+        originalPrice: plan.sale && plan.sale.sale_price > 0 ? plan.price : undefined,
         features: plan.features || [],
         popular: plan.popular,
         description: plan.description || undefined,
         image: storeMediaUrl(plan.image_url) || undefined,
-        badge: plan.custom_badges?.[0]?.label,
+        badge: plan.sale && plan.sale.sale_price > 0
+          ? `جشنواره ${plan.sale.percent.toLocaleString("fa-IR")}٪ تخفیف`
+          : plan.custom_badges?.[0]?.label,
         badges: (plan.custom_badges || []).map((badge) => ({
           label: badge.label,
           text_color: badge.text_color,
           background_color: badge.background_color,
         })),
         groupId: plan.plan_group_id || "other",
+        outOfStock: !!plan.out_of_stock,
         requiresActivationEmail: /جیمیل|ایمیل شخصی|روی ایمیل/.test(
           `${plan.description} ${(plan.features || []).join(" ")} ${product.description}`
         ),
@@ -171,7 +178,10 @@ const StoreServicePage = ({ slug: slugProp }: StoreServicePageProps) => {
     adapted.plans.length
   } پلن فعال از ${formatToman(minPrice)}.`;
 
+  // grok/cards get Product+Breadcrumb LD from the prerendered head — do not duplicate.
+  const hasPrerenderedLd = routeSlug === "grok" || routeSlug === "cards";
   const jsonLd = [
+    ...(hasPrerenderedLd ? [] : [
     createProductSchema({
       name: `اکانت ${product.name}`,
       description: product.short_description || product.description || product.name,
@@ -183,6 +193,7 @@ const StoreServicePage = ({ slug: slugProp }: StoreServicePageProps) => {
     createBreadcrumbSchema([
       { name: "نوا شاپ", url: "/" },
       { name: product.name, url: route },
+    ]),
     ]),
     ...(adapted.faqs.length ? [createFAQSchema(adapted.faqs)] : []),
   ];

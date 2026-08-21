@@ -140,7 +140,7 @@ const PerplexityPage = () => {
       "خرید اشتراک Perplexity Pro برای تحقیق و جست وجوی زنده وب همراه با منبع. تحویل سریع، پشتیبانی فارسی و راهنمای شروع.",
     price: lowestPrice,
     url: "/services/perplexity",
-    image: "https://nova-shop.co/logos/perplexity.png",
+    image: "https://nova-shop.co/logos/perplexity.svg",
     category: "ابزار تحقیقاتی",
     sku: "PERP-PRO",
     ratingValue: 4.7,
@@ -167,7 +167,7 @@ const PerplexityPage = () => {
       <ServicePageLayout
         serviceId="perplexity"
         icon={Search}
-        logoSrc="/logos/perplexity.png"
+        logoSrc="/logos/perplexity.svg"
         title="خرید اشتراک پرپلکسیتی پرو (Perplexity Pro) | موتور جست وجوی هوش مصنوعی با ذکر منبع"
         subtitle="Perplexity Pro"
         description="Perplexity ترکیبی از موتور جست وجوی وب و هوش مصنوعی است. با خرید اشتراک Pro می توانید سوال های پیچیده بپرسید و پاسخ هایی دقیق، خلاصه شده و همراه با لینک منبع بگیرید. این سرویس برای تحقیق، تولید محتوا و بررسی سریع چندین منبع بسیار کاربردی است."

@@ -12,6 +12,9 @@ const BASE_DIR = path.resolve(__dirname, '..');
 const DATA_FILE = process.env.AUTH_DATA_FILE || path.join(__dirname, 'data.json');
 const PUBLIC_PRICES_FILE = process.env.PUBLIC_PRICES_FILE || path.join(BASE_DIR, 'public', 'prices.json');
 const DIST_PRICES_FILE = process.env.DIST_PRICES_FILE || path.join(BASE_DIR, 'dist', 'prices.json');
+const TELEGRAM_BOT_PRICES_FILE = process.env.TELEGRAM_BOT_PRICES_FILE || '/root/novaBOT/NovaShopBot2/prices.json';
+const TELEGRAM_BOT_SERVICE = process.env.TELEGRAM_BOT_SERVICE || 'novashopbot.service';
+let telegramPricesSignature = '';
 
 const OTP_TTL_SECONDS = Number(process.env.OTP_TTL_SECONDS || 600);
 const OTP_RESEND_COOLDOWN_SECONDS = Number(process.env.OTP_RESEND_COOLDOWN_SECONDS || 60);
@@ -20,12 +23,29 @@ const SESSION_TTL_SECONDS = Number(process.env.SESSION_TTL_SECONDS || 60 * 60 * 
 const FROM_EMAIL = process.env.AUTH_FROM_EMAIL || 'admin@nova-shop.co';
 const FROM_NAME = process.env.AUTH_FROM_NAME || 'Nova Shop';
 const SENDMAIL_PATH = process.env.SENDMAIL_PATH || '/usr/sbin/sendmail';
+const SENDMAIL_TIMEOUT_MS = Number(process.env.SENDMAIL_TIMEOUT_MS || 20000);
+const SENDMAIL_MAX_RETRIES = Number(process.env.SENDMAIL_MAX_RETRIES || 2);
 const ADMIN_EMAILS = new Set(
   String(process.env.AUTH_ADMIN_EMAILS || 'admin@nova-shop.co')
     .split(',')
     .map((email) => normalizeEmail(email))
     .filter(Boolean),
 );
+
+const ZARINPAL_MERCHANT_ID = String(
+  process.env.ZARINPAL_MERCHANT_ID || 'd84ae105-9447-4b95-a7a2-41db8f4ca431',
+)
+  .trim()
+  .slice(0, 120);
+const ZARINPAL_SANDBOX = /^(1|true|yes|on)$/i.test(String(process.env.ZARINPAL_SANDBOX || '').trim());
+const ZARINPAL_CALLBACK_BASE_URL = String(process.env.ZARINPAL_CALLBACK_BASE_URL || 'https://nova-shop.co')
+  .trim()
+  .replace(/\/+$/, '');
+const ZARINPAL_API_BASE_URL = ZARINPAL_SANDBOX ? 'https://sandbox.zarinpal.com' : 'https://payment.zarinpal.com';
+const ZARINPAL_GATEWAY_BASE_URL = ZARINPAL_SANDBOX ? 'https://sandbox.zarinpal.com' : 'https://www.zarinpal.com';
+const ZARINPAL_REQUEST_PATH = '/pg/v4/payment/request.json';
+const ZARINPAL_VERIFY_PATH = '/pg/v4/payment/verify.json';
+const ZARINPAL_INQUIRY_PATH = '/pg/v4/payment/inquiry.json';
 
 const ORDER_STATUSES = new Set(['pending', 'processing', 'completed', 'cancelled', 'refunded']);
 const PAYMENT_STATUSES = new Set(['awaiting_payment', 'submitted', 'verified', 'rejected', 'refunded']);
@@ -34,6 +54,7 @@ const PRICE_MODIFIER_TYPES = new Set(['fixed', 'percent']);
 
 const state = loadState();
 hydrateState();
+syncPricesFromTelegramBot(true);
 persistState();
 syncPricesFiles();
 
@@ -206,6 +227,134 @@ function buildPricesPayload() {
     payload[key] = value;
   }
   return payload;
+}
+
+function readTelegramBotPricesDocument() {
+  try {
+    const raw = fs.readFileSync(TELEGRAM_BOT_PRICES_FILE, 'utf8');
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {};
+    return parsed;
+  } catch (_error) {
+    return {};
+  }
+}
+
+function listTelegramBotPrices() {
+  const doc = readTelegramBotPricesDocument();
+  const prices = [];
+  for (const [key, value] of Object.entries(doc)) {
+    if (!isPriceEntry(value)) continue;
+    const normalizedKey = normalizeSlug(key, 120);
+    const normalizedName = normalizeText(value.name, 160);
+    const normalizedPrice = normalizePrice(value.price);
+    if (!normalizedKey || !normalizedName || normalizedPrice === null) continue;
+    prices.push({
+      key: normalizedKey,
+      name: normalizedName,
+      price: normalizedPrice,
+    });
+  }
+  prices.sort((a, b) => a.key.localeCompare(b.key));
+  return prices;
+}
+
+function saveTelegramBotPrices(prices) {
+  const existing = readTelegramBotPricesDocument();
+  const payload = {};
+  for (const [key, value] of Object.entries(existing || {})) {
+    if (!isPriceEntry(value)) payload[key] = value;
+  }
+
+  for (const item of prices) {
+    const key = normalizeSlug(item.key, 120);
+    const name = normalizeText(item.name, 160);
+    const price = normalizePrice(item.price);
+    if (!key || !name || price === null) {
+      return { ok: false, error: 'کلید، نام یا قیمت یکی از آیتم‌ها نامعتبر است' };
+    }
+    payload[key] = { name, price };
+  }
+
+  try {
+    fs.mkdirSync(path.dirname(TELEGRAM_BOT_PRICES_FILE), { recursive: true });
+    const tmp = `${TELEGRAM_BOT_PRICES_FILE}.tmp`;
+    fs.writeFileSync(tmp, JSON.stringify(payload, null, 2));
+    fs.renameSync(tmp, TELEGRAM_BOT_PRICES_FILE);
+    return { ok: true };
+  } catch (error) {
+    return {
+      ok: false,
+      error: normalizeText(error instanceof Error ? error.message : 'save bot prices failed', 400),
+    };
+  }
+}
+
+function syncPricesFromTelegramBot(force = false) {
+  const document = readTelegramBotPricesDocument();
+  const nextPrices = {};
+  for (const [rawKey, value] of Object.entries(document)) {
+    if (!isPriceEntry(value)) continue;
+    const key = normalizeSlug(rawKey, 120);
+    const name = normalizeText(value.name, 160);
+    const price = normalizePrice(value.price);
+    if (!key || !name || price === null) continue;
+    nextPrices[key] = { name, price, updatedAt: new Date().toISOString() };
+  }
+
+  const signature = JSON.stringify(Object.entries(nextPrices).map(([key, value]) => [key, value.name, value.price]));
+  if (!force && signature === telegramPricesSignature) return false;
+  if (Object.keys(nextPrices).length === 0) return false;
+
+  telegramPricesSignature = signature;
+  state.prices = nextPrices;
+  return true;
+}
+
+function refreshTelegramPrices() {
+  if (!syncPricesFromTelegramBot(false)) return false;
+  syncPricesFiles();
+  persistState();
+  return true;
+}
+
+function runTelegramBotServiceAction(action) {
+  const allowed = new Set(['start', 'stop', 'restart']);
+  if (!allowed.has(action)) {
+    return { ok: false, output: 'عملیات نامعتبر است' };
+  }
+
+  const result = spawnSync('systemctl', [action, TELEGRAM_BOT_SERVICE], {
+    encoding: 'utf8',
+    timeout: 15000,
+  });
+
+  const output = [result.stdout || '', result.stderr || ''].join('\n').trim().slice(0, 4000);
+  return {
+    ok: result.status === 0,
+    output,
+  };
+}
+
+function getTelegramBotServiceStatus() {
+  const activeRes = spawnSync('systemctl', ['is-active', TELEGRAM_BOT_SERVICE], { encoding: 'utf8', timeout: 8000 });
+  const enabledRes = spawnSync('systemctl', ['is-enabled', TELEGRAM_BOT_SERVICE], { encoding: 'utf8', timeout: 8000 });
+  const statusRes = spawnSync('systemctl', ['status', TELEGRAM_BOT_SERVICE, '--no-pager', '-l'], {
+    encoding: 'utf8',
+    timeout: 15000,
+  });
+
+  const active = normalizeText((activeRes.stdout || activeRes.stderr || '').trim(), 80) || 'unknown';
+  const enabled = normalizeText((enabledRes.stdout || enabledRes.stderr || '').trim(), 80) || 'unknown';
+  const details = [statusRes.stdout || '', statusRes.stderr || ''].join('\n').trim().slice(0, 6000);
+
+  return {
+    service: TELEGRAM_BOT_SERVICE,
+    active,
+    enabled,
+    details,
+    checkedAt: new Date().toISOString(),
+  };
 }
 
 function getDefaultCatalogServices() {
@@ -631,6 +780,18 @@ function normalizeOrder(order) {
     paymentReceipt: normalizeNullableText(order.paymentReceipt, 1200),
     paymentSubmittedAt: normalizeNullableDate(order.paymentSubmittedAt),
     paymentVerifiedAt: normalizeNullableDate(order.paymentVerifiedAt),
+    paymentProvider: normalizeNullableText(order.paymentProvider, 40),
+    zarinpalAuthority: normalizeNullableText(order.zarinpalAuthority, 120),
+    zarinpalRefId: normalizeNullableText(order.zarinpalRefId, 120),
+    zarinpalCardPan: normalizeNullableText(order.zarinpalCardPan, 40),
+    zarinpalCardHash: normalizeNullableText(order.zarinpalCardHash, 256),
+    zarinpalFeeType: normalizeNullableText(order.zarinpalFeeType, 40),
+    zarinpalFee: normalizePrice(order.zarinpalFee),
+    zarinpalStatus: normalizeNullableText(order.zarinpalStatus, 80),
+    zarinpalLastCode: normalizeNullableText(order.zarinpalLastCode, 40),
+    zarinpalLastMessage: normalizeNullableText(order.zarinpalLastMessage, 500),
+    zarinpalRequestedAt: normalizeNullableDate(order.zarinpalRequestedAt),
+    zarinpalVerifiedAt: normalizeNullableDate(order.zarinpalVerifiedAt),
 
     deliveryAccount: normalizeNullableText(order.deliveryAccount, 500),
     deliveredAt: normalizeNullableDate(order.deliveredAt),
@@ -1005,15 +1166,32 @@ function sendOtpEmail(to, code, mode) {
   ];
 
   const message = `${lines.join('\n')}\n`;
-  const result = spawnSync(SENDMAIL_PATH, ['-t', '-f', FROM_EMAIL], {
-    input: message,
-    encoding: 'utf8',
-  });
+  const pathCandidates = Array.from(
+    new Set([SENDMAIL_PATH, '/usr/sbin/sendmail', '/usr/lib/sendmail'].filter(Boolean)),
+  );
 
-  if (result.status !== 0) {
-    const stderr = (result.stderr || '').trim();
-    throw new Error(stderr || 'sendmail failed');
+  let lastError = '';
+  for (const sendmailBin of pathCandidates) {
+    for (let attempt = 1; attempt <= SENDMAIL_MAX_RETRIES; attempt += 1) {
+      const result = spawnSync(sendmailBin, ['-t', '-f', FROM_EMAIL], {
+        input: message,
+        encoding: 'utf8',
+        timeout: SENDMAIL_TIMEOUT_MS,
+      });
+
+      if (result.status === 0) {
+        return;
+      }
+
+      const stderr = (result.stderr || '').trim();
+      const stdout = (result.stdout || '').trim();
+      const errorText = result.error ? String(result.error.message || result.error) : '';
+      const statusText = typeof result.status === 'number' ? `exit=${result.status}` : `signal=${result.signal || 'unknown'}`;
+      lastError = [errorText, stderr, stdout, statusText].filter(Boolean).join(' | ');
+    }
   }
+
+  throw new Error(lastError || 'sendmail failed');
 }
 
 function getCatalogSnapshot(includeInactive = false) {
@@ -1108,6 +1286,9 @@ function getServiceById(serviceId) {
 
 function resolveBasePrice({ serviceId, planId, clientPrice }) {
   const normalizedClientPrice = normalizePrice(clientPrice);
+  if (planId && state.prices[planId]) {
+    return state.prices[planId].price;
+  }
   const plan = planId ? getPlanById(planId) : null;
 
   if (plan) {
@@ -1252,6 +1433,120 @@ function parsePathSegments(pathname) {
   return pathname.split('/').filter(Boolean);
 }
 
+function redirectTo(res, location) {
+  res.writeHead(302, {
+    Location: location,
+    'Cache-Control': 'no-store',
+  });
+  res.end();
+}
+
+function getPublicBaseUrl(req) {
+  if (ZARINPAL_CALLBACK_BASE_URL) return ZARINPAL_CALLBACK_BASE_URL;
+
+  const forwardedProto = String(req.headers['x-forwarded-proto'] || '')
+    .split(',')[0]
+    .trim();
+  const forwardedHost = String(req.headers['x-forwarded-host'] || req.headers.host || '')
+    .split(',')[0]
+    .trim();
+
+  if (!forwardedHost) return 'https://nova-shop.co';
+  return `${forwardedProto || 'https'}://${forwardedHost}`;
+}
+
+function buildZarinpalCallbackUrl(req, orderId) {
+  const base = getPublicBaseUrl(req).replace(/\/+$/, '');
+  const params = new URLSearchParams();
+  params.set('orderId', orderId);
+  return `${base}/api/auth/payments/zarinpal/callback?${params.toString()}`;
+}
+
+function buildDashboardPaymentUrl(req, status, orderId, extra = {}) {
+  const base = getPublicBaseUrl(req).replace(/\/+$/, '');
+  const params = new URLSearchParams();
+  params.set('payment', 'zarinpal');
+  params.set('status', status);
+  if (orderId) params.set('orderId', orderId);
+
+  for (const [key, value] of Object.entries(extra || {})) {
+    if (value === null || value === undefined) continue;
+    const str = String(value).trim();
+    if (!str) continue;
+    params.set(key, str);
+  }
+
+  return `${base}/dashboard?${params.toString()}`;
+}
+
+function zarinpalExtractCode(payload) {
+  const code = Number(payload?.data?.code);
+  return Number.isFinite(code) ? code : null;
+}
+
+function zarinpalExtractMessage(payload) {
+  const direct = normalizeText(payload?.data?.message || '', 500);
+  if (direct) return direct;
+
+  const errors = payload?.errors;
+  if (!errors || typeof errors !== 'object') return '';
+
+  const message = normalizeText(errors.message || '', 500);
+  if (message) return message;
+
+  const code = normalizeText(errors.code || '', 500);
+  if (code) return code;
+
+  const parts = Object.values(errors)
+    .filter((value) => typeof value === 'string' && value.trim().length > 0)
+    .map((value) => value.trim());
+  return normalizeText(parts.join(' | '), 500);
+}
+
+function zarinpalStartPayUrl(authority) {
+  return `${ZARINPAL_GATEWAY_BASE_URL}/pg/StartPay/${encodeURIComponent(authority)}`;
+}
+
+async function zarinpalPost(apiPath, payload) {
+  if (typeof fetch !== 'function') {
+    throw new Error('Fetch API در این نسخه Node.js در دسترس نیست');
+  }
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15000);
+
+  try {
+    const response = await fetch(`${ZARINPAL_API_BASE_URL}${apiPath}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+
+    const text = await response.text();
+    let parsed = {};
+    if (text) {
+      try {
+        parsed = JSON.parse(text);
+      } catch (_error) {
+        parsed = {};
+      }
+    }
+
+    if (!response.ok) {
+      const message = zarinpalExtractMessage(parsed) || `HTTP ${response.status}`;
+      throw new Error(message);
+    }
+
+    return parsed;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 function setOrderStatus(order, nextStatus, actorName) {
   const current = order.status;
   if (!nextStatus || current === nextStatus) return;
@@ -1327,6 +1622,176 @@ async function handleRequest(req, res) {
     return;
   }
 
+  if (method === 'GET' && pathname === '/api/auth/payments/zarinpal/callback') {
+    const orderId = normalizeText(url.searchParams.get('orderId'), 100);
+    const authority = normalizeNullableText(
+      url.searchParams.get('Authority') || url.searchParams.get('authority'),
+      120,
+    );
+    const status = normalizeText(url.searchParams.get('Status') || url.searchParams.get('status'), 20).toUpperCase();
+
+    let order = null;
+    if (orderId) {
+      order = state.orders.find((item) => item.id === orderId) || null;
+    }
+    if (!order && authority) {
+      order = state.orders.find((item) => item.zarinpalAuthority === authority) || null;
+    }
+
+    if (!order) {
+      redirectTo(
+        res,
+        buildDashboardPaymentUrl(req, 'order_not_found', orderId || '', {
+          authority: authority || '',
+        }),
+      );
+      return;
+    }
+
+    if (!authority) {
+      addTimeline(order, 'payment_callback', 'Callback زرین‌پال بدون Authority دریافت شد', 'zarinpal');
+      order.updatedAt = new Date().toISOString();
+      persistState();
+      redirectTo(res, buildDashboardPaymentUrl(req, 'invalid_request', order.id));
+      return;
+    }
+
+    const authorityOrder = state.orders.find((item) => item.zarinpalAuthority === authority) || null;
+    if (authorityOrder && authorityOrder.id !== order.id) {
+      order = authorityOrder;
+    } else if (order.zarinpalAuthority && order.zarinpalAuthority !== authority) {
+      addTimeline(order, 'payment_callback', 'Authority دریافتی با سفارش هماهنگ نیست', 'zarinpal');
+      order.updatedAt = new Date().toISOString();
+      persistState();
+      redirectTo(
+        res,
+        buildDashboardPaymentUrl(req, 'invalid_authority', order.id, {
+          authority,
+        }),
+      );
+      return;
+    }
+
+    if (status !== 'OK') {
+      order.paymentProvider = 'zarinpal';
+      order.paymentMethod = 'zarinpal';
+      order.zarinpalStatus = 'cancelled';
+      order.zarinpalLastCode = 'cancelled';
+      order.zarinpalLastMessage = 'پرداخت توسط کاربر لغو شد';
+      if (order.paymentStatus !== 'verified' && order.paymentStatus !== 'refunded') {
+        setPaymentStatus(order, 'rejected', 'zarinpal');
+      }
+      addTimeline(order, 'payment_cancelled', 'کاربر پرداخت زرین‌پال را لغو کرد', 'zarinpal');
+      order.updatedAt = new Date().toISOString();
+      persistState();
+      redirectTo(res, buildDashboardPaymentUrl(req, 'cancelled', order.id));
+      return;
+    }
+
+    const amount = normalizePrice(order.price) || 0;
+    if (amount <= 0) {
+      addTimeline(order, 'payment_verify', 'مبلغ سفارش برای تایید زرین‌پال معتبر نبود', 'zarinpal');
+      order.updatedAt = new Date().toISOString();
+      persistState();
+      redirectTo(res, buildDashboardPaymentUrl(req, 'invalid_amount', order.id));
+      return;
+    }
+
+    try {
+      const verifyPayload = await zarinpalPost(ZARINPAL_VERIFY_PATH, {
+        merchant_id: ZARINPAL_MERCHANT_ID,
+        amount,
+        authority,
+        currency: 'IRT',
+      });
+
+      const verifyCode = zarinpalExtractCode(verifyPayload);
+      const verifyMessage = zarinpalExtractMessage(verifyPayload);
+      const verifyData = verifyPayload?.data && typeof verifyPayload.data === 'object' ? verifyPayload.data : {};
+
+      const refId = normalizeNullableText(verifyData.ref_id, 120);
+      const cardPan = normalizeNullableText(verifyData.card_pan, 40);
+      const cardHash = normalizeNullableText(verifyData.card_hash, 256);
+      const feeType = normalizeNullableText(verifyData.fee_type, 40);
+      const fee = normalizePrice(verifyData.fee);
+      const now = new Date().toISOString();
+
+      order.paymentProvider = 'zarinpal';
+      order.paymentMethod = 'zarinpal';
+      order.zarinpalAuthority = authority;
+      order.zarinpalRefId = refId;
+      order.zarinpalCardPan = cardPan;
+      order.zarinpalCardHash = cardHash;
+      order.zarinpalFeeType = feeType;
+      order.zarinpalFee = fee;
+      order.zarinpalLastCode = verifyCode === null ? null : String(verifyCode);
+      order.zarinpalLastMessage = verifyMessage || null;
+      order.updatedAt = now;
+
+      if (verifyCode === 100 || verifyCode === 101) {
+        order.zarinpalStatus = 'verified';
+        order.zarinpalVerifiedAt = now;
+        if (refId) {
+          order.paymentReference = refId;
+        }
+
+        if (order.paymentStatus !== 'verified') {
+          setPaymentStatus(order, 'verified', 'zarinpal');
+        }
+        addTimeline(
+          order,
+          'payment_verified',
+          `پرداخت زرین‌پال تایید شد${refId ? ` (Ref: ${refId})` : ''}`,
+          'zarinpal',
+        );
+
+        persistState();
+        redirectTo(
+          res,
+          buildDashboardPaymentUrl(req, 'success', order.id, {
+            refId: refId || '',
+            code: verifyCode,
+          }),
+        );
+        return;
+      }
+
+      order.zarinpalStatus = 'verify_failed';
+      if (order.paymentStatus !== 'verified' && order.paymentStatus !== 'refunded') {
+        setPaymentStatus(order, 'rejected', 'zarinpal');
+      }
+      addTimeline(
+        order,
+        'payment_failed',
+        `تایید پرداخت زرین‌پال ناموفق بود${verifyCode === null ? '' : ` (Code: ${verifyCode})`}`,
+        'zarinpal',
+      );
+
+      persistState();
+      redirectTo(
+        res,
+        buildDashboardPaymentUrl(req, 'failed', order.id, {
+          code: verifyCode === null ? '' : String(verifyCode),
+        }),
+      );
+      return;
+    } catch (error) {
+      const message = normalizeText(error instanceof Error ? error.message : 'verify error', 400);
+      order.paymentProvider = 'zarinpal';
+      order.paymentMethod = 'zarinpal';
+      order.zarinpalStatus = 'verify_error';
+      order.zarinpalLastMessage = message || null;
+      if (order.paymentStatus !== 'verified' && order.paymentStatus !== 'refunded') {
+        setPaymentStatus(order, 'rejected', 'zarinpal');
+      }
+      addTimeline(order, 'payment_failed', 'خطا در تایید پرداخت زرین‌پال', 'zarinpal');
+      order.updatedAt = new Date().toISOString();
+      persistState();
+      redirectTo(res, buildDashboardPaymentUrl(req, 'verify_error', order.id));
+      return;
+    }
+  }
+
   if (method === 'GET' && pathname === '/api/auth/session') {
     const identity = resolveUserFromRequest(req);
     if (!identity) {
@@ -1344,6 +1809,7 @@ async function handleRequest(req, res) {
   }
 
   if (method === 'GET' && pathname === '/api/auth/catalog') {
+    refreshTelegramPrices();
     ok(res, {
       services: getCatalogSnapshot(false),
       generatedAt: new Date().toISOString(),
@@ -1352,6 +1818,7 @@ async function handleRequest(req, res) {
   }
 
   if (method === 'POST' && pathname === '/api/auth/orders/quote') {
+    refreshTelegramPrices();
     const body = await readBody(req);
     const serviceId = normalizeSlug(body.serviceId, 120);
     const planId = normalizeNullableSlug(body.planId, 120);
@@ -1421,6 +1888,7 @@ async function handleRequest(req, res) {
   }
 
   if (method === 'POST' && pathname === '/api/auth/orders') {
+    refreshTelegramPrices();
     const identity = requireAuth(req, res);
     if (!identity) return;
 
@@ -1447,6 +1915,11 @@ async function handleRequest(req, res) {
 
     if (!serviceId || !serviceName || !planName) {
       badRequest(res, 'اطلاعات سفارش کامل نیست');
+      return;
+    }
+
+    if (!customerTelegram) {
+      badRequest(res, 'آیدی تلگرام الزامی است', 422);
       return;
     }
 
@@ -1599,12 +2072,250 @@ async function handleRequest(req, res) {
     return;
   }
 
+  if (
+    method === 'POST' &&
+    segments.length === 6 &&
+    segments[0] === 'api' &&
+    segments[1] === 'auth' &&
+    segments[2] === 'orders' &&
+    segments[4] === 'pay' &&
+    segments[5] === 'zarinpal'
+  ) {
+    const identity = requireAuth(req, res);
+    if (!identity) return;
+
+    const orderId = normalizeText(segments[3], 100);
+    const order = state.orders.find((item) => item.id === orderId && item.userId === identity.user.id);
+    if (!order) {
+      badRequest(res, 'سفارش یافت نشد', 404);
+      return;
+    }
+
+    const amount = normalizePrice(order.price) || 0;
+    if (amount <= 0) {
+      badRequest(res, 'این سفارش قابلیت پرداخت آنلاین ندارد', 422);
+      return;
+    }
+
+    if (!ZARINPAL_MERCHANT_ID) {
+      badRequest(res, 'تنظیمات زرین‌پال کامل نیست', 500);
+      return;
+    }
+
+    const callbackUrl = buildZarinpalCallbackUrl(req, order.id);
+    const description = normalizeText(
+      `Nova AI Shop | ${order.serviceName} | ${order.planName} | ${order.id}`,
+      255,
+    );
+
+    try {
+      const requestPayload = await zarinpalPost(ZARINPAL_REQUEST_PATH, {
+        merchant_id: ZARINPAL_MERCHANT_ID,
+        amount,
+        currency: 'IRT',
+        description,
+        callback_url: callbackUrl,
+        metadata: {
+          email: order.userEmail || undefined,
+          order_id: order.id,
+        },
+      });
+
+      const requestCode = zarinpalExtractCode(requestPayload);
+      const requestMessage = zarinpalExtractMessage(requestPayload);
+      const authority = normalizeNullableText(requestPayload?.data?.authority, 120);
+
+      if (requestCode !== 100 || !authority) {
+        order.paymentProvider = 'zarinpal';
+        order.paymentMethod = 'zarinpal';
+        order.zarinpalStatus = 'request_failed';
+        order.zarinpalLastCode = requestCode === null ? null : String(requestCode);
+        order.zarinpalLastMessage = requestMessage || null;
+        order.updatedAt = new Date().toISOString();
+        addTimeline(order, 'payment_gateway', 'ایجاد لینک پرداخت زرین‌پال ناموفق بود', 'system');
+        persistState();
+
+        badRequest(res, requestMessage || 'خطا در اتصال به زرین‌پال', 502);
+        return;
+      }
+
+      const now = new Date().toISOString();
+      order.paymentProvider = 'zarinpal';
+      order.paymentMethod = 'zarinpal';
+      order.zarinpalAuthority = authority;
+      order.zarinpalStatus = 'requested';
+      order.zarinpalLastCode = String(requestCode);
+      order.zarinpalLastMessage = requestMessage || 'درخواست پرداخت ثبت شد';
+      order.zarinpalRequestedAt = now;
+      order.updatedAt = now;
+
+      if (order.paymentStatus === 'rejected') {
+        setPaymentStatus(order, 'awaiting_payment', identity.user.email);
+      }
+      addTimeline(order, 'payment_gateway', 'لینک پرداخت زرین‌پال ایجاد شد', identity.user.email);
+
+      persistState();
+
+      ok(res, {
+        message: 'انتقال به درگاه زرین‌پال',
+        order,
+        payment: {
+          provider: 'zarinpal',
+          authority,
+          code: requestCode,
+          paymentUrl: zarinpalStartPayUrl(authority),
+          callbackUrl,
+          sandbox: ZARINPAL_SANDBOX,
+        },
+      });
+      return;
+    } catch (error) {
+      const message = normalizeText(error instanceof Error ? error.message : 'payment request error', 400);
+      order.paymentProvider = 'zarinpal';
+      order.paymentMethod = 'zarinpal';
+      order.zarinpalStatus = 'request_error';
+      order.zarinpalLastMessage = message || null;
+      order.updatedAt = new Date().toISOString();
+      addTimeline(order, 'payment_gateway', 'خطا در ایجاد لینک زرین‌پال', 'system');
+      persistState();
+      badRequest(res, message || 'خطا در اتصال به زرین‌پال', 502);
+      return;
+    }
+  }
+
+  if (
+    method === 'GET' &&
+    segments.length === 7 &&
+    segments[0] === 'api' &&
+    segments[1] === 'auth' &&
+    segments[2] === 'orders' &&
+    segments[4] === 'pay' &&
+    segments[5] === 'zarinpal' &&
+    segments[6] === 'inquiry'
+  ) {
+    const identity = requireAuth(req, res);
+    if (!identity) return;
+
+    const orderId = normalizeText(segments[3], 100);
+    const order = state.orders.find((item) => item.id === orderId && item.userId === identity.user.id);
+    if (!order) {
+      badRequest(res, 'سفارش یافت نشد', 404);
+      return;
+    }
+
+    if (!order.zarinpalAuthority) {
+      badRequest(res, 'Authority این سفارش ثبت نشده است', 422);
+      return;
+    }
+
+    try {
+      const inquiryPayload = await zarinpalPost(ZARINPAL_INQUIRY_PATH, {
+        merchant_id: ZARINPAL_MERCHANT_ID,
+        authority: order.zarinpalAuthority,
+      });
+      const code = zarinpalExtractCode(inquiryPayload);
+      const message = zarinpalExtractMessage(inquiryPayload);
+      order.paymentProvider = 'zarinpal';
+      order.zarinpalLastCode = code === null ? null : String(code);
+      order.zarinpalLastMessage = message || null;
+      order.updatedAt = new Date().toISOString();
+      persistState();
+
+      ok(res, {
+        order,
+        inquiry: inquiryPayload,
+      });
+      return;
+    } catch (error) {
+      const message = normalizeText(error instanceof Error ? error.message : 'inquiry error', 400);
+      badRequest(res, message || 'خطا در استعلام زرین‌پال', 502);
+      return;
+    }
+  }
+
   if (method === 'GET' && pathname === '/api/auth/admin/dashboard') {
     const identity = requireAdmin(req, res);
     if (!identity) return;
 
     ok(res, {
       stats: buildAdminDashboard(),
+    });
+    return;
+  }
+
+  if (method === 'GET' && pathname === '/api/auth/admin/telegram-bot') {
+    const identity = requireAdmin(req, res);
+    if (!identity) return;
+
+    const prices = listTelegramBotPrices();
+    const status = getTelegramBotServiceStatus();
+    ok(res, { prices, status });
+    return;
+  }
+
+  if (method === 'POST' && pathname === '/api/auth/admin/telegram-bot/actions') {
+    const identity = requireAdmin(req, res);
+    if (!identity) return;
+
+    const body = await readBody(req);
+    const action = normalizeText(body.action, 20);
+    if (!action || !['start', 'stop', 'restart'].includes(action)) {
+      badRequest(res, 'عملیات نامعتبر است');
+      return;
+    }
+
+    const actionResult = runTelegramBotServiceAction(action);
+    if (!actionResult.ok) {
+      badRequest(res, actionResult.output || 'اجرای عملیات روی سرویس ناموفق بود', 500);
+      return;
+    }
+
+    ok(res, {
+      message: `عملیات ${action} با موفقیت اجرا شد`,
+      output: actionResult.output || '',
+      status: getTelegramBotServiceStatus(),
+    });
+    return;
+  }
+
+  if (method === 'PUT' && pathname === '/api/auth/admin/telegram-bot/prices') {
+    const identity = requireAdmin(req, res);
+    if (!identity) return;
+
+    const body = await readBody(req);
+    const incoming = Array.isArray(body.prices) ? body.prices : null;
+    if (!incoming || incoming.length === 0) {
+      badRequest(res, 'لیست قیمت‌ها نامعتبر است');
+      return;
+    }
+
+    const normalized = [];
+    for (const item of incoming) {
+      const key = normalizeSlug(item.key, 120);
+      const name = normalizeText(item.name, 160);
+      const price = normalizePrice(item.price);
+      if (!key || !name || price === null) {
+        badRequest(res, 'کلید، نام یا قیمت یکی از آیتم‌ها نامعتبر است');
+        return;
+      }
+      normalized.push({ key, name, price });
+    }
+
+    const saveResult = saveTelegramBotPrices(normalized);
+    if (!saveResult.ok) {
+      badRequest(res, saveResult.error || 'خطا در ذخیره قیمت‌های بات', 500);
+      return;
+    }
+
+    for (const item of normalized) {
+      upsertPrice(item.key, item.name, item.price);
+    }
+    syncPricesFiles();
+    persistState();
+
+    ok(res, {
+      message: 'قیمت‌های بات بروزرسانی شد',
+      prices: listTelegramBotPrices(),
     });
     return;
   }
@@ -2272,7 +2983,17 @@ async function handleRequest(req, res) {
     state.otps = state.otps.filter((item) => item.email !== email);
     state.otps.push(otp);
 
-    sendOtpEmail(email, code, mode);
+    try {
+      sendOtpEmail(email, code, mode);
+    } catch (error) {
+      state.otps = state.otps.filter((item) => item.id !== otp.id);
+      const reason = error instanceof Error ? error.message : String(error || 'unknown');
+      console.error(`[OTP] failed to send email | to=${email} | mode=${mode} | reason=${reason}`);
+      badRequest(res, 'ارسال ایمیل با خطا مواجه شد. چند دقیقه دیگر دوباره تلاش کنید.', 502);
+      return;
+    }
+
+    console.log(`[OTP] email sent | to=${email} | mode=${mode}`);
     persistState();
 
     ok(res, {
@@ -2372,6 +3093,15 @@ const server = http.createServer(async (req, res) => {
     json(res, 500, { error: message });
   }
 });
+
+const telegramPriceTimer = setInterval(() => {
+  try {
+    refreshTelegramPrices();
+  } catch (error) {
+    console.error('[prices] Telegram bot price sync failed:', error instanceof Error ? error.message : error);
+  }
+}, 15_000);
+telegramPriceTimer.unref();
 
 server.listen(PORT, '127.0.0.1', () => {
   console.log(`Nova Shop auth API listening on 127.0.0.1:${PORT}`);

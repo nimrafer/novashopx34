@@ -1,8 +1,9 @@
 import React, { createContext, useContext, ReactNode } from 'react';
-import { usePrices, PricesData, formatPricePersian, formatPriceNumber } from '@/hooks/usePrices';
+import { usePrices, PricesData, CatalogService, formatPricePersian, formatPriceNumber } from '@/hooks/usePrices';
 
 interface PricesContextType {
   prices: PricesData;
+  catalog: CatalogService[];
   loading: boolean;
   error: string | null;
   refetch: () => Promise<void>;

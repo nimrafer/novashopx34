@@ -51,16 +51,26 @@ const jsonLdFor = (post, url) => {
       description: post.metaDescription || post.excerpt,
       image: `${SITE}${post.image}`,
       mainEntityOfPage: { "@type": "WebPage", "@id": url },
-      author: { "@type": "Person", name: post.author },
+      author: { "@type": "Organization", name: post.author, url: `${SITE}/about` },
       publisher: {
         "@type": "Organization",
         name: "Nova AI Shop",
         logo: { "@type": "ImageObject", url: `${SITE}/about-logo.webp` },
       },
+      inLanguage: "fa",
       datePublished: post.dateISO || post.date,
-      dateModified: post.dateISO || post.date,
+      dateModified: post.modifiedISO || post.dateISO || post.date,
     },
   ];
+  blocks.push({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "نوا شاپ", item: SITE + "/" },
+      { "@type": "ListItem", position: 2, name: "بلاگ", item: SITE + "/blog" },
+      { "@type": "ListItem", position: 3, name: post.title },
+    ],
+  });
   if (post.faqs && post.faqs.length) {
     blocks.push({
       "@context": "https://schema.org",
@@ -80,7 +90,13 @@ for (const post of Object.values(blogPosts)) {
   const url = `${SITE}/blog/${post.id}`;
   const title = post.metaTitle || `${post.title} | بلاگ نوا`;
   const description = post.metaDescription || post.excerpt;
-  const articleHtml = marked.parse(post.content, { gfm: true, breaks: true });
+  let articleHtml = marked.parse(post.content, { gfm: true, breaks: true });
+  if (post.heroAlt) {
+    articleHtml = articleHtml.replace(
+      /<img([^>]*?)alt="[^"]*"/,
+      `<img$1alt="${post.heroAlt.replace(/"/g, "&quot;")}"`
+    );
+  }
 
   const headExtras = [
     `<link rel="canonical" href="${url}" />`,
@@ -90,19 +106,41 @@ for (const post of Object.values(blogPosts)) {
     `<meta property="og:url" content="${url}" />`,
     `<meta property="og:image" content="${SITE}${post.image}" />`,
     `<meta property="article:published_time" content="${post.dateISO || ""}" />`,
+    `<meta property="article:modified_time" content="${post.modifiedISO || post.dateISO || ""}" />`,
     `<script type="application/ld+json">${JSON.stringify(jsonLdFor(post, url))}</script>`,
   ].join("\n  ");
 
+  // Answer-engine blocks: takeaways up top, FAQ at the end — extraction-ready.
+  const takeawaysHtml = post.takeaways?.length
+    ? `<section aria-label="خلاصه کلیدی"><h2>خلاصه کلیدی</h2><ul>${post.takeaways
+        .map((item) => `<li>${escapeHtml(item)}</li>`)
+        .join("")}</ul></section>`
+    : "";
+  const faqHtml = post.faqs?.length
+    ? `<section aria-label="سؤالات متداول"><h2>سؤالات متداول</h2>${post.faqs
+        .map((faq) => `<h3>${escapeHtml(faq.question)}</h3><p>${escapeHtml(faq.answer)}</p>`)
+        .join("")}</section>`
+    : "";
+
   const bodyContent = `
     <article dir="rtl" lang="fa" style="max-width:760px;margin:0 auto;padding:24px 16px;font-family:inherit">
-      <nav><a href="/blog">بلاگ نوا شاپ</a></nav>
+      <nav><a href="/">نوا شاپ</a> / <a href="/blog">بلاگ</a></nav>
       <h1>${escapeHtml(post.title)}</h1>
       <p><em>${escapeHtml(post.author)} · ${escapeHtml(post.date)} · ${escapeHtml(post.readTime)} مطالعه</em></p>
-      <img src="${post.image}" alt="${escapeHtml(`تصویر شاخص مقاله ${post.title} — بلاگ نوا شاپ`)}" width="96" height="96" loading="lazy" />
+      <img src="${post.image}" alt="${escapeHtml(post.heroAlt || `تصویر شاخص مقاله ${post.title} — بلاگ نوا شاپ`)}" width="96" height="96" loading="lazy" />
+      ${takeawaysHtml}
       ${articleHtml}
+      ${faqHtml}
     </article>`;
 
   let html = template
+    .replace(/<meta property="og:url"[\s\S]*?\/>/, "")
+    .replace(/<meta property="og:title"[\s\S]*?\/>/, "")
+    .replace(/<meta property="og:description"[\s\S]*?\/>/, "")
+    // The shell declares a site-wide og:type/og:image; every article overrides
+    // both below, so drop them here instead of emitting duplicates.
+    .replace(/<meta property="og:type"[\s\S]*?\/>/, "")
+    .replace(/<meta property="og:image"[\s\S]*?\/>/, "")
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(title)}</title>`)
     .replace(
       /<meta name="description"[\s\S]*?>/,

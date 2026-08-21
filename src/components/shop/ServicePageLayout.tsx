@@ -21,6 +21,7 @@ interface Plan {
   priceKey?: string;
   features?: string[];
   popular?: boolean;
+  outOfStock?: boolean;
   notIncluded?: string[];
   requiresActivationEmail?: boolean;
   activationEmailLabel?: string;
@@ -225,7 +226,7 @@ const ServicePageLayout = ({
       // The Mini App checkout is also a first-class browser checkout. It
       // creates a guest web session when Telegram initData is absent and uses
       // the exact same order, discount, central payment and delivery APIs.
-      window.location.assign(`/app/#/checkout/${encodeURIComponent(String(planId))}`);
+      window.location.assign(`/checkout/${encodeURIComponent(String(planId))}`);
       return;
     }
 
@@ -597,10 +598,14 @@ const ServicePageLayout = ({
                   <button
                     key={item.key}
                     type="button"
-                    className={`nv-plan ${plan.popular || isHighlighted ? "nv-plan--popular" : ""}`}
+                    className={`nv-plan ${(plan.popular || isHighlighted) && !plan.outOfStock ? "nv-plan--popular" : ""} ${plan.outOfStock ? "nv-plan--oos opacity-60" : ""}`}
                     onClick={() => setDetailPlan(plan)}
                   >
-                    {plan.popular && <span className="nv-plan__pop">پرفروش</span>}
+                    {plan.outOfStock ? (
+                      <span className="nv-plan__pop" style={{ background: "#64748b" }}>ناموجود</span>
+                    ) : (
+                      plan.popular && <span className="nv-plan__pop">پرفروش</span>
+                    )}
                     <span className="nv-plan__main">
                       <span className="nv-plan__name block">{plan.name}</span>
                       {(plan.duration || plan.subtitle) && (
@@ -743,16 +748,26 @@ const ServicePageLayout = ({
                     )}
                   </b>
                 </div>
+                {detailPlan.outOfStock && (
+                  <p className="text-sm rounded-xl bg-amber-50 text-amber-800 border border-amber-200 px-4 py-3 mb-3 leading-7">
+                    <b>این پلن فعلاً ناموجود است.</b> به‌زودی دوباره شارژ می‌شود؛ کمی بعد سر بزنید.
+                  </p>
+                )}
                 <button
                   type="button"
-                  className="nv-btn"
+                  className="nv-btn disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={detailPlan.outOfStock}
                   onClick={() => {
                     const plan = detailPlan;
                     setDetailPlan(null);
                     handleOrder(plan);
                   }}
                 >
-                  {usesCentralStoreCheckout ? "خرید و پرداخت خودکار ←" : "ثبت سفارش و ادامه ←"}
+                  {detailPlan.outOfStock
+                    ? "ناموجود"
+                    : usesCentralStoreCheckout
+                      ? "خرید و پرداخت خودکار ←"
+                      : "ثبت سفارش و ادامه ←"}
                 </button>
               </div>
             </div>

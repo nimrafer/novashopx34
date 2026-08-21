@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Mail, User, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import novaLogo from '@/assets/nova-logo.jpeg';
+import novaLogo from '@/assets/nova-logo.webp';
 
 type AuthStep = 'request' | 'verify';
 
@@ -211,6 +211,10 @@ const Auth = () => {
               <img
                 src={novaLogo}
                 alt="Nova AI Shop"
+                width={64}
+                height={64}
+                loading="eager"
+                decoding="async"
                 className="w-16 h-16 mx-auto mb-4 rounded-xl object-cover"
               />
             </Link>
@@ -350,9 +354,9 @@ const Auth = () => {
 
           <p className="text-center text-muted-foreground text-xs mt-6 leading-6">
             با ورود یا ثبت‌نام، شما{' '}
-            <Link to="/terms" className="text-primary hover:underline">
+            <a href="/terms" className="text-primary hover:underline">
               قوانین و مقررات
-            </Link>{' '}
+            </a>{' '}
             ما را می‌پذیرید. اگر ایمیل تأیید را ندیدید، پوشه Spam/Junk را بررسی کنید.
           </p>
         </div>

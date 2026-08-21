@@ -28,6 +28,17 @@ export default defineConfig(({ mode }) => {
       host: "::",
       port: 8080,
     },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes("node_modules")) {
+              return "vendor";
+            }
+          },
+        },
+      },
+    },
     plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
     define: {
       "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(supabaseUrl),
@@ -40,4 +51,3 @@ export default defineConfig(({ mode }) => {
     },
   };
 });
-

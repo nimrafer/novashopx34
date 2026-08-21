@@ -10,9 +10,15 @@ import ScrollToTop from "./components/ScrollToTop";
 
 const Index = lazy(() => import("./pages/Index"));
 const StoreServicePage = lazy(() => import("./pages/services/StoreServicePage"));
+const GeminiServicePage = lazy(() => import("./pages/services/GeminiServicePage"));
+const ChatGPTServicePage = lazy(() => import("./pages/services/ChatGPTServicePage"));
+const ClaudeServicePage = lazy(() => import("./pages/services/ClaudeServicePage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Auth = lazy(() => import("./pages/Auth"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
+const CheckoutPage = lazy(() => import("./pages/store/CheckoutPage"));
+const OrderPage = lazy(() => import("./pages/store/OrderPage"));
+const OrdersPage = lazy(() => import("./pages/store/OrdersPage"));
 const AdminOrders = lazy(() => import("./pages/AdminOrders"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
@@ -49,13 +55,16 @@ const App = () => (
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/admin/orders" element={<AdminOrders />} />
-                <Route path="/services/chatgpt" element={<StoreServicePage slug="chatgpt" />} />
-                <Route path="/services/gemini" element={<StoreServicePage slug="gemini" />} />
+                <Route path="/checkout/:planId" element={<CheckoutPage />} />
+                <Route path="/order/:publicId" element={<OrderPage />} />
+                <Route path="/orders" element={<OrdersPage />} />
+                <Route path="/services/chatgpt" element={<ChatGPTServicePage />} />
+                <Route path="/services/gemini" element={<GeminiServicePage />} />
                 <Route path="/services/grok" element={<StoreServicePage slug="grok" />} />
                 <Route path="/services/perplexity" element={<StoreServicePage slug="perplexity" />} />
                 <Route path="/services/spotify" element={<StoreServicePage slug="spotify" />} />
                 <Route path="/services/cursor" element={<StoreServicePage slug="cursor" />} />
-                <Route path="/services/claude" element={<StoreServicePage slug="claude" />} />
+                <Route path="/services/claude" element={<ClaudeServicePage />} />
                 <Route path="/services/telegram-premium" element={<StoreServicePage slug="telegram-premium" />} />
                 <Route path="/services/cards" element={<StoreServicePage slug="cards" />} />
                 <Route path="/services/virtual-number" element={<StoreServicePage slug="virtual-number" />} />

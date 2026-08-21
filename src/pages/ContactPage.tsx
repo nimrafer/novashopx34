@@ -7,7 +7,7 @@ import ShopFooter from "@/components/shop/ShopFooter";
 import SEOHead from "@/components/seo/SEOHead";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import supportImage from "@/assets/telegram-support.jpg";
+import supportImage from "@/assets/telegram-support.webp";
 import { CHANNEL_USERNAME, SUPPORT_USERNAME } from "@/constants/support";
 
 const ContactPage = () => {
@@ -60,7 +60,11 @@ const ContactPage = () => {
                                     <img
                                         src={supportImage}
                                         alt="تصویر پیوی پشتیبانی تلگرام"
+                                        width={1206}
+                                        height={2391}
                                         className="w-full rounded-xl border border-border object-cover"
+                                        loading="lazy"
+                                        decoding="async"
                                     />
                                     <p className="text-xs text-muted-foreground mt-3">
                                         برای ارتباط فوری، از دکمه‌های پشتیبانی تلگرام استفاده کنید.

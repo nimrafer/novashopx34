@@ -2,7 +2,7 @@ import { Building2, Send, ShieldCheck } from "lucide-react";
 import ShopHeader from "@/components/shop/ShopHeader";
 import ShopFooter from "@/components/shop/ShopFooter";
 import SEOHead from "@/components/seo/SEOHead";
-import supportImage from "@/assets/telegram-support.jpg";
+import supportImage from "@/assets/telegram-support.webp";
 import { CHANNEL_TELEGRAM_URL, CHANNEL_USERNAME, SUPPORT_TELEGRAM_URL, SUPPORT_USERNAME } from "@/constants/support";
 
 const AboutPage = () => {
@@ -83,7 +83,11 @@ const AboutPage = () => {
                 <img
                   src={supportImage}
                   alt="تصویر پیوی پشتیبانی تلگرام نوا شاپ"
+                  width={1206}
+                  height={2391}
                   className="w-full h-auto rounded-2xl border border-border object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
                   <div className="rounded-2xl border border-border/70 bg-card/40 p-4">
@@ -109,7 +113,7 @@ const AboutPage = () => {
               </h2>
               <p className="text-muted-foreground leading-8">
                 ماموریت نوا شاپ این است که کاربران ایرانی بتوانند بدون دردسر پرداخت ارزی، به بهترین ابزارهای هوش مصنوعی دنیا
-                دسترسی داشته باشند. ما روی شفافیت سفارش، پایداری سرویس، تحویل سریع و پاسخگویی واقعی تمرکز داریم.
+                دسترسی داشته باشند. ما روی شفافیت سفارش، پایداری سرویس، تحویل سریع و پاسخگویی ساعتی و مستمر تمرکز داریم.
               </p>
             </div>
           </div>

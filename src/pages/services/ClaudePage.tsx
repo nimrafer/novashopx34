@@ -264,7 +264,7 @@ const ClaudePage = () => {
     description: "خرید اشتراک Claude Pro از Anthropic. پنجره کانتکست ۲۰۰ هزار توکنی، بهترین انتخاب برای تحلیل کتاب‌ها و کدنویسی حرفه‌ای.",
     price: lowestPrice,
     url: "/services/claude",
-    image: "https://nova-shop.co/logos/claude.png",
+    image: "https://nova-shop.co/logos/claude.webp",
     category: "اشتراک هوش مصنوعی",
     sku: "CLAUDE-PRO",
     ratingValue: 4.8,

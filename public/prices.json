@@ -1,51 +1,67 @@
 {
-  "cgpt_pro_30day": {
-    "name": "چت جی پی تی (ChatGPT) Pro-Business 30 روزه",
-    "price": 499000
-  },
-  "cgpt_pro_37day": {
-    "name": "چت جی پی تی (ChatGPT) Pro-Business 37 روزه",
-    "price": 599000
-  },
   "cgpt_plus_team": {
     "name": "ChatGPT Plus ۵ نفره",
-    "price": 1249000
+    "price": 0
+  },
+  "cgpt_pro_30day": {
+    "name": "ChatGPT Pro 30 روزه",
+    "price": 0
+  },
+  "cgpt_pro_shared": {
+    "name": "ChatGPT Pro اشتراکی",
+    "price": 0
+  },
+  "cgpt_go_shared": {
+    "name": "ChatGPT Go اشتراکی",
+    "price": 1097000
+  },
+  "cgpt_go_dedicated": {
+    "name": "ChatGPT Go اختصاصی",
+    "price": 2197000
   },
   "cgpt_team": {
     "name": "ChatGPT Team (بیزنسی)",
     "price": 2750000
   },
-  "cgpt_go_yearly": {
-    "name": "ChatGPT GO یکساله",
-    "price": 0
-  },
-  "cgpt_pro_shared": {
-    "name": "چت جی پی تی (ChatGPT) Pro-Business اشتراکی",
-    "price": 427000
-  },
-  "gem_month": {
-    "name": "Gemini ماهانه",
-    "price": 649000
+  "cursor_monthly": {
+    "name": "Claude Pro - یک‌ماهه",
+    "price": 4579000
   },
   "gem_3month": {
     "name": "Gemini سه‌ماهه",
-    "price": 1549000
+    "price": 1620000
   },
   "gem_6month": {
-    "name": "Gemini شش‌ماهه",
-    "price": 1949000
+    "name": "پلن ۶ ماهه Gemini Pro",
+    "price": 2320000
   },
-  "gem_year_personal": {
-    "name": "Gemini یکساله (جیمیل شخصی)",
-    "price": 2497000
+  "gem_offer_year_telo": {
+    "name": "آفر ۱۲ ماهه Gemini Pro — Telo",
+    "price": 1697000
   },
-  "gem_year_ready": {
-    "name": "Gemini یکساله (جیمیل آماده)",
-    "price": 2497000
+  "gem_offer_18m_owner": {
+    "name": "آفر ۱۸ ماهه Gemini Pro هند — Owner + 50GB IP ثابت",
+    "price": 2499000
   },
-  "gem_student_month": {
-    "name": "تخفیف دانشجویی Gemini ماهانه",
-    "price": 130000
+  "gem_offer_18m_member": {
+    "name": "آفر ۱۸ ماهه Gemini Pro هند — Member + 35GB IP ثابت",
+    "price": 1897000
+  },
+  "gem_month": {
+    "name": "Gemini ماهانه",
+    "price": 597000
+  },
+  "gem_support_extra_month": {
+    "name": "Gemini پشتیبانی اضافه (ماهانه)",
+    "price": 650000
+  },
+  "cgpt_plus_shared": {
+    "name": "ChatGPT Plus اشتراکی",
+    "price": 1197000
+  },
+  "cgpt_plus_dedicated": {
+    "name": "ChatGPT Plus اختصاصی",
+    "price": 4397000
   },
   "gem_student_3month": {
     "name": "تخفیف دانشجویی Gemini 3 ماهه",
@@ -55,37 +71,49 @@
     "name": "تخفیف دانشجویی Gemini 6 ماهه",
     "price": 300000
   },
+  "gem_student_month": {
+    "name": "تخفیف دانشجویی Gemini ماهانه",
+    "price": 130000
+  },
   "gem_student_year": {
     "name": "تخفیف دانشجویی Gemini یکساله",
     "price": 350000
   },
-  "spotify_monthly": {
-    "name": "Spotify ماهانه",
-    "price": 350000
+  "gem_year_personal": {
+    "name": "Gemini یکساله (جیمیل شخصی)",
+    "price": 2497000
   },
-  "spotify_4month": {
-    "name": "Spotify 4 ماهه",
-    "price": 1150000
+  "gem_year_ready": {
+    "name": "Gemini یکساله (جیمیل آماده)",
+    "price": 2497000
   },
-  "cursor_monthly": {
-    "name": "Cursor ماهانه",
-    "price": 3490000
+  "grok_monthly": {
+    "name": "Super Grok ماهانه",
+    "price": 2250000
   },
-  "cursor_weekly": {
-    "name": "Cursor هفتگی",
-    "price": 397000
+  "master_card": {
+    "name": "مستر کارت",
+    "price": 750000
   },
   "perplexity_monthly": {
     "name": "Perplexity ماهانه",
-    "price": 429000
+    "price": 0
   },
   "perplexity_yearly": {
     "name": "Perplexity یکساله",
     "price": 0
   },
-  "grok_monthly": {
-    "name": "Super Grok ماهانه",
-    "price": 1679000
+  "spotify_4month": {
+    "name": "Spotify 4 ماهه",
+    "price": 0
+  },
+  "spotify_monthly": {
+    "name": "Spotify ماهانه",
+    "price": 650000
+  },
+  "tgpremium_12month": {
+    "name": "Telegram Premium یکساله",
+    "price": 5775000
   },
   "tgpremium_3month": {
     "name": "Telegram Premium 3 ماهه",
@@ -95,24 +123,8 @@
     "name": "Telegram Premium 6 ماهه",
     "price": 3275000
   },
-  "tgpremium_12month": {
-    "name": "Telegram Premium یکساله",
-    "price": 5775000
-  },
   "visa_card": {
     "name": "ویزا کارت",
-    "price": 750000
-  },
-  "master_card": {
-    "name": "مستر کارت",
-    "price": 750000
-  },
-  "vnum_uk": {
-    "name": "شماره انگلیس",
-    "price": 950000
-  },
-  "vnum_us": {
-    "name": "شماره آمریکا",
     "price": 750000
   },
   "vnum_au": {
@@ -123,28 +135,40 @@
     "name": "شماره کانادا",
     "price": 650000
   },
-  "vnum_tg_uk": {
-    "name": "تلگرام انگلیس",
-    "price": 350000
-  },
   "vnum_tg_au": {
     "name": "تلگرام استرالیا",
     "price": 1250000
-  },
-  "vnum_tg_us": {
-    "name": "تلگرام آمریکا",
-    "price": 300000
   },
   "vnum_tg_ca": {
     "name": "تلگرام کانادا",
     "price": 300000
   },
-  "vnum_wa_uk": {
-    "name": "واتساپ انگلیس",
+  "vnum_tg_uk": {
+    "name": "تلگرام انگلیس",
     "price": 350000
+  },
+  "vnum_tg_us": {
+    "name": "تلگرام آمریکا",
+    "price": 300000
+  },
+  "vnum_uk": {
+    "name": "شماره انگلیس",
+    "price": 950000
+  },
+  "vnum_us": {
+    "name": "شماره آمریکا",
+    "price": 750000
   },
   "vnum_wa_ca": {
     "name": "واتساپ کانادا",
+    "price": 350000
+  },
+  "kiro_monthly": {
+    "name": "Kiro یک‌ماهه",
+    "price": 960000
+  },
+  "vnum_wa_uk": {
+    "name": "واتساپ انگلیس",
     "price": 350000
   },
   "offers": {

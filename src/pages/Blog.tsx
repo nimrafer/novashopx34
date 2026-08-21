@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Calendar, Clock } from "lucide-react";
+import { Calendar, Clock, ArrowLeft } from "lucide-react";
 import ShopHeader from "@/components/shop/ShopHeader";
 import ShopFooter from "@/components/shop/ShopFooter";
 import SEOHead from "@/components/seo/SEOHead";
@@ -40,28 +40,28 @@ const Blog = () => {
         <ShopHeader />
 
         {/* Hero Section */}
-        <section className="pt-32 pb-16 px-4">
+        <section className="pt-32 pb-12 px-4">
           <div className="container mx-auto max-w-6xl text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-l from-primary via-purple-400 to-primary bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-black mb-5 text-foreground">
               بلاگ نوا
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              مقالات آموزشی و کاربردی درباره هوش مصنوعی و ابزارهای AI
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-8">
+              راهنمای خرید، مقایسه ابزارها و آموزش‌های کاربردی دنیای هوش مصنوعی — به زبان ساده و فارسی.
             </p>
           </div>
         </section>
 
         {/* Categories */}
-        <section className="px-4 pb-8">
+        <section className="px-4 pb-10">
           <div className="container mx-auto max-w-6xl">
             <div className="flex flex-wrap justify-center gap-3">
               {categories.map((category) => (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${selectedCategory === category
-                      ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
-                      : "bg-card hover:bg-primary/20 text-muted-foreground hover:text-foreground border border-border/50"
+                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${selectedCategory === category
+                      ? "bg-accent text-accent-foreground"
+                      : "bg-card hover:border-accent/40 text-muted-foreground hover:text-foreground border border-border/70"
                     }`}
                 >
                   {category}
@@ -74,50 +74,50 @@ const Blog = () => {
         {/* Blog Posts Grid */}
         <section className="px-4 pb-20">
           <div className="container mx-auto max-w-6xl">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {filteredPosts.map((post) => (
                 <Link
                   key={post.id}
                   to={`/blog/${post.id}`}
-                  className="group glass rounded-2xl overflow-hidden glass-hover border border-border/50 hover:border-primary/50 transition-all duration-300"
+                  className="group rounded-2xl bg-card border border-border/70 overflow-hidden transition-all duration-300 hover:border-accent/40 hover:shadow-[0_24px_48px_-32px_hsl(165_52%_33%/0.45)]"
                 >
                   {/* Image */}
-                  <div className="aspect-video bg-gradient-to-br from-primary/5 to-purple-500/5 flex items-center justify-center p-8 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-grid-white/5 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
+                  <div className={`aspect-[2/1] bg-muted/40 border-b border-border/60 flex items-center justify-center overflow-hidden${post.image.startsWith("/blog-images/") ? "" : " p-6"}`}>
                     <LazyImage
                       src={post.image}
-                      alt={post.title}
-                      className="w-24 h-24 object-contain group-hover:scale-110 transition-transform duration-500 drop-shadow-2xl"
+                      alt={post.heroAlt || post.title}
+                      className={`group-hover:scale-105 transition-transform duration-500 ${post.image.startsWith("/blog-images/") ? "w-full h-full" : "w-16 h-16"}`}
+                      imgClassName={post.image.startsWith("/blog-images/") ? "!object-cover" : undefined}
                     />
                   </div>
 
                   {/* Content */}
                   <div className="p-6">
-                    {/* Category */}
-                    <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full mb-3 border border-primary/20">
+                    <span className="inline-block px-3 py-1 bg-accent/10 text-accent text-xs font-semibold rounded-full mb-3">
                       {post.category}
                     </span>
 
-                    {/* Title */}
-                    <h2 className="text-lg font-bold mb-3 group-hover:text-primary transition-colors line-clamp-2 leading-tight">
+                    <h2 className="text-base font-bold mb-2.5 group-hover:text-accent transition-colors line-clamp-2 leading-7 text-foreground">
                       {post.title}
                     </h2>
 
-                    {/* Excerpt */}
-                    <p className="text-sm text-muted-foreground mb-4 line-clamp-2 leading-relaxed">
+                    <p className="text-sm text-muted-foreground mb-4 line-clamp-2 leading-7">
                       {post.excerpt}
                     </p>
 
-                    {/* Meta */}
-                    <div className="flex items-center justify-between text-xs text-muted-foreground pt-4 border-t border-border/50">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-3.5 h-3.5" />
-                        <span>{post.date}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-3.5 h-3.5" />
-                        <span>{post.readTime}</span>
-                      </div>
+                    <div className="flex items-center justify-between text-xs text-muted-foreground pt-4 border-t border-border/60">
+                      <span className="flex items-center gap-1.5">
+                        <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
+                        {post.date}
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5" aria-hidden="true" />
+                        {post.readTime}
+                      </span>
+                      <span className="inline-flex items-center gap-1 font-semibold text-accent">
+                        خواندن
+                        <ArrowLeft className="w-3.5 h-3.5 transition-transform duration-300 group-hover:-translate-x-0.5" aria-hidden="true" />
+                      </span>
                     </div>
                   </div>
                 </Link>
@@ -135,31 +135,31 @@ const Blog = () => {
         {/* SEO Text Section */}
         <section className="px-4 pb-20">
           <div className="container mx-auto max-w-4xl">
-            <div className="glass rounded-2xl p-8 border border-border/50">
-              <h2 className="text-2xl font-bold mb-6 text-center">یادگیری هوش مصنوعی با نوا</h2>
-              <div className="prose prose-invert max-w-none text-muted-foreground text-sm leading-relaxed space-y-4">
+            <div className="rounded-2xl bg-card border border-border/70 p-8">
+              <h2 className="text-2xl font-black mb-6 text-center text-foreground">یادگیری هوش مصنوعی با نوا</h2>
+              <div className="max-w-none text-muted-foreground text-sm leading-8 space-y-4">
                 <p>
                   در بلاگ نوا، جدیدترین مقالات آموزشی درباره ابزارهای هوش مصنوعی را می‌خوانید. از آموزش
-                  <Link to="/services/chatgpt" className="text-primary hover:underline mx-1 font-medium">چت جی پی تی (ChatGPT)</Link>
+                  <Link to="/services/chatgpt" className="text-accent hover:underline mx-1 font-semibold">چت جی پی تی (ChatGPT)</Link>
                   و
-                  <Link to="/services/gemini" className="text-primary hover:underline mx-1 font-medium">جمینای (Gemini)</Link>
+                  <Link to="/services/gemini" className="text-accent hover:underline mx-1 font-semibold">جمینای (Gemini)</Link>
                   گرفته تا نکات پیشرفته استفاده از
-                  <Link to="/services/cursor" className="text-primary hover:underline mx-1 font-medium">کرسور (Cursor)</Link>
+                  <Link to="/services/cursor" className="text-accent hover:underline mx-1 font-semibold">کرسور (Cursor)</Link>
                   برای برنامه‌نویسی.
                 </p>
                 <p>
                   همچنین مقالات مقایسه‌ای بین ابزارهای مختلف مثل
-                  <Link to="/services/gemini" className="text-primary hover:underline mx-1 font-medium">جمینای (Gemini)</Link>،
-                  <Link to="/services/grok" className="text-primary hover:underline mx-1 font-medium">گراک (Grok)</Link>
+                  <Link to="/services/gemini" className="text-accent hover:underline mx-1 font-semibold">جمینای (Gemini)</Link>،
+                  <Link to="/services/grok" className="text-accent hover:underline mx-1 font-semibold">گراک (Grok)</Link>
                   و
-                  <Link to="/services/perplexity" className="text-primary hover:underline mx-1 font-medium">پرپلکسیتی (Perplexity)</Link>
+                  <Link to="/services/perplexity" className="text-accent hover:underline mx-1 font-semibold">پرپلکسیتی (Perplexity)</Link>
                   را منتشر می‌کنیم تا بتوانید بهترین انتخاب را داشته باشید.
                 </p>
                 <p>
                   برای دسترسی به این ابزارها، می‌توانید اشتراک‌های
-                  <Link to="/services/spotify" className="text-primary hover:underline mx-1 font-medium">Spotify Premium</Link>
+                  <Link to="/services/spotify" className="text-accent hover:underline mx-1 font-semibold">Spotify Premium</Link>
                   و
-                  <Link to="/services/telegram-premium" className="text-primary hover:underline mx-1 font-medium">Telegram Premium</Link>
+                  <Link to="/services/telegram-premium" className="text-accent hover:underline mx-1 font-semibold">Telegram Premium</Link>
                   را نیز از نوا تهیه کنید.
                 </p>
               </div>

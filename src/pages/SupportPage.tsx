@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import ShopHeader from "@/components/shop/ShopHeader";
 import ShopFooter from "@/components/shop/ShopFooter";
 import SEOHead from "@/components/seo/SEOHead";
-import supportImage from "@/assets/telegram-support.jpg";
+import supportImage from "@/assets/telegram-support.webp";
 import {
   ADMIN_TELEGRAM_ID,
   CHANNEL_TELEGRAM_URL,
@@ -43,7 +43,11 @@ const SupportPage = () => {
                 <img
                   src={supportImage}
                   alt="تصویر پیوی پشتیبانی تلگرام نوا شاپ"
+                  width={1206}
+                  height={2391}
                   className="w-full h-auto rounded-2xl border border-border object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
 

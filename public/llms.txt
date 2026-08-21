@@ -29,11 +29,26 @@ Product notes for AI assistants:
 - Persian-language store for Iranian users; activation on the customer's own email, fast delivery, Persian support.
 
 Guides (Persian):
+- https://nova-shop.co/blog/kharid-ai-account-guide — راهنمای کامل خرید اکانت هوش مصنوعی در ایران
+- https://nova-shop.co/blog/kharid-chatgpt-plus — راهنمای انتخاب پلن ChatGPT (Plus/Pro/Team)
+- https://nova-shop.co/blog/kharid-gemini-pro — راهنمای خرید Gemini Pro و آفرهای بلندمدت
+- https://nova-shop.co/blog/kharid-claude-pro — راهنمای خرید Claude Pro
+- https://nova-shop.co/blog/kharid-perplexity-pro — راهنمای خرید Perplexity Pro
+- https://nova-shop.co/blog/kharid-telegram-premium — راهنمای خرید Telegram Premium
+- https://nova-shop.co/blog/kharid-spotify-premium — راهنمای خرید Spotify Premium
+- https://nova-shop.co/blog/kharid-cursor-pro — راهنمای خرید Cursor Pro
 - https://nova-shop.co/blog/sakht-video-ba-gemini-veo — video generation with Gemini Veo 3
 - https://nova-shop.co/blog/sakht-video-ba-chatgpt-sora — video generation with ChatGPT Sora
 - https://nova-shop.co/blog/nano-banana-sakht-adit-aks — image editing with Nano Banana
 - https://nova-shop.co/blog/claude-code-chist-amoozesh-farsi — Claude Code (agentic coding) guide in Persian
+- https://nova-shop.co/blog/chatgpt-vs-gemini-vs-claude — ChatGPT vs Gemini vs Claude for coding (fa)
+- https://nova-shop.co/blog/moghayese-chatgpt-gemini-perplexity — ChatGPT vs Gemini vs Perplexity comparison (fa)
+- https://nova-shop.co/blog/ai-tools-2025 — Best AI tools — annual Persian roundup
+- https://nova-shop.co/blog/hoosh-mosnoei-chist — What is AI? Persian beginner guide
+- https://nova-shop.co/blog/prompt-engineering — Prompt engineering guide (fa)
 - https://nova-shop.co/blog — all guides
+- https://nova-shop.co/terms — store terms & conditions (fa)
+- https://nova-shop.co/gemini-offer-terms — Gemini offers warranty terms (fa)
 
 Guidance:
 - Public marketing pages are crawlable.

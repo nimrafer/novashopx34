@@ -1,12 +1,14 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Search, Star } from "lucide-react";
+import SaleTimer from "@/components/shop/SaleTimer";
 import {
   StoreProduct,
   formatToman,
   normalizeText,
   storeMediaUrl,
   storeMinPrice,
+  planEffectivePrice,
   storeProductRoute,
   useStoreCatalog,
 } from "@/hooks/useStoreCatalog";
@@ -14,8 +16,8 @@ import {
 /** Local brand logos as fallback when the store product has no https image. */
 const LOCAL_LOGOS: [RegExp, string][] = [
   [/chatgpt|چت جی پی تی/, "/logos/chatgpt.svg"],
-  [/gemini|جمینای/, "/logos/gemini.svg"],
-  [/claude|کلود/, "/logos/claude.webp"],
+  [/gemini|جمینای/, "/logos/gemini-2025.svg"],
+  [/claude|کلود/, "/logos/claude-mark.svg"],
   [/grok|گروک|گراک/, "/logos/grok.svg"],
   [/perplexity|پرپلکسیتی/, "/logos/perplexity.svg"],
   [/spotify|اسپاتیفای/, "/logos/spotify.svg"],
@@ -28,13 +30,14 @@ const LOCAL_LOGOS: [RegExp, string][] = [
 ];
 
 const productLogo = (product: StoreProduct): string | null => {
-  const configuredLogo = storeMediaUrl(product.image_url);
-  if (configuredLogo) return configuredLogo;
-  const hay = normalizeText(
-    `${product.slug} ${product.name} ${(product.search_aliases || []).join(" ")}`
-  );
+  /* Brand marks first: the mini-app product images are plan-marketing art and
+     read wrong inside the small square tile; official logos always win here. */
+  // Identity only (slug+name): search aliases carry cross-sell terms — the
+  // Antigravity product lists «gemini» there and was getting the Gemini logo.
+  const hay = normalizeText(`${product.slug} ${product.name}`);
   const match = LOCAL_LOGOS.find(([pattern]) => pattern.test(hay));
-  return match ? match[1] : null;
+  if (match) return match[1];
+  return storeMediaUrl(product.image_url);
 };
 
 const ServicesSection = () => {
@@ -130,6 +133,11 @@ const ServicesSection = () => {
               {products.map((product) => {
                 const logo = productLogo(product);
                 const minPrice = storeMinPrice(product);
+                const bestSale = (product.plans || []).reduce(
+                  (best, plan) =>
+                    plan.sale && plan.sale.percent > (best?.percent || 0) ? plan.sale : best,
+                  null as null | { percent: number; title: string }
+                );
                 return (
                   <Link
                     key={product.id}
@@ -148,9 +156,31 @@ const ServicesSection = () => {
                           </span>
                         )}
                       </div>
-                      {product.featured && <Star className="w-4 h-4 text-amber-400 fill-amber-400" />}
+                      <span className="flex items-center gap-1.5 flex-wrap justify-end">
+                        {(product.badges || []).slice(0, 3).map((badge) => {
+                          const preset = String(badge.id || "").startsWith("preset_") ? String(badge.id).slice(7) : "";
+                          return (
+                            <span
+                              key={badge.id || badge.label}
+                              className={`nv-pbadge${preset ? ` nv-pbadge--${preset}` : ""}`}
+                              style={preset ? undefined : { color: badge.text_color, background: badge.background_color }}
+                            >
+                              {badge.label}
+                            </span>
+                          );
+                        })}
+                        {bestSale && (
+                          <span className="text-[10px] font-bold text-white rounded-full px-2 py-0.5" style={{ background: "linear-gradient(110deg,#e11d48,#f97316)" }}>
+                            جشنواره ٪{bestSale.percent.toLocaleString("fa-IR")}
+                          </span>
+                        )}
+                        {product.featured && <Star className="w-4 h-4 text-amber-400 fill-amber-400" />}
+                      </span>
                     </div>
 
+                    {bestSale?.ends_at && (
+                      <SaleTimer endsAt={bestSale.ends_at} className="mb-2" />
+                    )}
                     <h3 className="nv-pcard__name">{product.name}</h3>
                     <p className="nv-pcard__eyebrow line-clamp-2">
                       {product.eyebrow || product.short_description}

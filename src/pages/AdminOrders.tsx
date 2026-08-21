@@ -33,6 +33,7 @@ import {
   fetchAdminOffers,
   fetchAdminOrders,
   fetchAdminPrices,
+  fetchAdminTelegramBot,
   OfferRecord,
   OrderRecord,
   OrderStatus,
@@ -40,6 +41,10 @@ import {
   FulfillmentStatus,
   PriceModifierType,
   PriceRecord,
+  runAdminTelegramBotAction,
+  saveAdminTelegramBotPrices,
+  TelegramBotPriceRecord,
+  TelegramBotStatus,
   updateAdminDiscount,
   updateAdminOffer,
   updateAdminOrder,
@@ -53,15 +58,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 
-const ADMIN_EMAILS = String(import.meta.env.VITE_ADMIN_EMAILS || "admin@nova-shop.co")
-  .split(",")
-  .map((email) => email.trim().toLowerCase())
-  .filter(Boolean);
-
 const TAB_ITEMS = [
   { id: "orders", label: "سفارشات" },
   { id: "prices", label: "قیمت ها" },
   { id: "catalog", label: "سرویس و پلن" },
+  { id: "telegram", label: "ربات تلگرام" },
   { id: "discounts", label: "آفر و کد تخفیف" },
 ] as const;
 
@@ -116,6 +117,8 @@ const AdminOrders = () => {
   const [plans, setPlans] = useState<CatalogPlanRecord[]>([]);
   const [discounts, setDiscounts] = useState<DiscountRecord[]>([]);
   const [offers, setOffers] = useState<OfferRecord[]>([]);
+  const [telegramStatus, setTelegramStatus] = useState<TelegramBotStatus | null>(null);
+  const [telegramPrices, setTelegramPrices] = useState<TelegramBotPriceRecord[]>([]);
 
   const [search, setSearch] = useState("");
   const [savingMap, setSavingMap] = useState<Record<string, boolean>>({});
@@ -169,7 +172,7 @@ const AdminOrders = () => {
     active: true,
   });
 
-  const isAdmin = !!user && (user.isAdmin || ADMIN_EMAILS.includes(user.email.toLowerCase()));
+  const isAdmin = !!user?.isAdmin;
 
   const filteredOrders = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -210,17 +213,18 @@ const AdminOrders = () => {
   const loadAll = async () => {
     setPageLoading(true);
 
-    const [statsRes, ordersRes, pricesRes, catalogRes, discountsRes, offersRes] = await Promise.all([
+    const [statsRes, ordersRes, pricesRes, catalogRes, discountsRes, offersRes, telegramRes] = await Promise.all([
       fetchAdminDashboard(),
       fetchAdminOrders(),
       fetchAdminPrices(),
       fetchAdminCatalog(),
       fetchAdminDiscounts(),
       fetchAdminOffers(),
+      fetchAdminTelegramBot(),
     ]);
 
-    if ("error" in statsRes || "error" in ordersRes || "error" in pricesRes || "error" in catalogRes || "error" in discountsRes || "error" in offersRes) {
-      const failed = [statsRes, ordersRes, pricesRes, catalogRes, discountsRes, offersRes].find((item) => "error" in item) as {
+    if ("error" in statsRes || "error" in ordersRes || "error" in pricesRes || "error" in catalogRes || "error" in discountsRes || "error" in offersRes || "error" in telegramRes) {
+      const failed = [statsRes, ordersRes, pricesRes, catalogRes, discountsRes, offersRes, telegramRes].find((item) => "error" in item) as {
         error: string;
       };
       setError(failed.error);
@@ -235,9 +239,55 @@ const AdminOrders = () => {
     setPlans(catalogRes.data.plans || []);
     setDiscounts(discountsRes.data.discounts || []);
     setOffers(offersRes.data.offers || []);
+    setTelegramStatus(telegramRes.data.status || null);
+    setTelegramPrices(telegramRes.data.prices || []);
 
     setError(null);
     setPageLoading(false);
+  };
+
+  const refreshOrdersOnly = async () => {
+    const [statsRes, ordersRes] = await Promise.all([fetchAdminDashboard(), fetchAdminOrders()]);
+    if ("error" in statsRes || "error" in ordersRes) return;
+    setStats(statsRes.data.stats);
+    setOrders(ordersRes.data.orders || []);
+  };
+
+  const refreshTelegramBot = async () => {
+    await runWithSaving("telegram-refresh", async () => {
+      const result = await fetchAdminTelegramBot();
+      if ("error" in result) {
+        toast({ title: "خطا", description: result.error, variant: "destructive" });
+        return;
+      }
+      setTelegramStatus(result.data.status || null);
+      setTelegramPrices(result.data.prices || []);
+      toast({ title: "بروزرسانی شد", description: "وضعیت ربات دریافت شد." });
+    });
+  };
+
+  const runTelegramAction = async (action: "start" | "stop" | "restart") => {
+    await runWithSaving(`telegram-action-${action}`, async () => {
+      const result = await runAdminTelegramBotAction(action);
+      if ("error" in result) {
+        toast({ title: "خطا", description: result.error, variant: "destructive" });
+        return;
+      }
+      setTelegramStatus(result.data.status || null);
+      toast({ title: "انجام شد", description: result.data.message });
+    });
+  };
+
+  const saveTelegramPrices = async () => {
+    await runWithSaving("telegram-prices-save", async () => {
+      const result = await saveAdminTelegramBotPrices(telegramPrices);
+      if ("error" in result) {
+        toast({ title: "خطا", description: result.error, variant: "destructive" });
+        return;
+      }
+      setTelegramPrices(result.data.prices || []);
+      toast({ title: "ذخیره شد", description: "قیمت‌های ربات تلگرام بروزرسانی شد." });
+    });
   };
 
   useEffect(() => {
@@ -251,6 +301,14 @@ const AdminOrders = () => {
     loadAll();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, isAdmin]);
+
+  useEffect(() => {
+    if (!user || !isAdmin || activeTab !== "orders") return;
+    const timer = setInterval(() => {
+      void refreshOrdersOnly();
+    }, 15000);
+    return () => clearInterval(timer);
+  }, [user, isAdmin, activeTab]);
 
   const saveOrder = async (order: OrderRecord) => {
     await runWithSaving(order.id, async () => {
@@ -278,6 +336,29 @@ const AdminOrders = () => {
       setOrders((prev) => prev.map((item) => (item.id === order.id ? result.data.order : item)));
       setOrderTimelineNotes((prev) => ({ ...prev, [order.id]: "" }));
       toast({ title: "ذخیره شد", description: `سفارش ${order.id} بروزرسانی شد.` });
+    });
+  };
+
+  const sendAdminMessage = async (order: OrderRecord) => {
+    const noteMessage = (orderTimelineNotes[order.id] || "").trim();
+    if (!noteMessage) {
+      toast({ title: "پیام خالی است", description: "متن پیام ادمین را وارد کنید.", variant: "destructive" });
+      return;
+    }
+
+    await runWithSaving(`msg-${order.id}`, async () => {
+      const result = await updateAdminOrder(order.id, {
+        appendTimelineMessage: noteMessage,
+      });
+
+      if ("error" in result) {
+        toast({ title: "خطا", description: result.error, variant: "destructive" });
+        return;
+      }
+
+      setOrders((prev) => prev.map((item) => (item.id === order.id ? result.data.order : item)));
+      setOrderTimelineNotes((prev) => ({ ...prev, [order.id]: "" }));
+      toast({ title: "ارسال شد", description: "پیام ادمین برای مشتری ثبت شد." });
     });
   };
 
@@ -765,18 +846,57 @@ const AdminOrders = () => {
                     value={orderTimelineNotes[order.id] || ""}
                     onChange={(e) => setOrderTimelineNotes((prev) => ({ ...prev, [order.id]: e.target.value }))}
                     className="min-h-[68px]"
-                    placeholder="پیام بروزرسانی برای تایم‌لاین سفارش مشتری (اختیاری)"
+                    placeholder="پیام ادمین برای مشتری"
                   />
                 </div>
 
-                <Button
-                  onClick={() => saveOrder(order)}
-                  disabled={!!savingMap[order.id]}
-                  className="bg-gradient-primary text-primary-foreground"
-                >
-                  {savingMap[order.id] ? <Loader2 className="w-4 h-4 animate-spin ml-2" /> : <CheckCircle2 className="w-4 h-4 ml-2" />}
-                  ذخیره تغییرات سفارش
-                </Button>
+                <div className="rounded-xl border border-border/60 bg-card/40 p-3 mb-3">
+                  <p className="text-xs text-muted-foreground mb-2">گفتگوی سفارش</p>
+                  {order.timeline.filter((item) => item.type === "customer_message" || item.type === "admin_message").length === 0 ? (
+                    <p className="text-sm text-muted-foreground">هنوز پیامی بین مشتری و ادمین ثبت نشده است.</p>
+                  ) : (
+                    <div className="space-y-2 max-h-56 overflow-y-auto">
+                      {order.timeline
+                        .filter((item) => item.type === "customer_message" || item.type === "admin_message")
+                        .slice(-20)
+                        .map((item) => (
+                          <div key={item.id} className="rounded-lg border border-border/60 px-3 py-2 bg-background/50">
+                            <div className="flex items-center justify-between gap-2 mb-1">
+                              <span className="text-xs font-semibold">
+                                {item.type === "admin_message" ? "ادمین" : "مشتری"}
+                              </span>
+                              <span className="text-xs text-muted-foreground">{new Date(item.at).toLocaleString("fa-IR")}</span>
+                            </div>
+                            <p className="text-sm">{item.message}</p>
+                          </div>
+                        ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    onClick={() => sendAdminMessage(order)}
+                    disabled={!!savingMap[`msg-${order.id}`]}
+                    variant="outline"
+                  >
+                    {savingMap[`msg-${order.id}`] ? (
+                      <Loader2 className="w-4 h-4 animate-spin ml-2" />
+                    ) : (
+                      <CheckCircle2 className="w-4 h-4 ml-2" />
+                    )}
+                    ارسال پاسخ ادمین
+                  </Button>
+
+                  <Button
+                    onClick={() => saveOrder(order)}
+                    disabled={!!savingMap[order.id]}
+                    className="bg-gradient-primary text-primary-foreground"
+                  >
+                    {savingMap[order.id] ? <Loader2 className="w-4 h-4 animate-spin ml-2" /> : <CheckCircle2 className="w-4 h-4 ml-2" />}
+                    ذخیره تغییرات سفارش
+                  </Button>
+                </div>
               </div>
             ))}
           </div>
@@ -1184,6 +1304,93 @@ const AdminOrders = () => {
                 </div>
               </div>
             ))}
+          </div>
+        ) : null}
+
+        {!pageLoading && !error && activeTab === "telegram" ? (
+          <div className="space-y-4">
+            <div className="glass rounded-2xl p-4 space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="font-semibold">وضعیت سرویس ربات تلگرام</p>
+                <Button variant="outline" onClick={refreshTelegramBot} disabled={!!savingMap["telegram-refresh"]}>
+                  {savingMap["telegram-refresh"] ? <Loader2 className="w-4 h-4 animate-spin ml-2" /> : <RefreshCw className="w-4 h-4 ml-2" />}
+                  بروزرسانی وضعیت
+                </Button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                <div className="rounded-xl border border-border/60 bg-card/40 p-3">
+                  <p className="text-xs text-muted-foreground mb-1">Service</p>
+                  <p className="font-semibold" dir="ltr">{telegramStatus?.service || "—"}</p>
+                </div>
+                <div className="rounded-xl border border-border/60 bg-card/40 p-3">
+                  <p className="text-xs text-muted-foreground mb-1">Active</p>
+                  <p className="font-semibold" dir="ltr">{telegramStatus?.active || "unknown"}</p>
+                </div>
+                <div className="rounded-xl border border-border/60 bg-card/40 p-3">
+                  <p className="text-xs text-muted-foreground mb-1">Enabled</p>
+                  <p className="font-semibold" dir="ltr">{telegramStatus?.enabled || "unknown"}</p>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                <Button onClick={() => runTelegramAction("start")} disabled={!!savingMap["telegram-action-start"]}>
+                  {savingMap["telegram-action-start"] ? <Loader2 className="w-4 h-4 animate-spin ml-2" /> : null}
+                  Start
+                </Button>
+                <Button variant="outline" onClick={() => runTelegramAction("restart")} disabled={!!savingMap["telegram-action-restart"]}>
+                  {savingMap["telegram-action-restart"] ? <Loader2 className="w-4 h-4 animate-spin ml-2" /> : null}
+                  Restart
+                </Button>
+                <Button variant="destructive" onClick={() => runTelegramAction("stop")} disabled={!!savingMap["telegram-action-stop"]}>
+                  {savingMap["telegram-action-stop"] ? <Loader2 className="w-4 h-4 animate-spin ml-2" /> : null}
+                  Stop
+                </Button>
+              </div>
+
+              <Textarea
+                value={telegramStatus?.details || ""}
+                readOnly
+                className="min-h-[180px] font-mono text-xs"
+                placeholder="خروجی status سرویس اینجا نمایش داده می‌شود"
+              />
+            </div>
+
+            <div className="glass rounded-2xl p-4 space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="font-semibold">قیمت‌های ربات تلگرام</p>
+                <Button onClick={saveTelegramPrices} disabled={!!savingMap["telegram-prices-save"]}>
+                  {savingMap["telegram-prices-save"] ? <Loader2 className="w-4 h-4 animate-spin ml-2" /> : <CheckCircle2 className="w-4 h-4 ml-2" />}
+                  ذخیره قیمت‌های بات
+                </Button>
+              </div>
+
+              {telegramPrices.length === 0 ? (
+                <p className="text-sm text-muted-foreground">قیمتی برای ربات پیدا نشد.</p>
+              ) : (
+                <div className="space-y-2">
+                  {telegramPrices.map((price, index) => (
+                    <div key={price.key} className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                      <Input value={price.key} disabled />
+                      <Input
+                        value={price.name}
+                        onChange={(e) =>
+                          setTelegramPrices((prev) => prev.map((item, i) => (i === index ? { ...item, name: e.target.value } : item)))
+                        }
+                      />
+                      <Input
+                        value={String(price.price)}
+                        onChange={(e) =>
+                          setTelegramPrices((prev) =>
+                            prev.map((item, i) => (i === index ? { ...item, price: Number(e.target.value) || 0 } : item)),
+                          )
+                        }
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         ) : null}
 
